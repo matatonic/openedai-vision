@@ -1,0 +1,9 @@
+python-datauri
+requests
+uvicorn
+fastapi
+
+# moondream
+timm
+einops
+transformers>=4.39.*
