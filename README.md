@@ -9,10 +9,11 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 
 Backend Model support:
 - [X] Moondream2 [vikhyatk/moondream2](https://huggingface.co/vikhyatk/moondream2) *(only a single image and single question currently supported)
+- [X] Llava [llava-hf/llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf) *(mistral only for now, single image/question)
 - [ ] Deepseek-VL - (in progress) [deepseek-ai/deepseek-vl-7b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-7b-chat)
 - [ ] ...
 
-Version: 0.1.0
+Version: 0.2.0
 
 
 API Documentation
@@ -34,16 +35,19 @@ Usage
 -----
 
 ```
-usage: vision.py [-h] [-m MODEL] [-b BACKEND] [-d DEVICE] [-P PORT] [-H HOST] [--preload]
+usage: vision.py [-h] [-m MODEL] [-b BACKEND] [--load-in-4bit] [--load-in-8bit] [--use-flash-attn] [-d DEVICE] [-P PORT] [-H HOST] [--preload]
 
 OpenedAI Vision API Server
 
 options:
   -h, --help            show this help message and exit
   -m MODEL, --model MODEL
-                        The model to use, Ex. deepseek-ai/deepseek-vl-7b-chat (default: vikhyatk/moondream2)
+                        The model to use, Ex. llava-hf/llava-v1.6-mistral-7b-hf (default: vikhyatk/moondream2)
   -b BACKEND, --backend BACKEND
-                        The backend to use (moondream, deepseek) (default: moondream)
+                        The backend to use (moondream, llava) (default: moondream)
+  --load-in-4bit        load in 4bit (default: False)
+  --load-in-8bit        load in 8bit (default: False)
+  --use-flash-attn      Use Flash Attention 2 (default: False)
   -d DEVICE, --device DEVICE
                         Set the torch device for the model. Ex. cuda:1 (default: auto)
   -P PORT, --port PORT  Server tcp port (default: 5006)

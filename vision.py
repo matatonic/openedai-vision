@@ -74,8 +74,12 @@ def parse_args(argv=None):
         description='OpenedAI Vision API Server',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('-m', '--model', action='store', default="vikhyatk/moondream2", help="The model to use, Ex. deepseek-ai/deepseek-vl-7b-chat")
-    parser.add_argument('-b', '--backend', action='store', default="moondream", help="The backend to use (moondream, deepseek)")
+    parser.add_argument('-m', '--model', action='store', default="vikhyatk/moondream2", help="The model to use, Ex. llava-hf/llava-v1.6-mistral-7b-hf")
+    parser.add_argument('-b', '--backend', action='store', default="moondream", help="The backend to use (moondream, llava)")
+    #'load_in_4bit', 'load_in_8bit', 'use_flash_attn'
+    parser.add_argument('--load-in-4bit', action='store_true', help="load in 4bit")
+    parser.add_argument('--load-in-8bit', action='store_true', help="load in 8bit")
+    parser.add_argument('--use-flash-attn', action='store_true', help="Use Flash Attention 2")
     parser.add_argument('-d', '--device', action='store', default="auto", help="Set the torch device for the model. Ex. cuda:1")
     parser.add_argument('-P', '--port', action='store', default=5006, type=int, help="Server tcp port")
     parser.add_argument('-H', '--host', action='store', default='localhost', help="Host to listen on, Ex. 0.0.0.0")
@@ -87,7 +91,16 @@ if __name__ == "__main__":
 
     print(f"Loading VisionQnA[{args.backend}] with {args.model}")
     backend = importlib.import_module(f'backend.{args.backend}')
-    vision_qna = backend.VisionQnA(args.model, args.device)
+
+    extra_params = {}
+    if args.load_in_4bit:
+        extra_params['load_in_4bit'] = True
+    if args.load_in_8bit:
+        extra_params['load_in_8bit'] = True
+    if args.use_flash_attn:
+        extra_params['use_flash_attn'] = True
+    
+    vision_qna = backend.VisionQnA(args.model, args.device, extra_params)
 
     if args.preload:
         sys.exit(0)

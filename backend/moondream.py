@@ -8,7 +8,7 @@ class VisionQnA(VisionQnABase):
     model_name: str = "moondream2"
     revision: str = '2024-03-13'
     
-    def __init__(self, model_id: str, device: str):
+    def __init__(self, model_id: str, device: str, extra_params = {}):
         if device == 'auto':
             device = self.select_device()
 
@@ -18,12 +18,10 @@ class VisionQnA(VisionQnABase):
             'revision': self.revision,
             'torch_dtype': torch.float32 if device == 'cpu' else torch.float16,
         }
-        
+        params.update(extra_params)
+
         self.model = AutoModelForCausalLM.from_pretrained(**params).to(device)
         self.tokenizer = AutoTokenizer.from_pretrained(model_id)
-
-    def select_device(self):
-        return 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
     
     async def single_question(self, image_url: str, prompt: str) -> str:
         image = await self.url_to_image(image_url)
