@@ -4,54 +4,20 @@ import time
 import argparse
 import importlib
 
-from typing import Optional, List, Literal
 import uvicorn
-from pydantic import BaseModel
 
 import openedai
+from vision_qna import *
 
 
 app = openedai.OpenAIStub()
 
-class ImageURL(BaseModel):
-    url: str
-    detail: Optional[str] = "auto" # auto -> low (512) or high (Nx512) based on res.
-
-class Content(BaseModel):
-    type: Literal["text", "image_url"]
-    text: Optional[str] = None
-    image_url: Optional[ImageURL] = None
-
-class Message(BaseModel):
-    role: str
-    content: List[Content]
-
-class ImageChatRequest(BaseModel):
-    model: str # = "gpt-4-vision-preview"
-    messages: List[Message]
-    max_tokens: int = 300
-
 @app.post(path="/v1/chat/completions")
-async def chat_with_images(request: ImageChatRequest):
+async def vision_chat_completions(request: ImageChatRequest):
 
-    # XXX only single image & prompt for now
-    for c in request.messages[0].content:
-        if c.image_url:
-            image_url = c.image_url.url
-        elif c.text:
-            prompt = c.text
+    text = await vision_qna.chat_with_images(request.messages, max_tokens=request.max_tokens)
 
-    text = await vision_qna.single_question(image_url, prompt)
-
-    t_id = int(time.time() * 1e9)
-
-    vis_chat_resp = {
-        "id": f"chatcmpl-{t_id}",
-        "object": "chat.completion",
-        "created": t_id,
-        "model": vision_qna.model_name,
-        "system_fingerprint": "fp_111111111",
-        "choices": [{
+    choices = [ {
             "index": 0,
             "message": {
                 "role": "assistant",
@@ -59,7 +25,16 @@ async def chat_with_images(request: ImageChatRequest):
             },
             "logprobs": None,
             "finish_reason": "stop"
-        }],
+        }
+    ]
+    t_id = int(time.time() * 1e9)
+    vis_chat_resp = {
+        "id": f"chatcmpl-{t_id}",
+        "object": "chat.completion",
+        "created": t_id,
+        "model": vision_qna.model_name,
+        "system_fingerprint": "fp_111111111",
+        "choices": choices,
         "usage": {
             "prompt_tokens": 0,
             "completion_tokens": 0,
@@ -75,8 +50,8 @@ def parse_args(argv=None):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('-m', '--model', action='store', default="vikhyatk/moondream2", help="The model to use, Ex. llava-hf/llava-v1.6-mistral-7b-hf")
-    parser.add_argument('-b', '--backend', action='store', default="moondream", help="The backend to use (moondream, llava)")
-    #'load_in_4bit', 'load_in_8bit', 'use_flash_attn'
+    parser.add_argument('-b', '--backend', action='store', default="moondream2", help="The backend to use (moondream1, moondream2, llavanext, llava)")
+    parser.add_argument('-f', '--format', action='store', default=None, help="Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15)")
     parser.add_argument('--load-in-4bit', action='store_true', help="load in 4bit")
     parser.add_argument('--load-in-8bit', action='store_true', help="load in 8bit")
     parser.add_argument('--use-flash-attn', action='store_true', help="Use Flash Attention 2")
@@ -100,7 +75,7 @@ if __name__ == "__main__":
     if args.use_flash_attn:
         extra_params['use_flash_attn'] = True
     
-    vision_qna = backend.VisionQnA(args.model, args.device, extra_params)
+    vision_qna = backend.VisionQnA(args.model, args.device, extra_params, format=args.format)
 
     if args.preload:
         sys.exit(0)
