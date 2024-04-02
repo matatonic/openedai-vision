@@ -81,7 +81,7 @@ Sample API Usage
 
 Example:
 ```
-$ ./chat_with_image.py https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg
+$ python chat_with_image.py https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg
 Answer: This is a beautiful image of a wooden path leading through a lush green field. The path appears to be well-trodden, suggesting it's a popular route for walking or hiking. The sky is a clear blue with some scattered clouds, indicating a pleasant day with good weather. The field is vibrant and seems to be well-maintained, which could suggest it's part of a park or nature reserve. The overall scene is serene and inviting, perfect for a peaceful walk in nature.
 
 Question: Are there any animals in the picture?
