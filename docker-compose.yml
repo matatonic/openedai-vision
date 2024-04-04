@@ -7,10 +7,12 @@ services:
     image: ghcr.io/matatonic/openedai-vision
     environment:
       - HF_HOME=/app/hf_home
+      #- CUDA_VISIBLE_DEVICES=1,0
     volumes:
       - ./hf_home:/app/hf_home
     ports:
       - 5006:5006
+    #command: ["python", "vision.py", "--host", "0.0.0.0", "--port", "5006", "--backend", "qwen-vl", "--model", "Qwen/Qwen-VL-Chat"]
     #command: ["python", "vision.py", "--host", "0.0.0.0", "--port", "5006", "--backend", "llava", "--model", "llava-hf/llava-v1.6-mistral-7b-hf", "--load-in-4bit", "--use-flash-attn"]
     command: ["python", "vision.py", "--host", "0.0.0.0", "--port", "5006", "--use-flash-attn"]
     runtime: nvidia

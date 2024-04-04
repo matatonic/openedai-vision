@@ -3,10 +3,6 @@ requests
 uvicorn
 fastapi
 
-# moondream
-timm
-einops
-
 transformers>=4.39.*
 torch==2.2.*
 accelerate
