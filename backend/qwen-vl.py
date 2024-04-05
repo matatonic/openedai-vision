@@ -7,7 +7,7 @@ from datauri import DataURI
 from vision_qna import *
 
 # "Qwen/Qwen-VL-Chat" # 13GB
-# "Qwen/Qwen-VL-Chat-4bit" # auto-gptq
+# "Qwen/Qwen-VL-Chat-4bit" # TODO: auto-gptq
 
 class VisionQnA(VisionQnABase):
     model_name: str = "qwen-vl"
@@ -15,9 +15,8 @@ class VisionQnA(VisionQnABase):
     def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
         super().__init__(model_id, device, extra_params, format)
 
-        # Note: The default behavior now has injection attack prevention off.
-        self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
-        self.model = AutoModelForCausalLM.from_pretrained(trust_remote_code=True, **self.params).eval()
+        self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
+        self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
 

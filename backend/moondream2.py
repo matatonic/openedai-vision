@@ -3,6 +3,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 from vision_qna import *
 
+# vikhyatk/moondream2
+
 class VisionQnA(VisionQnABase):
     model_name: str = "moondream2"
     revision: str = '2024-03-13' # 'main'
@@ -15,16 +17,16 @@ class VisionQnA(VisionQnABase):
         del self.params['device_map']
         
         self.tokenizer = AutoTokenizer.from_pretrained(model_id)
-        self.model = AutoModelForCausalLM.from_pretrained(**self.params, trust_remote_code=True)
+        self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
     
 #        # bitsandbytes already moves the model to the device, so we don't need to do it again.
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
-           self.model.to(self.device)
+           self.model = self.model.to(self.device)
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
     async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
-        images, prompt = await prompt_from_messages(messages, self.format)
+        images, prompt = await phi15_prompt_from_messages(messages)
 
         encoded_images = self.model.encode_image(images).to(self.device)
 

@@ -14,15 +14,10 @@ class VisionQnA(VisionQnABase):
         super().__init__(model_id, device, extra_params, format)
 
         if not format:
-            if 'mistral' in model_id:
-                self.format = 'llama2'
-            elif 'vicuna' in model_id:
-                self.format = 'vicuna'
-            elif 'v1.6-34b' in model_id:
-                self.format = 'chatml'
+            self.format = guess_model_format(model_id)
 
         self.processor = LlavaNextProcessor.from_pretrained(model_id)
-        self.model = LlavaNextForConditionalGeneration.from_pretrained(**self.params)
+        self.model = LlavaNextForConditionalGeneration.from_pretrained(**self.params).eval()
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
 
@@ -32,19 +27,6 @@ class VisionQnA(VisionQnABase):
         inputs = self.processor(prompt, images, return_tensors="pt").to(self.model.device)
 
         output = self.model.generate(**inputs, max_new_tokens=max_tokens)
-        answer = self.processor.decode(output[0], skip_special_tokens=True)
+        response = self.processor.decode(output[0], skip_special_tokens=True)
         
-        if self.format in ['llama2', 'mistral']:
-            idx = answer.rfind('[/INST]') + len('[/INST]') + 1 #+ len(images)
-            return answer[idx:]
-        elif self.format == 'vicuna':
-            idx = answer.rfind('ASSISTANT:') + len('ASSISTANT:') + 1 #+ len(images)
-            return answer[idx:]
-        elif self.format == 'chatml':
-            # XXX This is broken with the 34b, extra spaces in the tokenizer
-            # XXX You set `add_prefix_space`. The tokenizer needs to be converted from the slow tokenizers
-            idx = answer.rfind('<|im_start|>assistant\n') + len('<|im_start|>assistant\n') + 1 #+ len(images)
-            end_idx = answer.rfind('<|im_end|>')
-            return answer[idx:end_idx]
-
-        return answer
+        return answer_from_response(response, self.format)

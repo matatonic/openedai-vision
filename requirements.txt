@@ -8,3 +8,4 @@ torch==2.2.*
 accelerate
 bitsandbytes
 flash_attn
+sentencepiece

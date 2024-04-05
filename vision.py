@@ -50,12 +50,13 @@ def parse_args(argv=None):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('-m', '--model', action='store', default="vikhyatk/moondream2", help="The model to use, Ex. llava-hf/llava-v1.6-mistral-7b-hf")
-    parser.add_argument('-b', '--backend', action='store', default="moondream2", help="The backend to use (moondream1, moondream2, llavanext, llava, qwen-vl)")
-    parser.add_argument('-f', '--format', action='store', default=None, help="Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15)")
-    parser.add_argument('--load-in-4bit', action='store_true', help="load in 4bit (doesn't work with all models)")
-    parser.add_argument('--load-in-8bit', action='store_true', help="load in 8bit (doesn't work with all models)")
-    parser.add_argument('--use-flash-attn', action='store_true', help="Use Flash Attention 2 (doesn't work with all models or GPU)")
+    parser.add_argument('-b', '--backend', action='store', default=None, help="Force the backend to use (moondream1, moondream2, llavanext, llava, qwen-vl)")
+    parser.add_argument('-f', '--format', action='store', default=None, help="Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15, gemma) (doesn't work with all models)")
     parser.add_argument('-d', '--device', action='store', default="auto", help="Set the torch device for the model. Ex. cuda:1")
+    parser.add_argument('--no-trust-remote-code', action='store_true', help="Don't trust remote code (required for some models)")
+    parser.add_argument('-4', '--load-in-4bit', action='store_true', help="load in 4bit (doesn't work with all models)")
+    parser.add_argument('-8', '--load-in-8bit', action='store_true', help="load in 8bit (doesn't work with all models)")
+    parser.add_argument('-F', '--use-flash-attn', action='store_true', help="Use Flash Attention 2 (doesn't work with all models or GPU)")
     parser.add_argument('-P', '--port', action='store', default=5006, type=int, help="Server tcp port")
     parser.add_argument('-H', '--host', action='store', default='0.0.0.0', help="Host to listen on, Ex. localhost")
     parser.add_argument('--preload', action='store_true', help="Preload model and exit.")
@@ -63,6 +64,9 @@ def parse_args(argv=None):
 
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
+
+    if not args.backend:
+        args.backend = guess_backend(args.model)
 
     print(f"Loading VisionQnA[{args.backend}] with {args.model}")
     backend = importlib.import_module(f'backend.{args.backend}')
@@ -74,6 +78,8 @@ if __name__ == "__main__":
         extra_params['load_in_8bit'] = True
     if args.use_flash_attn:
         extra_params['use_flash_attn'] = True
+    
+    extra_params['trust_remote_code'] = not args.no_trust_remote_code
     
     vision_qna = backend.VisionQnA(args.model, args.device, extra_params, format=args.format)
 

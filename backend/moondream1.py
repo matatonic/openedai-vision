@@ -14,17 +14,17 @@ class VisionQnA(VisionQnABase):
         del self.params['device_map']
 
         self.tokenizer = CodeGenTokenizerFast.from_pretrained(model_id)
-        self.model = AutoModelForCausalLM.from_pretrained(**self.params, trust_remote_code=True)
+        self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
         
         # bitsandbytes already moves the model to the device, so we don't need to do it again.
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
-           self.model.to(self.device)
+            self.model = self.model.to(self.device)
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
 
     async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
         images, prompt = await prompt_from_messages(messages, self.format)
-        encoded_images = self.model.encode_image(images[0]).to(self.device)
+        encoded_images = self.model.encode_image(images[0]).to(self.model.device)
 
         # XXX currently broken here... 
         """
