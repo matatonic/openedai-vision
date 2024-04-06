@@ -22,9 +22,11 @@ class VisionQnA(VisionQnABase):
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
 
-    async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
-        images, prompt = await prompt_from_messages(messages, self.format)
+    async def chat_with_images(self, request: ImageChatRequest) -> str:
+        images, prompt = await prompt_from_messages(request.messages, self.format)
         encoded_images = self.model.encode_image(images[0]).to(self.model.device)
+
+        params = self.get_generation_params(request)
 
         # XXX currently broken here... 
         """
@@ -37,7 +39,7 @@ RuntimeError: The expanded size of the tensor (747) must match the existing size
             prompt,
             eos_text="<END>",
             tokenizer=self.tokenizer,
-            max_new_tokens=max_tokens,
+            **params,
         )[0]
         answer = re.sub("<$|<END$", "", answer).strip()
         return answer

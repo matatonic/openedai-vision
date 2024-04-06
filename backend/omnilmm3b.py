@@ -17,12 +17,19 @@ class VisionQnA(VisionQnABase):
     
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
-    async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
+    async def chat_with_images(self, request: ImageChatRequest) -> str:
         # 3B
         image = None
         msgs = []
+        #system_prompt = ''
+        default_sampling_params = {
+            'do_sample': True,
+            'top_p': 0.8,
+            'top_k': 100,
+            'temperature': 0.6,
+        }
 
-        for m in messages:
+        for m in request.messages:
             if m.role == 'user':
                 for c in m.content:
                     if c.type == 'image_url':
@@ -33,13 +40,23 @@ class VisionQnA(VisionQnABase):
                 for c in m.content:
                     if c.type == 'text':
                         msgs.extend([{ 'role': 'assistant', 'content': c.text }])
+            elif m.role == 'system':
+                for c in m.content:
+                    if c.type == 'text':
+                        msgs.extend([{ 'role': 'user', 'content': c.text }, { 'role': 'assistant', 'content': "OK" }])  # fake system prompt
+
+        # default uses num_beams: 3, but if sampling is requested, switch the defaults.
+        params = self.get_generation_params(request)
+        if params.get('do_sample', False):
+            params = self.get_generation_params(request, default_sampling_params)
 
         answer, context, _ = self.model.chat(
             image=image,
             msgs=msgs,
             context=None,
             tokenizer=self.tokenizer,
-            max_new_tokens=max_tokens
+            sampling=params.get('do_sample', False),
+            **params,
         )
 
         return answer

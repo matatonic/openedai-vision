@@ -22,8 +22,8 @@ class VisionQnA(VisionQnABase):
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
-    async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
-        images, prompt = await prompt_from_messages(messages, self.format)
+    async def chat_with_images(self, request: ImageChatRequest) -> str:
+        images, prompt = await prompt_from_messages(request.messages, self.format)
 
         #encoded_images = self.model.encode_image(images).to(self.device)
         # square?
@@ -32,18 +32,19 @@ class VisionQnA(VisionQnABase):
 
         input_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).to(self.model.device)
 
+        params = self.get_generation_params(request)
+        
         with torch.inference_mode():
             output_ids = self.model.generate(
                 input_ids,
                 images=image_tensor,
                 images_aux=None,
-                do_sample=False,
-                temperature=0.0,
-                max_new_tokens=max_tokens,
                 bos_token_id=self.tokenizer.bos_token_id,  # Begin of sequence token
                 eos_token_id=self.tokenizer.eos_token_id,  # End of sequence token
                 pad_token_id=self.tokenizer.pad_token_id,  # Pad token
-                use_cache=True)
+                use_cache=True,
+                **params,
+            )
             
         answer = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
 

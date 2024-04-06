@@ -19,7 +19,7 @@ class VisionQnA(VisionQnABase):
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
 
-    async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
+    async def chat_with_images(self, request: ImageChatRequest) -> str:
         # XXX WIP
         conversation = [
             {

@@ -24,6 +24,8 @@ class ImageChatRequest(BaseModel):
     model: str # = "gpt-4-vision-preview"
     messages: List[Message]
     max_tokens: int = 512
+    temperature: float = None
+    top_p: float = None
 
 class VisionQnABase:
     model_name: str = None
@@ -72,7 +74,7 @@ class VisionQnABase:
 
         if format:
             self.format =  format
-        
+
 
     def select_device(self):
         return 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
@@ -85,8 +87,29 @@ class VisionQnABase:
         dtype = self.select_dtype(device)
         return device, dtype
     
-    async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
+    async def chat_with_images(self, request: ImageChatRequest) -> str:
         pass
+
+    def get_generation_params(self, request: ImageChatRequest, default_params = {}) -> dict:
+        params = {
+            "top_k": None,
+            'do_sample': False,
+        }
+        params.update(default_params)
+
+        if request.max_tokens:
+            params["max_new_tokens"] = request.max_tokens
+        
+        if request.temperature is not None:
+            if request.temperature > 0:
+                params["do_sample"] = True
+                params["temperature"] = request.temperature
+
+        if request.top_p is not None and request.top_p != params.get('top_p', 1.0):
+            params["do_sample"] = True
+            params["top_p"] = request.top_p
+
+        return params
 
 async def url_to_image(img_url: str) -> Image.Image:
     if img_url.startswith('http'):
@@ -107,6 +130,7 @@ async def url_to_file(img_url: str) -> str:
             return filename
     else:
         response = requests.get(img_url)
+        filename = f"/tmp/{uuid.uuid4()}"
         with open(filename, 'wb') as f:
             f.write(response.content)
             return filename
@@ -129,6 +153,10 @@ async def phi15_prompt_from_messages(messages: list[Message], img_tok = "<image>
             for c in m.content:
                 if c.type == 'text':
                     prompt += f"Answer: {c.text}\n\n"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"{c.text}\n\n"  # fake system prompt
 
     prompt += "Answer:"
 
@@ -155,7 +183,11 @@ async def vicuna_prompt_from_messages(messages: list[Message], img_tok = "<image
         elif m.role == 'assistant':
             for c in m.content:
                 if c.type == 'text':
-                    prompt += f"ASSISTANT: {c.text}\n"
+                    prompt += f"ASSISTANT: {c.text}</s>\n"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"{c.text}\n\n"
 
     prompt += "ASSISTANT:"
 
@@ -178,11 +210,15 @@ async def llama2_prompt_from_messages(messages: list[Message], img_tok = "<image
                     text = c.text
 
             img_tag = img_tok if has_image else ''
-            prompt += f"[INST] {img_tag}{text} [/INST]"
+            prompt += f"<s>[INST] {img_tag}{text} [/INST]"
         elif m.role == 'assistant':
             for c in m.content:
                 if c.type == 'text':
-                    prompt += f" {c.text}"
+                    prompt += f" {c.text}</s>"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"<s>[INST] <<SYS>>\n{c.text}\n<</SYS>> [/INST]</s>" # not quite right, but it's a start
 
     return images, prompt
 
@@ -208,6 +244,10 @@ async def chatml_prompt_from_messages(messages: list[Message], img_tok = "<image
             for c in m.content:
                 if c.type == 'text':
                     prompt += f"<|im_start|>assistant\n{c.text}<|im_end|>"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"<|im_start|>system\n{c.text}<|im_end|>"
 
     prompt += f"<|im_start|>assistant\n"
 
@@ -235,6 +275,11 @@ async def gemma_prompt_from_messages(messages: list[Message], img_tok = "<image>
             for c in m.content:
                 if c.type == 'text':
                     prompt += f"<|im_start|>assistant\n{c.text}<|im_end|>"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"<|im_start|>system\n{c.text}<|im_end|>"
+
 
     prompt += f"<|im_start|>assistant\n"
 
@@ -291,16 +336,16 @@ def guess_backend(model_name: str) -> str:
     model_id = model_name.lower()
 
     if 'llava' in model_id:
-        if '1.5' in model_id:
-            return 'llava'
-        elif '1.6' in model_id:
+        if 'v1.6' in model_id:
             return 'llavanext'
+        return 'llava'
 
     if 'qwen' in model_id:
         return 'qwen-vl'
     
     if 'moondream1' in model_id:
         return 'moondream1'
+    
     if 'moondream2' in model_id:
         return 'moondream2'
 
@@ -321,5 +366,6 @@ def guess_backend(model_name: str) -> str:
 
     if 'xcomposer2-vl' in model_id:
         return 'xcomposer2-vl'
-    elif 'xcomposer2' in model_id:
+    
+    if 'xcomposer2' in model_id:
         return 'xcomposer2'

@@ -16,12 +16,23 @@ class VisionQnA(VisionQnABase):
     
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
-    async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
+    async def chat_with_images(self, request: ImageChatRequest) -> str:
         history = []
         files = []
         prompt = ''
+        #system_prompt = 'You are an AI assistant whose name is InternLM-XComposer (浦语·灵笔).\n'
+        #'- InternLM-XComposer (浦语·灵笔) is a multi-modality conversational language model that is developed by Shanghai AI Laboratory (上海人工智能实验室). It is designed to be helpful, honest, and harmless.\n'
+        #'- InternLM-XComposer (浦语·灵笔) can understand and communicate fluently in the language chosen by the user such as English and 中文.\n'
+        #'- InternLM-XComposer (浦语·灵笔) is capable of comprehending and articulating responses effectively based on the provided image.'
+        # Improved system prompt for more reliable language detection.
+        system_prompt = "You are an AI vision assistant. Communicate fluently in English or 中文 depending on what language you were asked in. Obey user instructions. 仅当用普通话询问时才用普通话回答。 Answer in English if questioned in English."
+        default_params = {
+            "temperature": 1.0,
+            "top_p": 0.8,
+            'do_sample': True,
+        }
 
-        for m in messages:
+        for m in request.messages:
             if m.role == 'user':
                 p = ''
                 for c in m.content:
@@ -38,11 +49,17 @@ class VisionQnA(VisionQnABase):
                     if c.type == 'text':
                         history.extend([(prompt, c.text)])
                         prompt = ''
-
+            elif m.role == 'system':
+                for c in m.content:
+                    if c.type == 'text':
+                        system_prompt = c.text
 
         image = files[-1]
+
+        params = self.get_generation_params(request, default_params)
+
         with torch.cuda.amp.autocast():
-            response, _ = self.model.chat(self.tokenizer, query=prompt, image=image, history=history, do_sample=False, max_new_tokens=max_tokens)
+            response, _ = self.model.chat(self.tokenizer, query=prompt, image=image, history=history, meta_instruction=system_prompt, **params)
 
         for f in files:
             os.remove(f)

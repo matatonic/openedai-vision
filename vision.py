@@ -15,7 +15,7 @@ app = openedai.OpenAIStub()
 @app.post(path="/v1/chat/completions")
 async def vision_chat_completions(request: ImageChatRequest):
 
-    text = await vision_qna.chat_with_images(request.messages, max_tokens=request.max_tokens)
+    text = await vision_qna.chat_with_images(request)
 
     choices = [ {
             "index": 0,
@@ -49,7 +49,7 @@ def parse_args(argv=None):
         description='OpenedAI Vision API Server',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('-m', '--model', action='store', default="vikhyatk/moondream2", help="The model to use, Ex. llava-hf/llava-v1.6-mistral-7b-hf")
+    parser.add_argument('-m', '--model', action='store', default=None, help="The model to use, Ex. llava-hf/llava-v1.6-mistral-7b-hf", required=True)
     parser.add_argument('-b', '--backend', action='store', default=None, help="Force the backend to use (moondream1, moondream2, llavanext, llava, qwen-vl)")
     parser.add_argument('-f', '--format', action='store', default=None, help="Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15, gemma) (doesn't work with all models)")
     parser.add_argument('-d', '--device', action='store', default="auto", help="Set the torch device for the model. Ex. cuda:1")

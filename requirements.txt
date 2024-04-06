@@ -9,3 +9,5 @@ accelerate
 bitsandbytes
 flash_attn
 sentencepiece
+protobuf
+peft

@@ -21,12 +21,14 @@ class VisionQnA(VisionQnABase):
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
 
-    async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
-                               
-        images, prompt = await prompt_from_messages(messages, self.format)
+    async def chat_with_images(self, request: ImageChatRequest) -> str:
+
+        images, prompt = await prompt_from_messages(request.messages, self.format)
         inputs = self.processor(prompt, images, return_tensors="pt").to(self.model.device)
 
-        output = self.model.generate(**inputs, max_new_tokens=max_tokens)
+        params = self.get_generation_params(request)
+
+        output = self.model.generate(**inputs, **params)
         response = self.processor.decode(output[0], skip_special_tokens=True)
         
         return answer_from_response(response, self.format)

@@ -20,14 +20,15 @@ class VisionQnA(VisionQnABase):
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
 
-    async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
+    async def chat_with_images(self, request: ImageChatRequest) -> str:
 
         history = []
         files = []
         prompt = ''
         image_url = None
+        system_prompt = "You are an helpful assistant."
 
-        for m in messages:
+        for m in request.messages:
             if m.role == 'user':
                 for c in m.content:
                     if c.type == 'image_url':
@@ -43,12 +44,15 @@ class VisionQnA(VisionQnABase):
                             image_url = c.image_url.url
                     if c.type == 'text':
                         prompt = c.text
-                
             elif m.role == 'assistant':
                 for c in m.content:
                     if c.type == 'text':
                         history.extend([(prompt, c.text)])
                         prompt = ''
+            elif m.role == 'system':
+                for c in m.content:
+                    if c.type == 'text':
+                        system_prompt = c.text
 
         # 1st dialogue turn
         query = self.tokenizer.from_list_format([
@@ -56,7 +60,9 @@ class VisionQnA(VisionQnABase):
             {'text': prompt},
         ])
 
-        answer, history = self.model.chat(self.tokenizer, query=query, history=history)
+        params = self.get_generation_params(request)
+
+        answer, history = self.model.chat(self.tokenizer, query=query, history=history, system=system_prompt, **params)
 
         for f in files:
             os.remove(f)

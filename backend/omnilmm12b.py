@@ -10,17 +10,17 @@ class VisionQnA(VisionQnABase):
     def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
         super().__init__(model_id, device, extra_params, format)
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_id, model_max_length=2048) #trust_remote_code=self.params.get('trust_remote_code', False))
+        self.tokenizer = AutoTokenizer.from_pretrained(model_id, model_max_length=2048, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModel.from_pretrained(**self.params).to(dtype=self.params['torch_dtype']).eval()
     
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
-    async def chat_with_images(self, messages: list[Message], max_tokens: int) -> str:
+    async def chat_with_images(self, request: ImageChatRequest) -> str:
         # 3B
         image = None
         msgs = []
 
-        for m in messages:
+        for m in request.messages:
             if m.role == 'user':
                 for c in m.content:
                     if c.type == 'image_url':
@@ -32,12 +32,14 @@ class VisionQnA(VisionQnABase):
                     if c.type == 'text':
                         msgs.extend([{ 'role': 'assistant', 'content': c.text }])
 
+        params = self.get_generation_params(request)
+
         answer, context, _ = self.model.chat(
             image=image,
             msgs=msgs,
             context=None,
             tokenizer=self.tokenizer,
-            max_new_tokens=max_tokens
+            **params,
         )
 
         return answer
