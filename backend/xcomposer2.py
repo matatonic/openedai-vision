@@ -1,7 +1,23 @@
 import os
 from transformers import AutoTokenizer, AutoModel
-
 from vision_qna import *
+import auto_gptq
+import torch
+
+# internlm/internlm-xcomposer2-7b
+# internlm/internlm-xcomposer2-7b-4bit
+
+class InternLMXComposer2QForCausalLM(auto_gptq.modeling.BaseGPTQForCausalLM):
+    layers_block_name = "model.layers"
+    outside_layer_modules = [
+        'vit', 'vision_proj', 'model.tok_embeddings', 'model.norm', 'output', 
+    ]
+    inside_layer_modules = [
+        ["attention.wqkv.linear"],
+        ["attention.wo.linear"],
+        ["feed_forward.w1.linear", "feed_forward.w3.linear"],
+        ["feed_forward.w2.linear"],
+    ]
 
 # internlm/internlm-xcomposer2-7b
 
@@ -12,8 +28,16 @@ class VisionQnA(VisionQnABase):
         super().__init__(model_id, device, extra_params, format)
         
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
-        self.model = AutoModel.from_pretrained(**self.params).eval()
-    
+        if '-4bit' in model_id:
+            if self.params['torch_dtype'] == torch.bfloat16:
+                self.params['torch_dtype'] = torch.float16
+
+            torch.set_grad_enabled(False)
+            auto_gptq.modeling._base.SUPPORTED_MODELS = ["internlm"]
+            self.model = InternLMXComposer2QForCausalLM.from_quantized(model_name_or_path=model_id, **self.params).eval()
+        else:
+            self.model = AutoModel.from_pretrained(**self.params).eval()
+
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
     async def chat_with_images(self, request: ImageChatRequest) -> str:

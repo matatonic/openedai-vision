@@ -20,6 +20,7 @@ Model support:
 - [ ] [openbmb/OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
 - [ ] [echo840/Monkey](https://huggingface.co/echo840/Monkey)
 - [ ] [YanweiLi/MiniGemini](https://huggingface.co/collections/YanweiLi/)
+- [ ] [NousResearch/Obsidian-3B-V0.5](https://huggingface.co/NousResearch/Obsidian-3B-V0.5)
 - [ ] ...
 
 
@@ -27,9 +28,10 @@ Some vision systems include their own OpenAI compatible API server. Also include
 - [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM) ([cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf), [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)), `docker-compose.cogvlm.yml` **Recommended for 16GB-40GB GPU**s
 - [X] [01-ai](https://huggingface.co/01-ai)/Yi-VL ([Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B), [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B)), `docker-compose.yi-vl.yml`
 
-Version: 0.6.0
+Version: 0.6.1
 
 Recent updates:
+- AutoGPTQ support for internlm/internlm-xcomposer2-7b-4bit, internlm/internlm-xcomposer2-vl-7b-4bit
 - Automatic selection of backend, based on the model name
 - Enable trust_remote_code by default
 - Improved parameter support: temperature, top_p, max_tokens, system prompts

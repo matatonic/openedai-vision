@@ -48,10 +48,8 @@ if __name__ == '__main__':
         image_url = str(DataURI.from_file(image_url))
 
     messages = [{ "role": "system", "content": [{ 'type': 'text', 'text': args.system_prompt }] }] if args.system_prompt else []
-    content = [
-        { "type": "image_url", "image_url": { "url": image_url } },
-        { "type": "text", "text": ' '.join(args.questions) },
-    ]
+    content = [{ "type": "image_url", "image_url": { "url": image_url } },
+               { "type": "text", "text": ' '.join(args.questions) }]
     messages.extend([{ "role": "user", "content": content }])
 
     while True:
@@ -70,8 +68,8 @@ if __name__ == '__main__':
             break
         
         content = [{"type": "image_url", "image_url": { "url": image_url } }] if image_url else []
-        content.extend([{ 'type': 'text', 'text': response.choices[0].message.content } ])
+        content.extend([{ 'type': 'text', 'text': response.choices[0].message.content }])
         messages.extend([{ "role": "assistant", "content": content },
-                         { "role": "user", "content": [ { 'type': 'text', 'text': q } ] } ])
+                         { "role": "user", "content": [{ 'type': 'text', 'text': q }] }])
 
 

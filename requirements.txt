@@ -11,3 +11,4 @@ flash_attn
 sentencepiece
 protobuf
 peft
+auto_gptq
