@@ -8,8 +8,11 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - Not affiliated with OpenAI in any way
 
 Model support:
-- [X] [InternLM-XComposer2](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (multi-image chat model, lots of warnings on startup, wont gpu split)
-- [X] [InternLM-XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] *(only supports a single image, also lots of warnings, wont gpu split)
+- [X] [InternLM](https://huggingface.co/internlm/)
+- - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (multi-image chat model, lots of warnings on startup, wont gpu split)
+- - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended)
+- - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] *(only supports a single image, also lots of warnings, wont gpu split)
+- - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit)
 - [X] [LlavaNext](https://huggingface.co/llava-hf) *(only supports a single image)
 - - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
 - - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
@@ -46,7 +49,7 @@ Some vision systems include their own OpenAI compatible API server. Included are
 - [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM) `docker-compose.cogvlm.yml`
 - - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf) **Recommended for 16GB-40GB GPU**
-- [X] [01-ai](https://huggingface.co/01-ai)/Yi-VL `docker-compose.yi-vl.yml`
+- [X] [01-ai/Yi-VL](https://huggingface.co/01-ai) `docker-compose.yi-vl.yml`
 - - [X] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B)
 - - [X] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B)
 
@@ -156,6 +159,6 @@ Known Bugs & Workarounds
 ```
 RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cuda:1! (when checking argument for argument tensors in method wrapper_CUDA_cat)
 ```
-Try to specify a single cuda device with `CUDA_VISIBLE_DEVICES=1` (or # of your GPU) before running the script. or set the device via `--device \<device\>` on the command line.
+Try to specify a single cuda device with `CUDA_VISIBLE_DEVICES=1` (or # of your GPU) before running the script. or set the device via `--device cuda:0` on the command line.
 
-2. 4bit/8bit and flash attention 2 don't work for all the models. No workaround.
+2. 4bit/8bit quantization and flash attention 2 don't work for all the models. No workaround.
