@@ -4,8 +4,8 @@ from vision_qna import *
 import auto_gptq
 import torch
 
-# internlm/internlm-xcomposer2-vl-7b
-# internlm/internlm-xcomposer2-vl-7b-4bit
+# internlm/internlm-xcomposer2-vl-7b # ~21GB
+# internlm/internlm-xcomposer2-vl-7b-4bit # ~12GB
 
 class InternLMXComposer2QForCausalLM(auto_gptq.modeling.BaseGPTQForCausalLM):
     layers_block_name = "model.layers"

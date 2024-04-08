@@ -8,29 +8,53 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - Not affiliated with OpenAI in any way
 
 Model support:
-- [X] [InternLM-XComposer2](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (multi-image chat model, lots of warnings on startup, but works fine)
-- [X] [InternLM-XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] *(only supports a single image, also lots of warnings)
-- [X] [LlavaNext](https://huggingface.co/llava-hf) - (llava-v1.6-mistral-7b-hf, llava-v1.6-34b-hf - llava-v1.6-34b-hf is not working well yet) *(only supports a single image)
-- [X] [Llava](https://huggingface.co/llava-hf) - (llava-v1.5-vicuna-7b-hf, llava-v1.5-vicuna-13b-hf, llava-v1.5-bakLlava-7b-hf) *(only supports a single image)
+- [X] [InternLM-XComposer2](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (multi-image chat model, lots of warnings on startup, wont gpu split)
+- [X] [InternLM-XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] *(only supports a single image, also lots of warnings, wont gpu split)
+- [X] [LlavaNext](https://huggingface.co/llava-hf) *(only supports a single image)
+- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
+- - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
+- - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf)
+- - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf)
+- [X] [Llava](https://huggingface.co/llava-hf) *(only supports a single image)
+- - [X] [llava-v1.5-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-7b-hf)
+- - [X] [llava-v1.5-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-13b-hf)
+- - [ ] [llava-v1.5-bakLlava-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-bakLlava-7b-hf) (currently errors)
+- [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
+- [X] [Monkey](https://huggingface.co/echo840/Monkey)
 - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
-- [X] Moondream2 - [vikhyatk/moondream2](https://huggingface.co/vikhyatk/moondream2) *(only supports a single image)
-- [ ] Moondream1 - [vikhyatk/moondream1](https://huggingface.co/vikhyatk/moondream1)
-- [ ] Deepseek-VL - [deepseek-ai/deepseek-vl-7b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-7b-chat)
-- [X] [openbmb/MiniCPM-V](https://huggingface.co/openbmb/MiniCPM-V) (aka. OmniLMM-3B) *(only supports a single image)
-- [ ] [openbmb/OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
-- [ ] [echo840/Monkey](https://huggingface.co/echo840/Monkey)
-- [ ] [YanweiLi/MiniGemini](https://huggingface.co/collections/YanweiLi/)
+- [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2) *(only supports a single image)
+- [X] [MiniCPM-V](https://huggingface.co/openbmb/MiniCPM-V) (aka. OmniLMM-3B) *(only supports a single image)
+- [X] [MiniGemini](https://huggingface.co/collections/YanweiLi/) (more complex setup, see: `prepare_minigemini.sh`)
+- - [X] [MiniGemini-2B](https://huggingface.co/YanweiLi/Mini-Gemini-2B)
+- - [ ] [MiniGemini-7B](https://huggingface.co/YanweiLi/Mini-Gemini-7B) (currently errors)
+- - [ ] [MiniGemini-13B](https://huggingface.co/YanweiLi/Mini-Gemini-13B) (currently errors)
+- - [ ] [MiniGemini-34B](https://huggingface.co/YanweiLi/Mini-Gemini-34B) (currently errors)
+- - [ ] [MiniGemini-8x7B](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B) (currently errors)
+- - [ ] [MiniGemini-7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-7B-HD) (currently errors)
+- - [ ] [MiniGemini-13B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-13B-HD) (currently errors)
+- - [ ] [MiniGemini-34B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-34B-HD) (currently errors)
+- - [ ] [MiniGemini-8x7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B-HD) (currently errors)
+- [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
+- [ ] [Moondream1](https://huggingface.co/vikhyatk/moondream1)
+- [ ] [Deepseek-VL-7b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-7b-chat)
+- [ ] [Deepseek-VL-1.3b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat)
 - [ ] [NousResearch/Obsidian-3B-V0.5](https://huggingface.co/NousResearch/Obsidian-3B-V0.5)
 - [ ] ...
 
 
-Some vision systems include their own OpenAI compatible API server. Also included are some pre-built images and docker-compose for them:
-- [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM) ([cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf), [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)), `docker-compose.cogvlm.yml` **Recommended for 16GB-40GB GPU**s
-- [X] [01-ai](https://huggingface.co/01-ai)/Yi-VL ([Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B), [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B)), `docker-compose.yi-vl.yml`
+Some vision systems include their own OpenAI compatible API server. Included are some pre-built images and docker-compose for them (they must be run separately):
+- [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM) `docker-compose.cogvlm.yml`
+- - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
+- - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf) **Recommended for 16GB-40GB GPU**
+- [X] [01-ai](https://huggingface.co/01-ai)/Yi-VL `docker-compose.yi-vl.yml`
+- - [X] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B)
+- - [X] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B)
 
-Version: 0.6.1
+Version: 0.7.0
 
 Recent updates:
+- new model support: MiniGemini-2B (it's still a bit complex to use, see `prepare_minigemini.sh`)
+- new model support: echo840/Monkey-Chat, echo840/Monkey
 - AutoGPTQ support for internlm/internlm-xcomposer2-7b-4bit, internlm/internlm-xcomposer2-vl-7b-4bit
 - Automatic selection of backend, based on the model name
 - Enable trust_remote_code by default
@@ -48,10 +72,23 @@ API Documentation
 
 * [OpenAI Vision guide](https://platform.openai.com/docs/guides/vision)
 
-Installation instructions
--------------------------
 
-(**Docker Recommended**)
+Docker support
+--------------
+
+1) Edit the docker-compose file to suit your needs.
+
+2) You can run the server via docker like so:
+```shell
+docker compose up
+# for CogVLM
+docker compose -f docker-compose.cogvlm.yml up
+# for VI-VL
+docker compose -f docker-compose.yi-vl.yml up
+```
+
+Manual Installation instructions
+--------------------------------
 
 ```shell
 # install the python dependencies
@@ -63,6 +100,8 @@ pip install .
 # run the server with your chosen model
 python vision.py --model vikhyatk/moondream2
 ```
+
+For MiniGemini support the docker image is recommended. See `Dockerfile` and `requirements.minigemini.txt` for manual installation instructions.
 
 Usage
 -----
@@ -90,20 +129,6 @@ options:
   -P PORT, --port PORT  Server tcp port (default: 5006)
   -H HOST, --host HOST  Host to listen on, Ex. localhost (default: 0.0.0.0)
   --preload             Preload model and exit. (default: False)
-```
-
-Docker support
---------------
-
-1) Edit the docker-compose file to suit your needs.
-
-2) You can run the server via docker like so:
-```shell
-docker compose up
-# for CogVLM
-docker compose -f docker-compose.cogvlm.yml up
-# for VI-VL
-docker compose -f docker-compose.yi-vl.yml up
 ```
 
 Sample API Usage

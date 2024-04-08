@@ -1,0 +1,30 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.minigemini
+    tty: true
+    image: ghcr.io/matatonic/openedai-vision-minigemini
+    environment:
+      - HF_HOME=/app/hf_home
+      - CUDA_VISIBLE_DEVICES=1
+    volumes:
+      - ./hf_home:/app/hf_home
+      - ./model_zoo:/app/model_zoo
+      - ./YanweiLi:/app/YanweiLi
+    ports:
+      - 5006:5006
+    # be sure to review and run prepare_minigemini.sh before starting the container
+    command: ["python", "vision.py", "-m", "YanweiLi/Mini-Gemini-2B"]
+    #command: ["python", "vision.py", "-m", "YanweiLi/Mini-Gemini-7B"]
+    #command: ["python", "vision.py", "-m", "YanweiLi/Mini-Gemini-8x7B-HD"]
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              #device_ids: ['0', '1'] # Select a gpu, or
+              count: all
+              capabilities: [gpu]
+

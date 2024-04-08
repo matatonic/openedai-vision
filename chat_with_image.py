@@ -7,19 +7,19 @@ from openai import OpenAI
 
 
 def url_to_data_url(img_url: str) -> str:
-        if img_url.startswith('http'):
-                response = requests.get(img_url)
-                
-                img_data = response.content
-        elif img_url.startswith('data:'):
-                return img_url
-        elif img_url.startswith('file:'):
-                img_url = img_url.replace('file:', '')
-                return str(DataURI.from_file(img_url))
-        else:
-                raise ValueError(f'Unsupported image URL: {img_url}')
-
-        return str(DataURI(io.BytesIO(img_data)))
+    if img_url.startswith('http'):
+        response = requests.get(img_url)
+        
+        img_data = response.content
+        content_type = response.headers['content-type']
+        return str(DataURI.make(mimetype=content_type, charset='utf-8', base64=True, data=img_data))
+    elif img_url.startswith('data:'):
+        return img_url
+    elif img_url.startswith('file:'):
+        img_url = img_url.replace('file:', '')
+        return str(DataURI.from_file(img_url))
+    else:
+        raise ValueError(f'Unsupported image URL: {img_url}')
 
 if __name__ == '__main__':
     # Initialize argparse

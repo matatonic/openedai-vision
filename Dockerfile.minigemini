@@ -1,0 +1,25 @@
+FROM python:3.11-slim
+
+RUN mkdir -p /app
+
+RUN apt-get update && apt-get install -y git
+
+RUN git clone https://github.com/dvlab-research/MiniGemini.git --single-branch /app/MiniGemini
+WORKDIR /app/MiniGemini
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir --no-deps -e .
+
+WORKDIR /app
+
+COPY requirements.minigemini.txt .
+RUN pip install --no-cache-dir -r requirements.minigemini.txt
+
+COPY *.py .
+COPY backend /app/backend
+
+RUN pip show torch
+RUN pip show torchvision
+RUN pip show transformers
+RUN pip show accelerate
+CMD python vision.py
+

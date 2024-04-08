@@ -1,5 +1,7 @@
 #
 hf_home/
+model_zoo/
+YanweiLi/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

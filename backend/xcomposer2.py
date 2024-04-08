@@ -5,7 +5,7 @@ import auto_gptq
 import torch
 
 # internlm/internlm-xcomposer2-7b
-# internlm/internlm-xcomposer2-7b-4bit
+# internlm/internlm-xcomposer2-7b-4bit # pretty bad.
 
 class InternLMXComposer2QForCausalLM(auto_gptq.modeling.BaseGPTQForCausalLM):
     layers_block_name = "model.layers"
@@ -30,7 +30,7 @@ class VisionQnA(VisionQnABase):
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         if '-4bit' in model_id:
             if self.params['torch_dtype'] == torch.bfloat16:
-                self.params['torch_dtype'] = torch.float16
+                self.params['torch_dtype'] = torch.float16 # fix bugs.
 
             torch.set_grad_enabled(False)
             auto_gptq.modeling._base.SUPPORTED_MODELS = ["internlm"]

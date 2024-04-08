@@ -1,0 +1,27 @@
+# These are not the project official requirements - and don't work well yet
+transformers>=4.39.0
+torch>=2.2.0
+torchvision
+bitsandbytes
+tokenizers
+sentencepiece
+shortuuid
+accelerate
+peft
+bitsandbytes
+pydantic
+markdown2[all]
+requests
+httpx
+uvicorn
+fastapi
+numpy
+scikit-learn
+gradio
+gradio_client
+einops
+einops-exts
+timm
+deepspeed
+open_clip_torch
+python-datauri

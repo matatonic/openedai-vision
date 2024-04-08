@@ -5,6 +5,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from vision_qna import *
 
 # echo840/Monkey
+# echo840/Monkey-Chat
 
 class VisionQnA(VisionQnABase):
     model_name: str = "monkey"
@@ -13,9 +14,8 @@ class VisionQnA(VisionQnABase):
     def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
         super().__init__(model_id, device, extra_params, format)
 
-         # XXX currently bugged https://huggingface.co/echo840/Monkey/discussions/4
-        self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
+        self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
 
         self.tokenizer.padding_side = 'left'
         self.tokenizer.pad_token_id = self.tokenizer.eod_id
@@ -25,6 +25,10 @@ class VisionQnA(VisionQnABase):
     async def chat_with_images(self, request: ImageChatRequest) -> str:
         files = []
         prompt = ''
+        default_params = {
+            'top_p': None,
+            'do_sample': False,
+        }
     
         for m in request.messages:
             if m.role == 'user':
@@ -33,6 +37,7 @@ class VisionQnA(VisionQnABase):
                     if c.type == 'image_url':
                         filename = await url_to_file(c.image_url.url)
                         p = '<img>' + filename + '</img> ' + p
+                        files.extend([filename])
                     if c.type == 'text':
                         p += f"{c.text}\n\n" # Question:
                 prompt += p
@@ -40,6 +45,10 @@ class VisionQnA(VisionQnABase):
                 for c in m.content:
                     if c.type == 'text':
                         prompt += f"Answer: {c.text}\n\n"
+            elif m.role == 'system':
+                for c in m.content:
+                    if c.type == 'text':
+                        prompt += f"{c.text}\n\n" # fake system prompt... doesn't really work.
 
         prompt += "Answer:"
 
@@ -48,7 +57,7 @@ class VisionQnA(VisionQnABase):
         attention_mask = input_ids.attention_mask.to(self.model.device)
         input_ids = input_ids.input_ids.to(self.model.device)
 
-        params = self.get_generation_params(request)
+        params = self.get_generation_params(request, default_params=default_params)
 
         pred = self.model.generate(
             input_ids=input_ids,

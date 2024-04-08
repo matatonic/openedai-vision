@@ -92,7 +92,7 @@ class VisionQnABase:
 
     def get_generation_params(self, request: ImageChatRequest, default_params = {}) -> dict:
         params = {
-            "top_k": None,
+            'top_k': None,
             'do_sample': False,
         }
         params.update(default_params)
@@ -270,18 +270,18 @@ async def gemma_prompt_from_messages(messages: list[Message], img_tok = "<image>
                     text = c.text
 
             img_tag = img_tok if has_image else ''
-            prompt += f"<|im_start|>user\n{img_tag}{text}<|im_end|>"
+            prompt += f"<start_of_turn>user\n{img_tag}{text}<end_of_turn>"
         elif m.role == 'assistant':
             for c in m.content:
                 if c.type == 'text':
-                    prompt += f"<|im_start|>assistant\n{c.text}<|im_end|>"
+                    prompt += f"<start_of_turn>model\n{c.text}<end_of_turn>"
         elif m.role == 'system':
             for c in m.content:
                 if c.type == 'text':
-                    prompt += f"<|im_start|>system\n{c.text}<|im_end|>"
+                    prompt += f"<start_of_turn>system\n{c.text}<end_of_turn>" # fake it
 
 
-    prompt += f"<|im_start|>assistant\n"
+    prompt += f"<start_of_turn>model\n"
 
     return images, prompt
 
@@ -292,6 +292,7 @@ async def prompt_from_messages(messages: list[Message], format: str) -> str:
         'llama2': llama2_prompt_from_messages,
         'mistral': llama2_prompt_from_messages, # simplicity
         'chatml': chatml_prompt_from_messages,
+        'gemma': gemma_prompt_from_messages
     }
 
     if format not in known_formats:
@@ -299,31 +300,14 @@ async def prompt_from_messages(messages: list[Message], format: str) -> str:
     
     return await known_formats[format](messages)
 
-def answer_from_response(response: str, format: str) -> str:
-    """ parse out the model response from the prompt format """
-    if format in ['llama2', 'mistral']:
-        idx = response.rfind('[/INST]') + len('[/INST]') + 1 #+ len(images)
-        return response[idx:]
-    elif format == 'vicuna':
-        idx = response.rfind('ASSISTANT:') + len('ASSISTANT:') + 1 #+ len(images)
-        return response[idx:]
-    elif format == 'chatml':
-        idx = response.rfind('<|im_user|>assistant\n') + len('<|im_user|>assistant\n') + 1 #+ len(images)
-        end_idx = response.rfind('<|im_end|>')
-        return response[idx:end_idx]
-    elif format == 'gemma':
-        idx = response.rfind('<start_of_turn>model\n') + len('<start_of_turn>model\n') + 1 #+ len(images)
-        end_idx = response.rfind('<end_of_turn>')
-        return response[idx:end_idx]
-    
 def guess_model_format(model_name: str) -> str:
     model_id = model_name.lower()
 
     model_format_match_map = {
         'llama2': ['bakllava', '8x7b', 'mistral', 'mixtral'],
-        'gemma': ['gemma', '2b'],
+        'gemma': ['gemma', '-2b'],
         'vicuna': ['vicuna', '13b'],
-        'phi15': ['moondream1', 'moondream2'],
+        'phi15': ['moondream1', 'moondream2', 'monkey'],
         'chatml': ['34b', 'yi-6b'],
     }
     for format, options in model_format_match_map.items():
@@ -369,3 +353,6 @@ def guess_backend(model_name: str) -> str:
     
     if 'xcomposer2' in model_id:
         return 'xcomposer2'
+    
+    if 'mini-gemini' in model_id:
+        return 'minigemini'

@@ -7,10 +7,11 @@ from datauri import DataURI
 from vision_qna import *
 
 # "Qwen/Qwen-VL-Chat" # 13GB
-# "Qwen/Qwen-VL-Chat-4bit" # TODO: auto-gptq
+# "Qwen/Qwen-VL-Chat-int4" # 11GB (bad, bugs)
 
 class VisionQnA(VisionQnABase):
     model_name: str = "qwen-vl"
+    format: 'chatml'
     
     def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
         super().__init__(model_id, device, extra_params, format)
