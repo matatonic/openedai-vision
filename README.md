@@ -9,9 +9,9 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 
 Model support:
 - [X] [InternLM](https://huggingface.co/internlm/)
-- - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (multi-image chat model, lots of warnings on startup, wont gpu split)
+- - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (multi-image chat model, wont gpu split)
 - - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended)
-- - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] *(only supports a single image, also lots of warnings, wont gpu split)
+- - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] *(only supports a single image, wont gpu split)
 - - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit)
 - [X] [LlavaNext](https://huggingface.co/llava-hf) *(only supports a single image)
 - - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
@@ -37,6 +37,7 @@ Model support:
 - - [ ] [MiniGemini-13B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-13B-HD) (currently errors)
 - - [ ] [MiniGemini-34B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-34B-HD) (currently errors)
 - - [ ] [MiniGemini-8x7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B-HD) (currently errors)
+- [X] [qnguyen3/nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA)
 - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
 - [ ] [Moondream1](https://huggingface.co/vikhyatk/moondream1)
 - [ ] [Deepseek-VL-7b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-7b-chat)
@@ -53,9 +54,14 @@ Some vision systems include their own OpenAI compatible API server. Included are
 - - [X] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B)
 - - [X] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B)
 
-Version: 0.7.0
+Version: 0.8.0
 
 Recent updates:
+- Big performance gains (10x) for some models, especially llava-v1.6-34B (`use_cache` missing from many models, all llava* models, more.)
+- new model support: qnguyen3/nanoLLaVA (sub 1B model)
+- Updated chat_with_image.py to include --single (-1) answer mode
+- More testing
+- `sample.env` contains VRAM usage and some notes about model configurations.
 - new model support: MiniGemini-2B (it's still a bit complex to use, see `prepare_minigemini.sh`)
 - new model support: echo840/Monkey-Chat, echo840/Monkey
 - AutoGPTQ support for internlm/internlm-xcomposer2-7b-4bit, internlm/internlm-xcomposer2-vl-7b-4bit
@@ -79,10 +85,15 @@ API Documentation
 Docker support
 --------------
 
-1) Edit the docker-compose file to suit your needs.
+1) Edit the `vision.env` file to suit your needs. See: `sample.env` for an example.
+
+```shell
+cp sample.env vision.env
+```
 
 2) You can run the server via docker like so:
 ```shell
+# for OpenedAI Vision Server
 docker compose up
 # for CogVLM
 docker compose -f docker-compose.cogvlm.yml up
@@ -139,17 +150,41 @@ Sample API Usage
 
 `chat_with_image.py` has a sample of how to use the API.
 
+Usage
+```
+usage: chat_with_image.py [-h] [-s SYSTEM_PROMPT] [-m MAX_TOKENS] [-t TEMPERATURE] [-p TOP_P] [-u] [-1] image_url [questions ...]
+
+Test vision using OpenAI
+
+positional arguments:
+  image_url             URL or image file to be tested
+  questions             The question to ask the image
+
+options:
+  -h, --help            show this help message and exit
+  -s SYSTEM_PROMPT, --system-prompt SYSTEM_PROMPT
+  -m MAX_TOKENS, --max-tokens MAX_TOKENS
+  -t TEMPERATURE, --temperature TEMPERATURE
+  -p TOP_P, --top_p TOP_P
+  -u, --keep-remote-urls
+                        Normally, http urls are converted to data: urls for better latency.
+  -1, --single          Single turn Q&A, output is only the model response.
+```
+
 Example:
 ```
-$ python chat_with_image.py https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg
-Answer: The image captures a serene landscape of a grassy field, where a wooden walkway cuts through the center. The path is flanked by tall, lush green grass on either side, leading the eye towards the horizon. A few trees and bushes are scattered in the distance, adding depth to the scene. Above, the sky is a clear blue, dotted with white clouds that add to the tranquil atmosphere.
+$ python chat_with_image.py -1 https://images.freeimages.com/images/large-previews/cd7/gingko-biloba-1058537.jpg "Describe the image."
+The image features a close-up of a large green leaf, possibly a fern leaf, with a white background. The leaf is the main focus of the image, and it appears to be the only green object in the picture.
+$ python chat_with_image.py https://images.freeimages.com/images/large-previews/e59/autumn-tree-1408307.jpg
+Answer: The image captures a breathtaking view of a solitary tree standing tall on the edge of a lake, with mountains forming a majestic backdrop. The tree, in full autumn glory, is adorned with leaves that exhibit vibrant hues of orange and yellow, contrasting beautifully against the clear blue sky. The perspective of the photo is such that it appears to be taken from across the water, adding a sense of depth and grandeur to the scene.
 
+Question: What kind of tree is it?
+Answer: The tree is a deciduous tree with broad, orange and yellow leaves, which indicates that it might be in the process of shedding its foliage, possibly during autumn.
 
-Question: Are there any animals in the picture?
-Answer: No, there are no animals visible in the picture.
+Question: Is it a larch?
+Answer: It's hard to definitively identify the tree just from its leaves, but given the broad orange and yellow foliage in what appears to be autumn, it could possibly be a larch or a species of birch. Both these trees are known for their distinctive fall colors.
 
 Question: ^D
-$
 ```
 
 Known Bugs & Workarounds
@@ -161,4 +196,4 @@ RuntimeError: Expected all tensors to be on the same device, but found at least 
 ```
 Try to specify a single cuda device with `CUDA_VISIBLE_DEVICES=1` (or # of your GPU) before running the script. or set the device via `--device cuda:0` on the command line.
 
-2. 4bit/8bit quantization and flash attention 2 don't work for all the models. No workaround.
+2. 4bit/8bit quantization and flash attention 2 don't work for all the models. No workaround, see: `sample.env` for known working configurations.

@@ -1,6 +1,12 @@
 import re
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
+import transformers
+import warnings
+# disable some warnings
+transformers.logging.set_verbosity_error()
+warnings.filterwarnings('ignore')
+
 from minigemini.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 from minigemini.conversation import conv_templates, SeparatorStyle
 from minigemini.model.builder import load_pretrained_model
@@ -108,7 +114,6 @@ class VisionQnA(VisionQnABase):
                 bos_token_id=self.tokenizer.bos_token_id,  # Begin of sequence token
                 eos_token_id=self.tokenizer.eos_token_id,  # End of sequence token
                 pad_token_id=self.tokenizer.pad_token_id,  # Pad token
-                use_cache=True,
                 **params,
             )
         answer = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()

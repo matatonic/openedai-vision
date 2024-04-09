@@ -19,7 +19,7 @@ class VisionQnA(VisionQnABase):
         del self.params['trust_remote_code']
         
         self.processor = LlavaProcessor.from_pretrained(model_id)
-        self.model = LlavaForConditionalGeneration.from_pretrained(**self.params).eval()
+        self.model = LlavaForConditionalGeneration.from_pretrained(**self.params)
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
 

@@ -4,6 +4,12 @@ from vision_qna import *
 import auto_gptq
 import torch
 
+import transformers
+import warnings
+# disable some warnings
+transformers.logging.set_verbosity_error()
+warnings.filterwarnings('ignore')
+
 # internlm/internlm-xcomposer2-7b
 # internlm/internlm-xcomposer2-7b-4bit # pretty bad.
 
@@ -34,7 +40,7 @@ class VisionQnA(VisionQnABase):
 
             torch.set_grad_enabled(False)
             auto_gptq.modeling._base.SUPPORTED_MODELS = ["internlm"]
-            self.model = InternLMXComposer2QForCausalLM.from_quantized(model_name_or_path=model_id, **self.params).eval()
+            self.model = InternLMXComposer2QForCausalLM.from_quantized(model_name_or_path=model_id, **self.params)
         else:
             self.model = AutoModel.from_pretrained(**self.params).eval()
 

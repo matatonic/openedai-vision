@@ -20,7 +20,7 @@ class VisionQnA(VisionQnABase):
 
         use_fast = 'mistral' in model_id
         self.processor = LlavaNextProcessor.from_pretrained(model_id, use_fast=use_fast)
-        self.model = LlavaNextForConditionalGeneration.from_pretrained(**self.params).eval()
+        self.model = LlavaNextForConditionalGeneration.from_pretrained(**self.params)
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
 

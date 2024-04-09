@@ -18,7 +18,10 @@ WORKDIR /app
 COPY requirements.*.txt .
 RUN for r in requirements.*.txt ; do pip install -U --no-cache-dir -r $r; done
 
+RUN pip install --no-cache-dir -U openai
+
 COPY *.py .
 COPY backend /app/backend
 
-CMD python vision.py
+ENV CLI_COMMAND="python vision.py"
+CMD $CLI_COMMAND

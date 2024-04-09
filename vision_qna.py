@@ -94,6 +94,7 @@ class VisionQnABase:
         params = {
             'top_k': None,
             'do_sample': False,
+            'use_cache': True,
         }
         params.update(default_params)
 
@@ -308,7 +309,7 @@ def guess_model_format(model_name: str) -> str:
         'gemma': ['gemma', '-2b'],
         'vicuna': ['vicuna', '13b'],
         'phi15': ['moondream1', 'moondream2', 'monkey'],
-        'chatml': ['34b', 'yi-6b'],
+        'chatml': ['34b', 'yi-6b', 'nanollava'],
     }
     for format, options in model_format_match_map.items():
         if any(x in model_id for x in options):
@@ -318,6 +319,9 @@ def guess_model_format(model_name: str) -> str:
 
 def guess_backend(model_name: str) -> str:
     model_id = model_name.lower()
+
+    if 'nanollava' in model_id:
+        return 'nanollava'
 
     if 'llava' in model_id:
         if 'v1.6' in model_id:

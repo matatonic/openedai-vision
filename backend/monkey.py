@@ -67,7 +67,6 @@ class VisionQnA(VisionQnABase):
             length_penalty=1,
             num_return_sequences=1,
             output_hidden_states=True,
-            use_cache=True,
             pad_token_id=self.tokenizer.eod_id,
             eos_token_id=self.tokenizer.eod_id,
             **params,
