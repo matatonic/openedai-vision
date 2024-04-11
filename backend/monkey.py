@@ -11,8 +11,8 @@ class VisionQnA(VisionQnABase):
     model_name: str = "monkey"
     format: str = 'qwen' # phi15-ish
     
-    def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
-        super().__init__(model_id, device, extra_params, format)
+    def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
+        super().__init__(model_id, device, device_map, extra_params, format)
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()

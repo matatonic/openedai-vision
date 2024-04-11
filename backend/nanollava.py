@@ -6,6 +6,7 @@ import transformers
 import warnings
 # disable some warnings
 transformers.logging.set_verbosity_error()
+warnings.filterwarnings('ignore')
 
 # 'qnguyen3/nanoLLaVA'
 
@@ -21,8 +22,8 @@ class VisionQnA(VisionQnABase):
     model_name: str = "nanollava"
     format: str = "chatml"
     
-    def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
-        super().__init__(model_id, device, extra_params, format)
+    def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
+        super().__init__(model_id, device, device_map, extra_params, format)
         
         torch.set_default_device(self.device)
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))

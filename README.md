@@ -7,56 +7,63 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - Does not connect to the OpenAI API and does not require an OpenAI API Key
 - Not affiliated with OpenAI in any way
 
-Model support:
+## Model support
+
+- [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM)
+- - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
+- - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)
 - [X] [InternLM](https://huggingface.co/internlm/)
-- - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (multi-image chat model, wont gpu split)
+- - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (wont gpu split)
 - - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended)
-- - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] *(only supports a single image, wont gpu split)
+- - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] (wont gpu split)
 - - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit)
-- [X] [LlavaNext](https://huggingface.co/llava-hf) *(only supports a single image)
-- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
-- - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
-- - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf)
-- - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf)
-- [X] [Llava](https://huggingface.co/llava-hf) *(only supports a single image)
+- [X] [LlavaNext](https://huggingface.co/llava-hf) (main docker only)
+- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf) (main docker only)
+- - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf) (main docker only)
+- - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf) (main docker only)
+- - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf) (main docker only)
+- [X] [Llava](https://huggingface.co/llava-hf)
 - - [X] [llava-v1.5-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-7b-hf)
 - - [X] [llava-v1.5-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-13b-hf)
 - - [ ] [llava-v1.5-bakLlava-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-bakLlava-7b-hf) (currently errors)
+- [X] [01-ai/Yi-VL](https://huggingface.co/01-ai)
+- - [ ] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B) (currently errors)
+- - [ ] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B) (currently errors)
 - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
 - [X] [Monkey](https://huggingface.co/echo840/Monkey)
 - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
-- [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2) *(only supports a single image)
-- [X] [MiniCPM-V](https://huggingface.co/openbmb/MiniCPM-V) (aka. OmniLMM-3B) *(only supports a single image)
+- [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2)
+- [X] [Moondream1](https://huggingface.co/vikhyatk/moondream1) (alternate docker only)
+- [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V)
 - [X] [MiniGemini](https://huggingface.co/collections/YanweiLi/) (more complex setup, see: `prepare_minigemini.sh`)
-- - [X] [MiniGemini-2B](https://huggingface.co/YanweiLi/Mini-Gemini-2B)
-- - [ ] [MiniGemini-7B](https://huggingface.co/YanweiLi/Mini-Gemini-7B) (currently errors)
-- - [ ] [MiniGemini-13B](https://huggingface.co/YanweiLi/Mini-Gemini-13B) (currently errors)
-- - [ ] [MiniGemini-34B](https://huggingface.co/YanweiLi/Mini-Gemini-34B) (currently errors)
-- - [ ] [MiniGemini-8x7B](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B) (currently errors)
-- - [ ] [MiniGemini-7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-7B-HD) (currently errors)
-- - [ ] [MiniGemini-13B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-13B-HD) (currently errors)
-- - [ ] [MiniGemini-34B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-34B-HD) (currently errors)
-- - [ ] [MiniGemini-8x7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B-HD) (currently errors)
-- [X] [qnguyen3/nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA)
+- - [X] [MiniGemini-2B](https://huggingface.co/YanweiLi/Mini-Gemini-2B) (main docker only)
+- - [X] [MiniGemini-7B](https://huggingface.co/YanweiLi/Mini-Gemini-7B) (alternate docker only)
+- - [X] [MiniGemini-13B](https://huggingface.co/YanweiLi/Mini-Gemini-13B) (alternate docker only)
+- - [X] [MiniGemini-34B](https://huggingface.co/YanweiLi/Mini-Gemini-34B) (alternate docker only)
+- - [X] [MiniGemini-8x7B](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B) (alternate docker only)
+- - [X] [MiniGemini-7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-7B-HD) (alternate docker only)
+- - [X] [MiniGemini-13B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-13B-HD) (alternate docker only)
+- - [X] [MiniGemini-34B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-34B-HD) (alternate docker only)
+- - [X] [MiniGemini-8x7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B-HD) (alternate docker only)
+- [X] [qnguyen3/nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (main docker only, wont gpu split)
 - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
-- [ ] [Moondream1](https://huggingface.co/vikhyatk/moondream1)
 - [ ] [Deepseek-VL-7b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-7b-chat)
 - [ ] [Deepseek-VL-1.3b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat)
 - [ ] [NousResearch/Obsidian-3B-V0.5](https://huggingface.co/NousResearch/Obsidian-3B-V0.5)
 - [ ] ...
 
+See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
-Some vision systems include their own OpenAI compatible API server. Included are some pre-built images and docker-compose for them (they must be run separately):
-- [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM) `docker-compose.cogvlm.yml`
-- - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
-- - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf) **Recommended for 16GB-40GB GPU**
-- [X] [01-ai/Yi-VL](https://huggingface.co/01-ai) `docker-compose.yi-vl.yml`
-- - [X] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B)
-- - [X] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B)
+Version: 0.9.0
 
-Version: 0.8.0
+## Recent updates
 
-Recent updates:
+- new model support: MiniGemini-7B -> MiniGemini-8x7B-HD, alternate docker.
+- new openai_example.sh shell script for simple command line generation.
+- new backend: include 01-ai/Yi-VL in main docker containers, currently errors.
+- new backend: include THUDM/CogVLM in main docker containers.
+- Fix: moondream1 (use alt container)
+- Split images into main (transformers>=4.39.0) and alt (transformers==4.36.2)
 - Big performance gains (10x) for some models, especially llava-v1.6-34B (`use_cache` missing from many models, all llava* models, more.)
 - new model support: qnguyen3/nanoLLaVA (sub 1B model)
 - Updated chat_with_image.py to include --single (-1) answer mode
@@ -66,62 +73,60 @@ Recent updates:
 - new model support: echo840/Monkey-Chat, echo840/Monkey
 - AutoGPTQ support for internlm/internlm-xcomposer2-7b-4bit, internlm/internlm-xcomposer2-vl-7b-4bit
 - Automatic selection of backend, based on the model name
-- Enable trust_remote_code by default
-- Improved parameter support: temperature, top_p, max_tokens, system prompts
-- Improved default generation parameters and sampler settings
-- Improved system prompt for InternLM-XComposer2 & InternLM-XComposer2-VL, Fewer refusals and should not require "In English" nearly as much while still supporting Chinese.
-- Fix: chat_with_images.py url filename bug
 
 
-See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 
-API Documentation
------------------
+## API Documentation
 
 * [OpenAI Vision guide](https://platform.openai.com/docs/guides/vision)
 
 
-Docker support
---------------
+## Docker support
 
-1) Edit the `vision.env` file to suit your needs. See: `sample.env` for an example.
+1) Edit the `vision.env` or `vision-alt.env` file to suit your needs. See: `sample.env` for an example.
 
 ```shell
 cp sample.env vision.env
+# OR for alt the version
+cp sample.alt.env vision-alt.env
 ```
 
-2) You can run the server via docker like so:
+2) You can run the server via docker compose like so:
+```shell
+# for OpenedAI Vision Server (transformers>=4.39.0)
+docker compose up
+# for OpenedAI Vision Server (alternate, for Mini-Gemini > 2B, used transformers==4.36.2)
+docker compose -f docker-compose.alt.yml up
+```
+
+Add the `-d` flag to daemonize. To install as a service, add `--restart unless-stopped`.
+
+3) To update your setup (or download the image before running the server), you can pull the latest version of the image with the following command:
 ```shell
 # for OpenedAI Vision Server
-docker compose up
-# for CogVLM
-docker compose -f docker-compose.cogvlm.yml up
-# for VI-VL
-docker compose -f docker-compose.yi-vl.yml up
+docker compose pull
+# for OpenedAI Vision Server (alternate, for Mini-Gemini > 2B, nanollava, moondream1) which uses transformers==4.36.2
+docker compose -f docker-compose.alt.yml pull
 ```
 
-Manual Installation instructions
---------------------------------
+## Manual Installation instructions
 
 ```shell
 # install the python dependencies
-pip install -r requirements.txt
-# Install backend specific requirements (or select only backends you plan to use)
-pip install -r requirements.moondream.txt -r requirements.qwen-vl.txt
-# install the package
-pip install .
+pip install -r requirements.txt "transformers>=4.39.0"
+# OR install the python dependencies for the alt version
+pip install -r requirements.txt "transformers==4.36.2"
 # run the server with your chosen model
 python vision.py --model vikhyatk/moondream2
 ```
 
 For MiniGemini support the docker image is recommended. See `Dockerfile` and `requirements.minigemini.txt` for manual installation instructions.
 
-Usage
------
+## Usage
 
 ```
-usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--no-trust-remote-code] [-4] [-8] [-F] [-P PORT] [-H HOST] [--preload]
+usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--no-trust-remote-code] [-4] [-8] [-F] [-P PORT] [-H HOST] [--preload]
 
 OpenedAI Vision API Server
 
@@ -134,19 +139,21 @@ options:
   -f FORMAT, --format FORMAT
                         Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15, gemma) (doesn't work with all models) (default: None)
   -d DEVICE, --device DEVICE
-                        Set the torch device for the model. Ex. cuda:1 (default: auto)
-  c
-                        Don't trust remote code (required for some models) (default: False)
+                        Set the torch device for the model. Ex. cpu, cuda:1 (default: auto)
+  --device-map DEVICE_MAP
+                        Set the default device map policy for the model. (auto, balanced, sequential, balanced_low_0, cuda:1, etc.) (default: auto)
+  --no-trust-remote-code
+                        Don't trust remote code (required for many models) (default: False)
   -4, --load-in-4bit    load in 4bit (doesn't work with all models) (default: False)
   -8, --load-in-8bit    load in 8bit (doesn't work with all models) (default: False)
   -F, --use-flash-attn  Use Flash Attention 2 (doesn't work with all models or GPU) (default: False)
   -P PORT, --port PORT  Server tcp port (default: 5006)
   -H HOST, --host HOST  Host to listen on, Ex. localhost (default: 0.0.0.0)
   --preload             Preload model and exit. (default: False)
+
 ```
 
-Sample API Usage
-----------------
+## Sample API Usage
 
 `chat_with_image.py` has a sample of how to use the API.
 
@@ -174,26 +181,42 @@ options:
 Example:
 ```
 $ python chat_with_image.py -1 https://images.freeimages.com/images/large-previews/cd7/gingko-biloba-1058537.jpg "Describe the image."
-The image features a close-up of a large green leaf, possibly a fern leaf, with a white background. The leaf is the main focus of the image, and it appears to be the only green object in the picture.
+The image presents a single, large green leaf with a pointed tip and a serrated edge. The leaf is attached to a thin stem, suggesting it's still connected to its plant. The leaf is set against a stark white background, which contrasts with the leaf's vibrant green color. The leaf's position and the absence of other objects in the image give it a sense of isolation. There are no discernible texts or actions associated with the leaf. The relative position of the leaf to the background remains constant as it is the sole object in the image. The image does not provide any information about the leaf's size or the type of plant it belongs to. The leaf's serrated edge and pointed tip might suggest it's from a deciduous tree, but without additional context, this is purely speculative. The image is a simple yet detailed representation of a single leaf.
+```
+
+```
 $ python chat_with_image.py https://images.freeimages.com/images/large-previews/e59/autumn-tree-1408307.jpg
-Answer: The image captures a breathtaking view of a solitary tree standing tall on the edge of a lake, with mountains forming a majestic backdrop. The tree, in full autumn glory, is adorned with leaves that exhibit vibrant hues of orange and yellow, contrasting beautifully against the clear blue sky. The perspective of the photo is such that it appears to be taken from across the water, adding a sense of depth and grandeur to the scene.
+Answer: The image captures a serene autumn scene. The main subject is a deciduous tree, standing alone on the shore of a calm lake. The tree is in the midst of changing colors, with leaves in shades of orange, yellow, and green. The branches of the tree are bare, indicating that the leaves are in the process of falling. The tree is positioned on the left side of the image, with its reflection visible in the still water of the lake.
+
+The background of the image features a mountain range, which is partially obscured by a haze. The mountains are covered in a dense forest, with trees displaying a mix of green and autumnal colors. The sky above is clear and blue, suggesting a calm and sunny day.
+
+The overall composition of the image places the tree as the focal point, with the lake, mountains, and sky serving as a picturesque backdrop. The image does not contain any discernible text or human-made objects, reinforcing the natural beauty of the scene. The relative positions of the objects in the image create a sense of depth and perspective, with the tree in the foreground, the lake in the middle ground, and the mountains and sky in the background. The image is a testament to the tranquil beauty of nature during the autumn season.
 
 Question: What kind of tree is it?
-Answer: The tree is a deciduous tree with broad, orange and yellow leaves, which indicates that it might be in the process of shedding its foliage, possibly during autumn.
+Answer: Based on the image, it is not possible to definitively identify the species of the tree. However, the tree's characteristics, such as its broad leaves and the way they change color in the fall, suggest that it could be a type of deciduous tree commonly found in temperate regions. Without more specific details or a closer view, it is not possible to provide a more precise identification of the tree species.
 
 Question: Is it a larch?
-Answer: It's hard to definitively identify the tree just from its leaves, but given the broad orange and yellow foliage in what appears to be autumn, it could possibly be a larch or a species of birch. Both these trees are known for their distinctive fall colors.
+Answer: The tree in the image could potentially be a larch, which is a type of deciduous conifer. Larches are known for their needle-like leaves that turn yellow and orange in the fall before falling off. However, without a closer view or more specific details, it is not possible to confirm whether the tree is indeed a larch. The image does not provide enough detail to make a definitive identification of the tree species.
 
 Question: ^D
 ```
 
-Known Bugs & Workarounds
-------------------------
+## Known Problems & Workarounds
 
 1. Related to cuda device split, If you get:
 ```
 RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cuda:1! (when checking argument for argument tensors in method wrapper_CUDA_cat)
 ```
-Try to specify a single cuda device with `CUDA_VISIBLE_DEVICES=1` (or # of your GPU) before running the script. or set the device via `--device cuda:0` on the command line.
+Try to specify a single cuda device with `CUDA_VISIBLE_DEVICES=1` (or # of your GPU) before running the script. or set the device via `--device-map cuda:0` (or `--device cuda:0` in the alt image!) on the command line.
 
 2. 4bit/8bit quantization and flash attention 2 don't work for all the models. No workaround, see: `sample.env` for known working configurations.
+
+3. Yi-VL is currently not working.
+
+4. The default `--device-map auto` doesn't always work well with these models. If you have issues with multiple GPU's, try using `sequential` and selecting the order of your CUDA devices, like so:
+
+```shell
+# Example for reversing the order of 2 devices.
+CUDA_VISIBLE_DEVICES=1,0 python vision.py -m llava-hf/llava-v1.6-34b-hf --device-map sequential
+```
+

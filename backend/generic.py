@@ -5,8 +5,8 @@ from vision_qna import *
 class VisionQnA(VisionQnABase):
     model_name: str = "generic"
     
-    def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
-        super().__init__(model_id, device, extra_params, format)
+    def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
+        super().__init__(model_id, device, device_map, extra_params, format)
 
         if not format:
             self.format = guess_model_format(model_id)
@@ -25,6 +25,6 @@ class VisionQnA(VisionQnABase):
         params = self.get_generation_params(request)
 
         output = self.model.generate(**inputs, **params)
-        response = self.tokenizer.decode(output[0], skip_special_tokens=True)
+        response = self.tokenizer.decode(output[0][inputs.input_ids.size(1):].cpu(), skip_special_tokens=True)
 
-        return answer_from_response(response, self.format)
+        return response

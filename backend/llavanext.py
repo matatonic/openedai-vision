@@ -10,8 +10,8 @@ class VisionQnA(VisionQnABase):
     model_name: str = "llavanext"
     format: str = 'llama2'
     
-    def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
-        super().__init__(model_id, device, extra_params, format)
+    def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
+        super().__init__(model_id, device, device_map, extra_params, format)
 
         if not format:
             self.format = guess_model_format(model_id)
@@ -29,6 +29,7 @@ class VisionQnA(VisionQnABase):
         images, prompt = await prompt_from_messages(request.messages, self.format)
         inputs = self.processor(prompt, images, return_tensors="pt").to(self.model.device)
 
+        # XXX pad_id to eos_id for less warnings
         params = self.get_generation_params(request)
 
         output = self.model.generate(**inputs, **params)

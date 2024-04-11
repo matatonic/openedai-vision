@@ -1,5 +1,7 @@
 import re
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from accelerate import infer_auto_device_map
+
+
 
 import transformers
 import warnings
@@ -7,11 +9,9 @@ import warnings
 transformers.logging.set_verbosity_error()
 warnings.filterwarnings('ignore')
 
-from minigemini.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
-from minigemini.conversation import conv_templates, SeparatorStyle
+from minigemini.constants import IMAGE_TOKEN_INDEX
 from minigemini.model.builder import load_pretrained_model
-from minigemini.utils import disable_torch_init
-from minigemini.mm_utils import process_images, tokenizer_image_token, get_model_name_from_path, KeywordsStoppingCriteria
+from minigemini.mm_utils import process_images, tokenizer_image_token
 
 from vision_qna import *
 
@@ -29,8 +29,8 @@ class VisionQnA(VisionQnABase):
     model_name: str = "minigemini"
     format: str = "llama2"
     
-    def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
-        super().__init__(model_id, device, extra_params, format)
+    def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
+        super().__init__(model_id, device, device_map, extra_params, format)
 
         if not format:
             self.format = guess_model_format(model_id)
@@ -39,7 +39,7 @@ class VisionQnA(VisionQnABase):
         del self.params['low_cpu_mem_usage']
         del self.params['pretrained_model_name_or_path']
         del self.params['trust_remote_code']
-
+        
         self.tokenizer, self.model, self.image_processor, self.context_len = load_pretrained_model(
             model_id, None, model_name, **self.params)
     
@@ -105,6 +105,8 @@ class VisionQnA(VisionQnABase):
         input_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).to(self.model.device)
 
         params = self.get_generation_params(request)
+        
+        if 'top_k' in params: del params['top_k'] # avoid warnings
         
         with torch.inference_mode():
             output_ids = self.model.generate(

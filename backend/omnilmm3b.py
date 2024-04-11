@@ -8,8 +8,8 @@ from vision_qna import *
 class VisionQnA(VisionQnABase):
     model_name: str = "omnilmm3b"
     
-    def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
-        super().__init__(model_id, device, extra_params, format)
+    def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
+        super().__init__(model_id, device, device_map, extra_params, format)
 
         # bugs with 4bit, RuntimeError: mat1 and mat2 must have the same dtype, but got Float and BFloat16
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))

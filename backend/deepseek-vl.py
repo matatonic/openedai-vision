@@ -11,8 +11,8 @@ class VisionQnA(VisionQnABase):
     model_name: str = "deepseek-vl"
     format: str = ''
     
-    def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
-        super().__init__(model_id, device, extra_params, format)
+    def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
+        super().__init__(model_id, device, device_map, extra_params, format)
 
         self.processor = VLChatProcessor.from_pretrained(model_id)
         self.model = MultiModalityCausalLM.from_pretrained(**self.params)

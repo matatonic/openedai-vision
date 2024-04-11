@@ -6,6 +6,7 @@ from PIL import Image
 import torch
 from typing import Optional, List, Literal
 from pydantic import BaseModel
+from transformers import BitsAndBytesConfig
 
 class ImageURL(BaseModel):
     url: str
@@ -32,7 +33,7 @@ class VisionQnABase:
     format: str = None
     revision: str = 'main'
     
-    def __init__(self, model_id: str, device: str, extra_params = {}, format = None):
+    def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         self.device, self.dtype = self.select_device_dtype(device)
 
         self.params = {
@@ -40,23 +41,25 @@ class VisionQnABase:
             'torch_dtype': self.dtype,
             'low_cpu_mem_usage': True,
             'revision': self.revision,
-            'device_map': 'auto' if device == 'auto' else self.device,
+            'device_map': device_map,
         }
         if extra_params.get('load_in_4bit', False):
             load_in_4bit_params = {
-                'quantization_config': {
-                    'load_in_4bit': True,
-                    'bnb_4bit_quant_type': "nf4",
-                    'bnb_4bit_use_double_quant': True, # XXX make this an option
-                    'bnb_4bit_compute_dtype': self.dtype,
-                }
+                'quantization_config': BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_quant_type='nf4',
+                    bnb_4bit_use_double_quant=True, # XXX make this an option
+                    bnb_4bit_compute_dtype=self.dtype,
+                    load_in_4bit_fp32_cpu_offload=False,
+                )
             }
             self.params.update(load_in_4bit_params)
         elif extra_params.get('load_in_8bit', False):
             load_in_8bit_params = {
-                'quantization_config': {
-                    'load_in_8bit': True,
-                }
+                'quantization_config': BitsAndBytesConfig(
+                    load_in_8bit=True,
+                    load_in_8bit_fp32_cpu_offload=False,
+                )
             }
             self.params.update(load_in_8bit_params)
 
@@ -163,6 +166,37 @@ async def phi15_prompt_from_messages(messages: list[Message], img_tok = "<image>
 
     return images, prompt
 
+async def vicuna0_prompt_from_messages(messages: list[Message], img_tok = "<image_placeholder>\n"):
+    prompt = ''
+    images = []
+
+    for m in messages:
+        if m.role == 'user':
+            text = ''
+            has_image = False
+
+            for c in m.content:
+                if c.type == 'image_url':
+                    images.extend([ await url_to_image(c.image_url.url) ])
+                    has_image = True
+                if c.type == 'text':
+                    text = c.text
+            
+            img_tag = img_tok if has_image else ''
+            prompt += f"### Human: {img_tag}{text}\n"
+        elif m.role == 'assistant':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"### Assistant: {c.text}\n"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"{c.text}\n\n"
+
+    prompt += "### Assistant:"
+
+    return images, prompt
+
 async def vicuna_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
     prompt = ''
     images = []
@@ -184,7 +218,7 @@ async def vicuna_prompt_from_messages(messages: list[Message], img_tok = "<image
         elif m.role == 'assistant':
             for c in m.content:
                 if c.type == 'text':
-                    prompt += f"ASSISTANT: {c.text}</s>\n"
+                    prompt += f"ASSISTANT: {c.text}\n"
         elif m.role == 'system':
             for c in m.content:
                 if c.type == 'text':
@@ -211,15 +245,15 @@ async def llama2_prompt_from_messages(messages: list[Message], img_tok = "<image
                     text = c.text
 
             img_tag = img_tok if has_image else ''
-            prompt += f"<s>[INST] {img_tag}{text} [/INST]"
+            prompt += f"[INST] {img_tag}{text} [/INST]"
         elif m.role == 'assistant':
             for c in m.content:
                 if c.type == 'text':
-                    prompt += f" {c.text}</s>"
+                    prompt += f" {c.text}"
         elif m.role == 'system':
             for c in m.content:
                 if c.type == 'text':
-                    prompt += f"<s>[INST] <<SYS>>\n{c.text}\n<</SYS>> [/INST]</s>" # not quite right, but it's a start
+                    prompt += f"[INST] <<SYS>>\n{c.text}\n<</SYS>> [/INST]" # not quite right, but it's a start
 
     return images, prompt
 
@@ -286,9 +320,43 @@ async def gemma_prompt_from_messages(messages: list[Message], img_tok = "<image>
 
     return images, prompt
 
+async def prompt_history_images_system_from_messages(messages: list[Message], img_tok = "<image>\n", url_handler = url_to_image):
+    history = []
+    images = []
+    prompt = ''
+    system_prompt = None
+
+    for m in messages:
+        if m.role == 'user':
+            p = ''
+            for c in m.content:
+                if c.type == 'image_url':
+                    image = await url_handler(c.image_url.url)
+                    images.extend([image])
+                    p = img_tok + p
+                if c.type == 'text':
+                    p += c.text
+
+            prompt += p
+        elif m.role == 'assistant':
+            for c in m.content:
+                if c.type == 'text':
+                    history.extend([(prompt, c.text)])
+                    prompt = ''
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    system_prompt = c.text
+
+    return prompt, history, images, system_prompt
+
+
+
+
 async def prompt_from_messages(messages: list[Message], format: str) -> str:
     known_formats = {
         'phi15': phi15_prompt_from_messages,
+        'vicuna0': vicuna0_prompt_from_messages,
         'vicuna': vicuna_prompt_from_messages,
         'llama2': llama2_prompt_from_messages,
         'mistral': llama2_prompt_from_messages, # simplicity
@@ -308,6 +376,7 @@ def guess_model_format(model_name: str) -> str:
         'llama2': ['bakllava', '8x7b', 'mistral', 'mixtral'],
         'gemma': ['gemma', '-2b'],
         'vicuna': ['vicuna', '13b'],
+        'vicuna0': ['yi-vl'],
         'phi15': ['moondream1', 'moondream2', 'monkey'],
         'chatml': ['34b', 'yi-6b', 'nanollava'],
     }
@@ -360,3 +429,9 @@ def guess_backend(model_name: str) -> str:
     
     if 'mini-gemini' in model_id:
         return 'minigemini'
+
+    if 'yi-vl' in model_id:
+        return 'yi-vl'
+    
+    if 'thudm/cog' in model_id:
+        return 'cogvlm'

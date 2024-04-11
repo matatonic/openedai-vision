@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import time
+import json
 import sys
 import requests
 import argparse
@@ -8,41 +9,7 @@ from datauri import DataURI
 from openai import OpenAI
 import torch
 
-model_tests = [ 
-    # fp16
-    ["vikhyatk/moondream2", "--use-flash-attn"],
-    ["qnguyen3/nanoLLaVA", "--use-flash-attn", "-d", "cuda:0"],
-    ["echo840/Monkey"],
-    ["echo840/Monkey-Chat"],
-    ["internlm/internlm-xcomposer2-7b", "--use-flash-attn", '-d', 'cuda:0'],
-    ["internlm/internlm-xcomposer2-vl-7b", "--use-flash-attn", "-d", "cuda:0"],
-    ["openbmb/MiniCPM-V", "--use-flash-attn", '-d', 'cuda:0'],
-    ["Qwen/Qwen-VL-Chat"],
-    ["vikhyatk/moondream1"], # broken
-    ["YanweiLi/Mini-Gemini-2B"],
-    #["YanweiLi/Mini-Gemini-8x7B"], # requires transformers 4.36.2
-    #["deepseek-ai/deepseek-vl-1.3b-chat"], # WIP
-    #["deepseek-ai/deepseek-vl-7b-chat"], # WIP
-    #["openbmb/OmniLMM-12B"], # WIP
-    ["llava-hf/bakLlava-v1-hf", "--use-flash-attn"], # broken
-    ["llava-hf/llava-1.5-7b-hf", "--use-flash-attn"],
-    ["llava-hf/llava-1.5-13b-hf", "--use-flash-attn"],
-    ["llava-hf/llava-v1.6-mistral-7b-hf", "--use-flash-attn"],
-    ["llava-hf/llava-v1.6-vicuna-7b-hf", "--use-flash-attn"],
-    ["llava-hf/llava-v1.6-vicuna-13b-hf", "--use-flash-attn"],
-    ["llava-hf/llava-v1.6-34b-hf", "--use-flash-attn"],
-    # 4bit
-    ["qnguyen3/nanoLLaVA", "--use-flash-attn", "--load-in-4bit"],
-    ["internlm/internlm-xcomposer2-7b-4bit", "--use-flash-attn"], # not recommended, bad quant.
-    ["internlm/internlm-xcomposer2-vl-7b-4bit", "--use-flash-attn"],
-    ["llava-hf/bakLlava-v1-hf", "--load-in-4bit", "--use-flash-attn"], # broken
-    ["llava-hf/llava-1.5-7b-hf", "--load-in-4bit", "--use-flash-attn"],
-    ["llava-hf/llava-1.5-13b-hf", "--load-in-4bit", "--use-flash-attn"],
-    ["llava-hf/llava-v1.6-mistral-7b-hf", "--load-in-4bit", "--use-flash-attn"],
-    ["llava-hf/llava-v1.6-vicuna-7b-hf", "--load-in-4bit", "--use-flash-attn"],
-    ["llava-hf/llava-v1.6-vicuna-13b-hf", "--load-in-4bit", "--use-flash-attn"],
-    ["llava-hf/llava-v1.6-34b-hf", "--load-in-4bit", "--use-flash-attn"],
-]
+# tests are configured with model_conf_tests.json
 
 all_results = []
 
@@ -103,17 +70,32 @@ def test(cmd_args: list[str]) -> int:
 
     note = ''
     results = []
+    timeout = time.time() + 600
 
     while not ready():
+        try:
+            proc.communicate(timeout=0)
+        except:
+            pass
+
         if proc.returncode is not None:
-            note = 'Error: Server failed to start.'
+            note = 'Error: Server failed to start (exit).'
             record_result(cmd_args, [False], -1, -1, note)
-            print(f"\n{note}\nResult: fail")
+            print(f"\n{note}\nResult: fail\n\n### Test end")
             return -1
-        
+        elif time.time() > timeout:
+            print("Startup Timeout, killing server.", end='', flush=True)
+            note = 'Error: Server failed to start (timeout).'
+            record_result(cmd_args, [False], -1, -1, note)
+
+            proc.kill()
+            proc.wait()
+
+            print(f"\n{note}\nResult: fail\n\n### Test end")
+            return -1
+
         print(".", end='', flush=True)
         time.sleep(1)
-        # XXX TODO: timeout
 
     print("Server Alive, starting test.\n\n###")
     t = time.time()
@@ -220,20 +202,27 @@ if __name__ == '__main__':
                 print(f"{name}[data]: pass{', got: ' + answer if args.verbose else ''}")
 
         return results
-    
+
+    with open('model_conf_tests.json') as f:
+        model_tests = json.load(f)
 
     print(f"### Begin tests. test count: {len(model_tests)}")
 
-    for i, cmd_args in enumerate(model_tests):
-        print(f"### Test {i+1}/{len(model_tests)}: {cmd_args}")
-        ret = test(cmd_args)
-        if ret != 0 and args.abort_on_fail:
-            print(f"### Test {i+1}/{len(model_tests)} Failed.")
-            break
+    try:
+        for i, cmd_args in enumerate(model_tests):
+            print(f"### Test {i+1}/{len(model_tests)}: {cmd_args}")
+            ret = test(cmd_args)
+            if ret != 0 and args.abort_on_fail:
+                print(f"### Test {i+1}/{len(model_tests)} Failed.")
+                break
+    except:
+        import traceback
+        traceback.print_exc()
+        print(f"### Aborting due to Exception at test {len(all_results) + 1}/{len(model_tests)}")
     
     print(f"### End tests.")
 
-    print("""# This sample.env file can be to set environment variables for the docker-compose.yml
+    print("""# This sample env file can be used to set environment variables for the docker-compose.yml
 # Copy this file to vision.env and uncomment the model of your choice.
 HF_HOME=/app/hf_home
 #CUDA_VISIBLE_DEVICES=1,0""")
