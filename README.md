@@ -89,7 +89,7 @@ Version: 0.9.0
 ```shell
 cp sample.env vision.env
 # OR for alt the version
-cp sample.alt.env vision-alt.env
+cp vision-alt.sample.env vision-alt.env
 ```
 
 2) You can run the server via docker compose like so:
