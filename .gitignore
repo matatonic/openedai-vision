@@ -3,6 +3,7 @@ hf_home/
 model_zoo/
 YanweiLi/
 vision.env
+vision-alt.env
 test_model.sh
 
 # Byte-compiled / optimized / DLL files
