@@ -34,7 +34,10 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
 - [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2)
 - [X] [Moondream1](https://huggingface.co/vikhyatk/moondream1) (alternate docker only)
-- [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V)
+- [X] [openbmb](https://huggingface.co/openbmb)
+- - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2)
+- - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V)
+- - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
 - [X] [MiniGemini](https://huggingface.co/collections/YanweiLi/) (more complex setup, see: `prepare_minigemini.sh`)
 - - [X] [MiniGemini-2B](https://huggingface.co/YanweiLi/Mini-Gemini-2B) (main docker only)
 - - [X] [MiniGemini-7B](https://huggingface.co/YanweiLi/Mini-Gemini-7B) (alternate docker only)
@@ -46,7 +49,6 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [MiniGemini-34B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-34B-HD) (alternate docker only)
 - - [X] [MiniGemini-8x7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B-HD) (alternate docker only)
 - [X] [qnguyen3/nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (main docker only, wont gpu split)
-- [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
 - [ ] [Deepseek-VL-7b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-7b-chat)
 - [ ] [Deepseek-VL-1.3b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat)
 - [ ] [NousResearch/Obsidian-3B-V0.5](https://huggingface.co/NousResearch/Obsidian-3B-V0.5)
@@ -54,10 +56,11 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
-Version: 0.9.0
+Version: 0.9.1
 
 ## Recent updates
 
+- new model support: MiniCPM-V-2
 - new model support: MiniGemini-7B -> MiniGemini-8x7B-HD, alternate docker.
 - new openai_example.sh shell script for simple command line generation.
 - new backend: include 01-ai/Yi-VL in main docker containers, currently errors.
