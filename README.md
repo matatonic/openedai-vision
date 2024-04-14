@@ -124,7 +124,7 @@ pip install -r requirements.txt "transformers==4.36.2"
 python vision.py --model vikhyatk/moondream2
 ```
 
-For MiniGemini support the docker image is recommended. See `Dockerfile` and `requirements.minigemini.txt` for manual installation instructions.
+For MiniGemini support the docker image is recommended. See `prepare_minigemini.sh` for manual installation instructions, models for mini_gemini must be downloaded to local directories, not just run from cache.
 
 ## Usage
 
