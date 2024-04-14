@@ -87,10 +87,10 @@ Version: 0.9.1
 
 ## Docker support
 
-1) Edit the `vision.env` or `vision-alt.env` file to suit your needs. See: `sample.env` for an example.
+1) Edit the `vision.env` or `vision-alt.env` file to suit your needs. See: `vision.sample.env` for an example.
 
 ```shell
-cp sample.env vision.env
+cp vision.sample.env vision.env
 # OR for alt the version
 cp vision-alt.sample.env vision-alt.env
 ```
