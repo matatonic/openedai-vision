@@ -48,7 +48,7 @@ def record_result(cmd_args, results, t, mem, note):
         'note': note
     }])
     result = all(results)
-    print(f"\n#CLI_COMMAND={cmd_args} # test {'pass' if result else 'fail'}, time: {t:.1f}s, mem: {mem:.1f}GB, {note}")
+    print(f"#CLI_COMMAND=\"python vision.py -m {' '.join(cmd_args)}\"  # test {'pass' if result else 'fail'}, time: {t:.1f}s, mem: {mem:.1f}GB, {note}")
 
 torch_memory_baseline = 0
 

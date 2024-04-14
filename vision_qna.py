@@ -320,6 +320,31 @@ async def gemma_prompt_from_messages(messages: list[Message], img_tok = "<image>
 
     return images, prompt
 
+async def fuyu_prompt_from_messages(messages: list[Message], img_tok = "", img_end = ''):
+    prompt = ''
+    images = []
+
+    for m in messages:
+        if m.role == 'user':
+            p = ''
+            for c in m.content:
+                if c.type == 'image_url':
+                    images.extend([ await url_to_image(c.image_url.url) ])
+                    p = img_tok + p + img_end
+                if c.type == 'text':
+                    p += f"{c.text}\n\n" # Question:
+            prompt += p
+        elif m.role == 'assistant':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"\x04{c.text}\n"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"{c.text}\n\n" # fake system prompt doesn't work.
+
+    return images, prompt
+
 async def prompt_history_images_system_from_messages(messages: list[Message], img_tok = "<image>\n", url_handler = url_to_image):
     history = []
     images = []
@@ -361,7 +386,8 @@ async def prompt_from_messages(messages: list[Message], format: str) -> str:
         'llama2': llama2_prompt_from_messages,
         'mistral': llama2_prompt_from_messages, # simplicity
         'chatml': chatml_prompt_from_messages,
-        'gemma': gemma_prompt_from_messages
+        'gemma': gemma_prompt_from_messages,
+        'fuyu': fuyu_prompt_from_messages,
     }
 
     if format not in known_formats:
@@ -379,6 +405,7 @@ def guess_model_format(model_name: str) -> str:
         'vicuna0': ['yi-vl'],
         'phi15': ['moondream1', 'moondream2', 'monkey'],
         'chatml': ['34b', 'yi-6b', 'nanollava'],
+        'fuyu': ['fuyu'],
     }
     for format, options in model_format_match_map.items():
         if any(x in model_id for x in options):
@@ -435,3 +462,7 @@ def guess_backend(model_name: str) -> str:
     
     if 'thudm/cog' in model_id:
         return 'cogvlm'
+    
+    if 'fuyu' in model_id:
+        return 'fuyu'
+    

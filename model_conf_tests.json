@@ -1,13 +1,13 @@
 [
   ["vikhyatk/moondream2", "--use-flash-attn"],
   ["vikhyatk/moondream1"],
-
   ["qnguyen3/nanoLLaVA", "--use-flash-attn"],
   ["echo840/Monkey"],
   ["echo840/Monkey-Chat"],
   ["THUDM/cogvlm-chat-hf"],
   ["THUDM/cogagent-chat-hf"],
   ["Qwen/Qwen-VL-Chat"],
+  ["adept/fuyu-8b", "--device-map", "cuda:0"],
   ["internlm/internlm-xcomposer2-7b", "--use-flash-attn", "--device-map", "cuda:0"],
   ["internlm/internlm-xcomposer2-vl-7b", "--use-flash-attn", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V-2", "--use-flash-attn", "--device-map", "cuda:0"],

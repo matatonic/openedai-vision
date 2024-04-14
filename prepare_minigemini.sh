@@ -1,6 +1,11 @@
 #!/bin/bash
 export HF_HOME=hf_home
 
+if [ -z "$(which huggingface-cli)" ]; then
+	echo "First install huggingface-hub: pip install huggingface-hub"
+	exit 1
+fi
+
 echo "Edit this script and uncomment which models to download"
 
 huggingface-cli download OpenAI/clip-vit-large-patch14-336 --local-dir model_zoo/OpenAI/clip-vit-large-patch14-336

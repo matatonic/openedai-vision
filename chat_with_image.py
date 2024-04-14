@@ -1,9 +1,15 @@
 #!/usr/bin/env python
+import os
 import requests
 import argparse
 from datauri import DataURI
 from openai import OpenAI
 
+try:
+    import dotenv
+    dotenv.load_dotenv(override=True)
+except:
+    pass
 
 def url_for_api(img_url: str = None, filename: str = None, always_data=False) -> str:
     if img_url.startswith('http'):
@@ -31,7 +37,7 @@ if __name__ == '__main__':
     parser.add_argument('questions', type=str, nargs='*', help='The question to ask the image')
     args = parser.parse_args()
 
-    client = OpenAI(base_url='http://localhost:5006/v1', api_key='skip')
+    client = OpenAI(base_url=os.environ.get('OPENAI_BASE_URL', 'http://localhost:5006/v1'), api_key='skip')
 
     params = {}
     if args.max_tokens is not None:

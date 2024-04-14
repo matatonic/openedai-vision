@@ -29,6 +29,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [01-ai/Yi-VL](https://huggingface.co/01-ai)
 - - [ ] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B) (currently errors)
 - - [ ] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B) (currently errors)
+- [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
 - [X] [Monkey](https://huggingface.co/echo840/Monkey)
 - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
@@ -56,10 +57,11 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
-Version: 0.9.1
+Version: 0.10.0
 
 ## Recent updates
 
+- new model support: adept/fuyu-8b
 - new model support: MiniCPM-V-2
 - new model support: MiniGemini-7B -> MiniGemini-8x7B-HD, alternate docker.
 - new openai_example.sh shell script for simple command line generation.
@@ -68,16 +70,6 @@ Version: 0.9.1
 - Fix: moondream1 (use alt container)
 - Split images into main (transformers>=4.39.0) and alt (transformers==4.36.2)
 - Big performance gains (10x) for some models, especially llava-v1.6-34B (`use_cache` missing from many models, all llava* models, more.)
-- new model support: qnguyen3/nanoLLaVA (sub 1B model)
-- Updated chat_with_image.py to include --single (-1) answer mode
-- More testing
-- `sample.env` contains VRAM usage and some notes about model configurations.
-- new model support: MiniGemini-2B (it's still a bit complex to use, see `prepare_minigemini.sh`)
-- new model support: echo840/Monkey-Chat, echo840/Monkey
-- AutoGPTQ support for internlm/internlm-xcomposer2-7b-4bit, internlm/internlm-xcomposer2-vl-7b-4bit
-- Automatic selection of backend, based on the model name
-
-
 
 
 ## API Documentation
