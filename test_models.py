@@ -50,15 +50,18 @@ def record_result(cmd_args, results, t, mem, note):
     result = all(results)
     print(f"\n#CLI_COMMAND={cmd_args} # test {'pass' if result else 'fail'}, time: {t:.1f}s, mem: {mem:.1f}GB, {note}")
 
-    
+torch_memory_baseline = 0
+
 def get_total_gpu_mem_used():
     device_count = torch.cuda.device_count()
     total_mem_used = 0.0
     for i in range(device_count):
         allocated_memory, total_memory,  = torch.cuda.mem_get_info(device=i)
         total_mem_used += total_memory - allocated_memory
-    return total_mem_used / (1024 ** 3)  # convert bytes to gigabytes
+    return total_mem_used / (1024 ** 3) - torch_memory_baseline  # convert bytes to gigabytes
     
+torch_memory_baseline = get_total_gpu_mem_used()
+print(f"Baseline CUDA memory: {torch_memory_baseline:.1f}GB")
 
 def test(cmd_args: list[str]) -> int:
     print(f"### Test start")
@@ -224,7 +227,7 @@ if __name__ == '__main__':
 
     print("""# This sample env file can be used to set environment variables for the docker-compose.yml
 # Copy this file to vision.env and uncomment the model of your choice.
-HF_HOME=/app/hf_home
+HF_HOME=hf_home
 #CUDA_VISIBLE_DEVICES=1,0""")
 
     for r in all_results:
