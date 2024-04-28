@@ -10,11 +10,9 @@ RUN git clone https://github.com/dvlab-research/MGM.git --single-branch /app/MGM
 WORKDIR /app
 COPY requirements.txt .
 ARG VERSION=latest
-# transformers==4.36.2 supports most models except MGM-2B, llava-1.6, nanollava
-RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.36.2" >> requirements.txt; else echo "transformers>=4.39.0" >> requirements.txt ; fi
+RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.36.2" >> requirements.txt; else echo "transformers>=4.39.0\nautoawq" >> requirements.txt ; fi
 # TODO: nvidia apex wheel
-RUN pip install --no-cache-dir -U -r requirements.txt \
-    https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.7/flash_attn-2.5.7+cu122torch2.2cxx11abiFALSE-cp311-cp311-linux_x86_64.whl
+RUN --mount=type=cache,target=/root/.cache/pip pip install -U -r requirements.txt
 
 WORKDIR /app/MGM
 RUN pip install --no-cache-dir --no-deps -e .

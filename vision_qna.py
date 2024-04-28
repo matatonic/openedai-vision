@@ -7,6 +7,7 @@ import torch
 from typing import Optional, List, Literal
 from pydantic import BaseModel
 from transformers import BitsAndBytesConfig
+from transformers.image_utils import load_image
 
 class ImageURL(BaseModel):
     url: str
@@ -116,14 +117,7 @@ class VisionQnABase:
         return params
 
 async def url_to_image(img_url: str) -> Image.Image:
-    if img_url.startswith('http'):
-        response = requests.get(img_url)
-        
-        img_data = response.content
-    elif img_url.startswith('data:'):
-        img_data = DataURI(img_url).data
-
-    return Image.open(io.BytesIO(img_data)).convert("RGB")
+    return load_image(img_url)
 
 async def url_to_file(img_url: str) -> str:
     if img_url.startswith('data:'):
@@ -138,6 +132,25 @@ async def url_to_file(img_url: str) -> str:
         with open(filename, 'wb') as f:
             f.write(response.content)
             return filename
+
+async def images_hfmessages_from_messages(messages: list[Message], url_handler = url_to_image):
+    hfmessages = []
+    images = []
+
+    for m in messages:
+        content = []
+        for c in m.content:
+            if c.type == 'image_url':
+                image = await url_handler(c.image_url.url)
+                images.extend([image])
+                content.extend([{"type": "image"}])
+            elif c.type == 'text':
+                content.extend([{'type': 'text', 'text': c.text}])
+
+        hfmessages.extend([{'role': m.role, 'content': content}])
+
+    return images, hfmessages
+
 
 async def phi15_prompt_from_messages(messages: list[Message], img_tok = "<image>", img_end = ''): # </image>
     prompt = ''
@@ -465,3 +478,7 @@ def guess_backend(model_name: str) -> str:
     
     if 'internvl-chat-v1-5' in model_id:
         return 'internvl-chat-v1-5'
+    
+    if 'idefics2' in model_id:
+        return 'idefics2'
+    

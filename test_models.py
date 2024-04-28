@@ -20,8 +20,8 @@ urls = {
     'leaf': 'https://images.freeimages.com/images/large-previews/cd7/gingko-biloba-1058537.jpg',
 }
 
-green_pass = '\033[92mpass\033[0m'
-red_fail = '\033[91mfail\033[0m'
+green_pass = '\033[92mpass\033[0m✅'
+red_fail = '\033[91mfail\033[0m❌'
 
 
 def data_url_from_url(img_url: str) -> str:
@@ -48,7 +48,7 @@ def record_result(cmd_args, results, t, mem, note):
         'note': note
     }])
     result = all(results)
-    print(f"#CLI_COMMAND=\"python vision.py -m {' '.join(cmd_args)}\"  # test {'pass' if result else 'fail'}, time: {t:.1f}s, mem: {mem:.1f}GB, {note}")
+    print(f"#CLI_COMMAND=\"python vision.py -m {' '.join(cmd_args)}\"  # test {green_pass if result else red_fail}, time: {t:.1f}s, mem: {mem:.1f}GB, {note}")
 
 torch_memory_baseline = 0
 
@@ -115,8 +115,8 @@ def test(cmd_args: list[str]) -> int:
     mem = get_total_gpu_mem_used()
 
     result = all(results)
-    if result:
-        note = 'All tests passed.'
+    if not note:
+        note = f'{results.count(True)}/{len(results)} tests passed.'
 
     print(f"\n\n###\n\nTest complete.\nResult: {green_pass if result else red_fail}, time: {t:.1f}s")
     
@@ -233,4 +233,4 @@ HF_HOME=hf_home
     for r in all_results:
         cmdl = ' '.join(r['args'])
         result = all(r['results'])
-        print(f"#CLI_COMMAND=\"python vision.py -m {cmdl}\"  # test {'pass' if result else 'fail'}, time: {r['time']:.1f}s, mem: {r['mem']:.1f}GB, {r['note']}")
+        print(f"#CLI_COMMAND=\"python vision.py -m {cmdl}\"  # test {green_pass if result else red_fail}, time: {r['time']:.1f}s, mem: {r['mem']:.1f}GB, {r['note']}")
