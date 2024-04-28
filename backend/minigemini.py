@@ -1,29 +1,27 @@
 import re
 from accelerate import infer_auto_device_map
 
-
-
 import transformers
 import warnings
 # disable some warnings
 transformers.logging.set_verbosity_error()
 warnings.filterwarnings('ignore')
 
-from minigemini.constants import IMAGE_TOKEN_INDEX
-from minigemini.model.builder import load_pretrained_model
-from minigemini.mm_utils import process_images, tokenizer_image_token
+from mgm.constants import IMAGE_TOKEN_INDEX
+from mgm.model.builder import load_pretrained_model
+from mgm.mm_utils import process_images, tokenizer_image_token
 
 from vision_qna import *
 
-# YanweiLi/Mini-Gemini-2B
-# YanweiLi/Mini-Gemini-7B
-# YanweiLi/Mini-Gemini-7B-HD
-# YanweiLi/Mini-Gemini-13B
-# YanweiLi/Mini-Gemini-34B
-# YanweiLi/Mini-Gemini-34B-HD
-# YanweiLi/Mini-Gemini-13B-HDs
-# YanweiLi/Mini-Gemini-8x7B-HD
-# YanweiLi/Mini-Gemini-8x7B
+# YanweiLi/MGM-2B
+# YanweiLi/MGM-7B
+# YanweiLi/MGM-7B-HD
+# YanweiLi/MGM-13B
+# YanweiLi/MGM-34B
+# YanweiLi/MGM-34B-HD
+# YanweiLi/MGM-13B-HDs
+# YanweiLi/MGM-8x7B-HD
+# YanweiLi/MGM-8x7B
 
 class VisionQnA(VisionQnABase):
     model_name: str = "minigemini"

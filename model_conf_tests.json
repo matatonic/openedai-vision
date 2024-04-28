@@ -22,7 +22,7 @@
   ["llava-hf/llava-v1.6-34b-hf", "--use-flash-attn"],
   ["01-ai/Yi-VL-6B", "--use-flash-attn"],
   ["01-ai/Yi-VL-34B", "--use-flash-attn"],
-  ["YanweiLi/Mini-Gemini-2B", "--use-flash-attn"],
+  ["YanweiLi/MGM-2B", "--use-flash-attn"],
 
   ["OpenGVLab/InternVL-Chat-V1-5", "--load-in-4bit", "--device-map", "cuda:0"],
   ["qnguyen3/nanoLLaVA", "--use-flash-attn", "--load-in-4bit"],
@@ -39,5 +39,5 @@
   ["llava-hf/llava-v1.6-34b-hf", "--load-in-4bit", "--use-flash-attn"],
   ["01-ai/Yi-VL-6B", "--load-in-4bit", "--use-flash-attn"],
   ["01-ai/Yi-VL-34B", "--load-in-4bit", "--use-flash-attn"],
-  ["YanweiLi/Mini-Gemini-2B", "--use-flash-attn", "--load-in-4bit"]
+  ["YanweiLi/MGM-2B", "--use-flash-attn", "--load-in-4bit"]
 ]

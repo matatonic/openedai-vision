@@ -436,7 +436,7 @@ def guess_backend(model_name: str) -> str:
     if 'monkey' in model_id:
         return 'monkey'
     
-    if 'mini-gemini' in model_id:
+    if 'mgm-' in model_id or 'minigemini' in model_id or 'mini-gemini' in model_id:
         return 'minigemini'
 
     if 'deepseek' in model_id:
@@ -453,9 +453,6 @@ def guess_backend(model_name: str) -> str:
     
     if 'xcomposer2' in model_id:
         return 'xcomposer2'
-    
-    if 'mini-gemini' in model_id:
-        return 'minigemini'
 
     if 'yi-vl' in model_id:
         return 'yi-vl'

@@ -41,16 +41,16 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2)
 - - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V)
 - - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
-- [X] [MiniGemini](https://huggingface.co/collections/YanweiLi/) (more complex setup, see: `prepare_minigemini.sh`)
-- - [X] [MiniGemini-2B](https://huggingface.co/YanweiLi/Mini-Gemini-2B) (main docker only)
-- - [X] [MiniGemini-7B](https://huggingface.co/YanweiLi/Mini-Gemini-7B) (alternate docker only)
-- - [X] [MiniGemini-13B](https://huggingface.co/YanweiLi/Mini-Gemini-13B) (alternate docker only)
-- - [X] [MiniGemini-34B](https://huggingface.co/YanweiLi/Mini-Gemini-34B) (alternate docker only)
-- - [X] [MiniGemini-8x7B](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B) (alternate docker only)
-- - [X] [MiniGemini-7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-7B-HD) (alternate docker only)
-- - [X] [MiniGemini-13B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-13B-HD) (alternate docker only)
-- - [X] [MiniGemini-34B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-34B-HD) (alternate docker only)
-- - [X] [MiniGemini-8x7B-HD](https://huggingface.co/YanweiLi/Mini-Gemini-8x7B-HD) (alternate docker only)
+- [X] [YanweiLi/MGM](https://huggingface.co/collections/YanweiLi/) (aka Mini-Gemini, more complex setup, see: `prepare_minigemini.sh`)
+- - [X] [MGM-2B](https://huggingface.co/YanweiLi/MGM-2B) (main docker only)
+- - [X] [MGM-7B](https://huggingface.co/YanweiLi/MGM-7B) (alternate docker only)
+- - [X] [MGM-13B](https://huggingface.co/YanweiLi/MGM-13B) (alternate docker only)
+- - [X] [MGM-34B](https://huggingface.co/YanweiLi/MGM-34B) (alternate docker only)
+- - [X] [MGM-8x7B](https://huggingface.co/YanweiLi/MGM-8x7B) (alternate docker only)
+- - [X] [MGM-7B-HD](https://huggingface.co/YanweiLi/MGM-7B-HD) (alternate docker only)
+- - [X] [MGM-13B-HD](https://huggingface.co/YanweiLi/MGM-13B-HD) (alternate docker only)
+- - [X] [MGM-34B-HD](https://huggingface.co/YanweiLi/MGM-34B-HD) (alternate docker only)
+- - [X] [MGM-8x7B-HD](https://huggingface.co/YanweiLi/MGM-8x7B-HD) (alternate docker only)
 - [X] [qnguyen3/nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (main docker only, wont gpu split)
 - [ ] [Deepseek-VL-7b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-7b-chat)
 - [ ] [Deepseek-VL-1.3b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat)
@@ -64,6 +64,7 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 Version: 0.11.0
 
 - new model support: OpenGVLab/InternVL-Chat-V1-5, up to 4k resolution, top opensource model
+- MiniGemini renamed MGM upstream
 
 Version: 0.10.0
 
