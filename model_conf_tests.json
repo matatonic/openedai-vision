@@ -24,6 +24,7 @@
   ["01-ai/Yi-VL-34B", "--use-flash-attn"],
   ["YanweiLi/MGM-2B", "--use-flash-attn"],
 
+  ["OpenGVLab/InternVL-Chat-V1-5-Int8", "--device-map", "cuda:0"],
   ["OpenGVLab/InternVL-Chat-V1-5", "--load-in-4bit", "--device-map", "cuda:0"],
   ["qnguyen3/nanoLLaVA", "--use-flash-attn", "--load-in-4bit"],
   ["THUDM/cogvlm-chat-hf", "--load-in-4bit"],

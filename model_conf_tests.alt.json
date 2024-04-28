@@ -25,6 +25,7 @@
   ["llava-hf/llava-1.5-7b-hf", "--use-flash-attn", "--device-map", "cuda:0"],
   ["llava-hf/llava-1.5-13b-hf", "--use-flash-attn", "--device-map", "cuda:0"],
 
+  ["OpenGVLab/InternVL-Chat-V1-5-Int8", "--device-map", "cuda:0"],
   ["OpenGVLab/InternVL-Chat-V1-5", "--load-in-4bit", "--device-map", "cuda:0"],
   ["THUDM/cogvlm-chat-hf", "--load-in-4bit"],
   ["THUDM/cogagent-chat-hf", "--load-in-4bit"],

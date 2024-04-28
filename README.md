@@ -11,6 +11,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
 - - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5)  (wont gpu split yet, 4bit not recommended)
+- - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8)  (wont gpu split yet)
 - [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM)
 - - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)
