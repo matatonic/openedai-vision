@@ -26,7 +26,8 @@ def url_for_api(img_url: str = None, filename: str = None, always_data=False) ->
 
 if __name__ == '__main__':
     # Initialize argparse
-    parser = argparse.ArgumentParser(description='Test vision using OpenAI')
+    parser = argparse.ArgumentParser(description='Test vision using OpenAI',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-s', '--system-prompt', type=str, default=None)
     parser.add_argument('-m', '--max-tokens', type=int, default=None)
     parser.add_argument('-t', '--temperature', type=float, default=None)

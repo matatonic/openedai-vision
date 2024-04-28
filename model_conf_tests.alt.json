@@ -3,6 +3,7 @@
   ["vikhyatk/moondream1"],
   ["echo840/Monkey"],
   ["echo840/Monkey-Chat"],
+  ["OpenGVLab/InternVL-Chat-V1-5", "--device-map", "cuda:0"],
   ["THUDM/cogvlm-chat-hf"],
   ["THUDM/cogagent-chat-hf"],
   ["Qwen/Qwen-VL-Chat"],
@@ -24,6 +25,7 @@
   ["llava-hf/llava-1.5-7b-hf", "--use-flash-attn", "--device-map", "cuda:0"],
   ["llava-hf/llava-1.5-13b-hf", "--use-flash-attn", "--device-map", "cuda:0"],
 
+  ["OpenGVLab/InternVL-Chat-V1-5", , "--load-in-4bit", "--device-map", "cuda:0"],
   ["THUDM/cogvlm-chat-hf", "--load-in-4bit"],
   ["THUDM/cogagent-chat-hf", "--load-in-4bit"],
   ["internlm/internlm-xcomposer2-7b-4bit", "--use-flash-attn", "--device", "cuda:0"],

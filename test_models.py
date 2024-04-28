@@ -185,7 +185,7 @@ if __name__ == '__main__':
         for name, url in urls.items():
             answer = generate_response(url, "What is the subject of the image?")
             correct = name in answer.lower()
-            results.extend([answer])
+            results.extend([correct])
             if not correct:
                 print(f"{name}[url]: fail, got: {answer}")
                 if args.abort_on_fail:
@@ -196,7 +196,7 @@ if __name__ == '__main__':
             data_url = data_url_from_url(url)
             answer = generate_response(data_url, "What is the subject of the image?")
             correct = name in answer.lower()
-            results.extend([answer])
+            results.extend([correct])
             if not correct:
                 print(f"{name}[data]: fail, got: {answer}")
                 if args.abort_on_fail:

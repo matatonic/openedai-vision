@@ -9,6 +9,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 
 ## Model support
 
+- [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
+- - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5)  (wont gpu split yet, 4bit not recommended)
 - [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM)
 - - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)
@@ -57,9 +59,13 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
-Version: 0.10.0
-
 ## Recent updates
+
+Version: 0.11.0
+
+- new model support: OpenGVLab/InternVL-Chat-V1-5, up to 4k resolution, top opensource model
+
+Version: 0.10.0
 
 - new model support: adept/fuyu-8b
 - new model support: MiniCPM-V-2

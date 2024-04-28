@@ -404,7 +404,7 @@ def guess_model_format(model_name: str) -> str:
         'vicuna': ['vicuna', '13b'],
         'vicuna0': ['yi-vl'],
         'phi15': ['moondream1', 'moondream2', 'monkey'],
-        'chatml': ['34b', 'yi-6b', 'nanollava'],
+        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5'],
         'fuyu': ['fuyu'],
     }
     for format, options in model_format_match_map.items():
@@ -466,3 +466,5 @@ def guess_backend(model_name: str) -> str:
     if 'fuyu' in model_id:
         return 'fuyu'
     
+    if 'internvl-chat-v1-5' in model_id:
+        return 'internvl-chat-v1-5'
