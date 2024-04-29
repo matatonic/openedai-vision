@@ -117,7 +117,15 @@ class VisionQnABase:
         return params
 
 async def url_to_image(img_url: str) -> Image.Image:
-    return load_image(img_url)
+    #return load_image(img_url)
+    if img_url.startswith('http'):
+        response = requests.get(img_url)
+
+        img_data = response.content
+    elif img_url.startswith('data:'):
+        img_data = DataURI(img_url).data
+
+    return Image.open(io.BytesIO(img_data)).convert("RGB")
 
 async def url_to_file(img_url: str) -> str:
     if img_url.startswith('data:'):
