@@ -65,6 +65,10 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version: 0.12.1
+
+- Fix: data: urls, revert load_image change
+
 Version: 0.12.0
 
 - new model support: HuggingFaceM4/idefics2-8b, HuggingFaceM4/idefics2-8b-AWQ
