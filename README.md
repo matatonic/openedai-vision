@@ -35,6 +35,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [01-ai/Yi-VL](https://huggingface.co/01-ai)
 - - [ ] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B) (currently errors)
 - - [ ] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B) (currently errors)
+- [X] [qresearch](https://huggingface.co/qresearch/)
+- - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (main docker only, wont gpu split)
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
 - [X] [Monkey](https://huggingface.co/echo840/Monkey)
@@ -64,6 +66,10 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version: 0.13.0
+
+- new model support: qresearch/llama-3-vision-alpha-hf
 
 Version: 0.12.1
 

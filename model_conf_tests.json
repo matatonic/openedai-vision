@@ -9,6 +9,7 @@
   ["THUDM/cogvlm-chat-hf"],
   ["THUDM/cogagent-chat-hf"],
   ["Qwen/Qwen-VL-Chat"],
+  ["qresearch/llama-3-vision-alpha-hf", "--device", "cuda:0"],
   ["adept/fuyu-8b", "--device-map", "cuda:0"],
   ["internlm/internlm-xcomposer2-7b", "--use-flash-attn", "--device-map", "cuda:0"],
   ["internlm/internlm-xcomposer2-vl-7b", "--use-flash-attn", "--device-map", "cuda:0"],

@@ -278,6 +278,28 @@ async def llama2_prompt_from_messages(messages: list[Message], img_tok = "<image
 
     return images, prompt
 
+async def llama3_prompt_from_messages(messages: list[Message], img_tok = "<image>"):
+    prompt = ''
+    images = []
+
+    for m in messages:
+        has_image = False
+        
+        for c in m.content:
+            if c.type == 'image_url':
+                images.extend([ await url_to_image(c.image_url.url) ])
+                has_image = True
+        
+        img_tag = img_tok if has_image else ''
+
+        for c in m.content:
+            if c.type == 'text':
+                prompt += f"<|start_header_id|>{m.role}<|end_header_id|>\n\n{img_tag}{c.text.strip()}<|eot_id|>"
+    
+    prompt += '<|start_header_id|>assistant<|end_header_id|>\n\n'
+
+    return images, prompt
+
 async def chatml_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
     prompt = ''
     images = []
@@ -405,6 +427,7 @@ async def prompt_from_messages(messages: list[Message], format: str) -> str:
         'vicuna0': vicuna0_prompt_from_messages,
         'vicuna': vicuna_prompt_from_messages,
         'llama2': llama2_prompt_from_messages,
+        'llama3': llama3_prompt_from_messages,
         'mistral': llama2_prompt_from_messages, # simplicity
         'chatml': chatml_prompt_from_messages,
         'gemma': gemma_prompt_from_messages,
@@ -421,6 +444,7 @@ def guess_model_format(model_name: str) -> str:
 
     model_format_match_map = {
         'llama2': ['bakllava', '8x7b', 'mistral', 'mixtral'],
+        'llama3': ['llama-3-vision'],
         'gemma': ['gemma', '-2b'],
         'vicuna': ['vicuna', '13b'],
         'vicuna0': ['yi-vl'],
@@ -490,3 +514,5 @@ def guess_backend(model_name: str) -> str:
     if 'idefics2' in model_id:
         return 'idefics2'
     
+    if 'llama-3-vision-alpha' in model_id:
+        return 'llama3vision'
