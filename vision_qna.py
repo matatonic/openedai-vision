@@ -493,6 +493,9 @@ def guess_backend(model_name: str) -> str:
     if 'omnilmm-12b' in model_id:
         return 'omnilmm12b'
 
+    if 'xcomposer2-4khd' in model_id:
+        return 'xcomposer2-4khd'
+        
     if 'xcomposer2-vl' in model_id:
         return 'xcomposer2-vl'
     
@@ -516,3 +519,6 @@ def guess_backend(model_name: str) -> str:
     
     if 'llama-3-vision-alpha' in model_id:
         return 'llama3vision'
+    
+    if 'bunny' in model_id:
+        return 'bunny'

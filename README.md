@@ -10,12 +10,13 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 ## Model support
 
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
-- - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5)  (wont gpu split yet, 4bit not recommended)
-- - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8)  (wont gpu split yet)
+- - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5) (wont gpu split yet, 4bit not recommended)
+- - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8) (wont gpu split yet)
 - [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM)
 - - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)
 - [X] [InternLM](https://huggingface.co/internlm/)
+- - [X] [XComposer2-4KHD](https://huggingface.co/internlm/internlm-xcomposer2-4khd-7b) (wont gpu split)
 - - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (wont gpu split)
 - - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended)
 - - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] (wont gpu split)
@@ -37,6 +38,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [ ] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B) (currently errors)
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (main docker only, wont gpu split)
+- [X] [BAAI](https://huggingface.co/BAAI/)
+- - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V)
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
 - [X] [Monkey](https://huggingface.co/echo840/Monkey)
@@ -69,6 +72,8 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 Version: 0.13.0
 
+- new model support: InternLM-XComposer2-4KHD
+- new model support: BAAI/Bunny-Llama-3-8B-V
 - new model support: qresearch/llama-3-vision-alpha-hf
 
 Version: 0.12.1
