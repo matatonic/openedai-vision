@@ -6,21 +6,24 @@ if [ -z "$(which huggingface-cli)" ]; then
 	exit 1
 fi
 
-echo "Edit this script and uncomment which models to download"
+ALL_MODELS="2B 7B 7B-HD 13B 13B-HD 34B 34B-HD 8x7B 8x7B-HD"
+MODELS=${*:-}
 
-huggingface-cli download OpenAI/clip-vit-large-patch14-336 --local-dir model_zoo/OpenAI/clip-vit-large-patch14-336
-huggingface-cli download laion/CLIP-convnext_large_d_320.laion2B-s29B-b131K-ft-soup --local-dir model_zoo/OpenAI/openclip-convnext-large-d-320-laion2B-s29B-b131K-ft-soup
+if [ "$MODELS" = "all" ]; then
+	MODELS=$ALL_MODELS
+elif [ -z "$MODELS" ]; then
+	echo "Specify which sizes of models to download for Mini-Gemini (aka. MGM), or 'all' for all."
+	echo "Chose from: $ALL_MODELS"
+	echo "Example: $0 2B 8x7B-HD"
+	echo "Example: $0 all"
+	exit 1
+fi
 
-# Select the model(s) of your choice and download them before starting the server
-huggingface-cli download YanweiLi/MGM-2B --local-dir YanweiLi/MGM-2B # main image
-huggingface-cli download YanweiLi/MGM-7B --local-dir YanweiLi/MGM-7B # alt image
-huggingface-cli download YanweiLi/MGM-7B-HD --local-dir YanweiLi/MGM-7B-HD # alt image
-huggingface-cli download YanweiLi/MGM-13B --local-dir YanweiLi/MGM-13B # alt image
-huggingface-cli download YanweiLi/MGM-13B-HD --local-dir YanweiLi/MGM-13B-HD # alt image
-huggingface-cli download YanweiLi/MGM-34B --local-dir YanweiLi/MGM-34B # alt image
-huggingface-cli download YanweiLi/MGM-34B-HD --local-dir YanweiLi/MGM-34B-HD # alt image
-huggingface-cli download YanweiLi/MGM-8x7B --local-dir YanweiLi/MGM-8x7B # alt image
-huggingface-cli download YanweiLi/MGM-8x7B-HD --local-dir YanweiLi/MGM-8x7B-HD # alt image
+# Required
+echo "Downloading required vit/clip models..."
+huggingface-cli download OpenAI/clip-vit-large-patch14-336 --local-dir model_zoo/OpenAI/clip-vit-large-patch14-336  || exit
+huggingface-cli download laion/CLIP-convnext_large_d_320.laion2B-s29B-b131K-ft-soup --local-dir model_zoo/OpenAI/openclip-convnext-large-d-320-laion2B-s29B-b131K-ft-soup  || exit
 
-#huggingface-cli download 01-ai/Yi-VL-6B --local-dir Yi/VL/01-ai/Yi-VL-6B
-#huggingface-cli download 01-ai/Yi-VL-34B --local-dir Yi/VL/01-ai/Yi-VL-34B
+for M in $MODELS; do 
+	huggingface-cli download YanweiLi/MGM-$M --local-dir YanweiLi/MGM-$M || exit
+done

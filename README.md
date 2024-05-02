@@ -39,7 +39,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (main docker only, wont gpu split)
 - [X] [BAAI](https://huggingface.co/BAAI/)
-- - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V)
+- - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V) (main docker only)
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
 - [X] [Monkey](https://huggingface.co/echo840/Monkey)
