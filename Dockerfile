@@ -6,6 +6,7 @@ RUN pip install --no-cache-dir --upgrade pip
 RUN mkdir -p /app
 RUN git clone https://github.com/01-ai/Yi --single-branch /app/Yi
 RUN git clone https://github.com/dvlab-research/MGM.git --single-branch /app/MGM
+RUN git clone https://github.com/TIGER-AI-Lab/Mantis.git --single-branch /app/Mantis
 
 WORKDIR /app
 COPY requirements.txt .
@@ -15,6 +16,9 @@ RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.36.2" >> requirements.
 RUN --mount=type=cache,target=/root/.cache/pip pip install -U -r requirements.txt
 
 WORKDIR /app/MGM
+RUN pip install --no-cache-dir --no-deps -e .
+
+WORKDIR /app/Mantis
 RUN pip install --no-cache-dir --no-deps -e .
 
 WORKDIR /app

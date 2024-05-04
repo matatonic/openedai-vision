@@ -40,6 +40,10 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (main docker only, wont gpu split)
 - [X] [BAAI](https://huggingface.co/BAAI/)
 - - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V) (main docker only)
+- [X] [TIGER-Lab](https://huggingface.co/TIGER-Lab)
+- - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (main docker only, wont gpu split)
+- - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (main docker only, wont gpu split)
+- - [X] [Mantis-8B-Fuyu](https://huggingface.co/TIGER-Lab/Mantis-8B-Fuyu) (main docker only, wont gpu split)
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
 - [X] [Monkey](https://huggingface.co/echo840/Monkey)
@@ -70,6 +74,11 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version: 0.14.0
+
+- new model support: TIGER-Labs/Mantis: Mantis-8B-siglip-llama3, Mantis-8B-clip-llama3, Mantis-8B-Fuyu
+
+
 Version: 0.13.0
 
 - new model support: InternLM-XComposer2-4KHD
@@ -78,10 +87,6 @@ Version: 0.13.0
 
 Version: 0.12.1
 
-- Fix: data: urls, revert load_image change
-
-Version: 0.12.0
-
 - new model support: HuggingFaceM4/idefics2-8b, HuggingFaceM4/idefics2-8b-AWQ
 - Fix: remove prompt from output of InternVL-Chat-V1-5
 
@@ -89,18 +94,6 @@ Version: 0.11.0
 
 - new model support: OpenGVLab/InternVL-Chat-V1-5, up to 4k resolution, top opensource model
 - MiniGemini renamed MGM upstream
-
-Version: 0.10.0
-
-- new model support: adept/fuyu-8b
-- new model support: MiniCPM-V-2
-- new model support: MiniGemini-7B -> MiniGemini-8x7B-HD, alternate docker.
-- new openai_example.sh shell script for simple command line generation.
-- new backend: include 01-ai/Yi-VL in main docker containers, currently errors.
-- new backend: include THUDM/CogVLM in main docker containers.
-- Fix: moondream1 (use alt container)
-- Split images into main (transformers>=4.39.0) and alt (transformers==4.36.2)
-- Big performance gains (10x) for some models, especially llava-v1.6-34B (`use_cache` missing from many models, all llava* models, more.)
 
 
 ## API Documentation

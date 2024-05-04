@@ -522,3 +522,6 @@ def guess_backend(model_name: str) -> str:
     
     if 'bunny' in model_id:
         return 'bunny'
+    
+    if 'mantis' in model_id:
+        return 'mantis'

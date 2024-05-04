@@ -1,4 +1,7 @@
 [
+  ["TIGER-Lab/Mantis-8B-siglip-llama3", "--use-flash-attn", "--device-map", "cuda:0"],
+  ["TIGER-Lab/Mantis-8B-clip-llama3", "--use-flash-attn", "--device-map", "cuda:0"],
+  ["TIGER-Lab/Mantis-8B-Fuyu", "--device-map", "cuda:0"],
   ["vikhyatk/moondream2", "--use-flash-attn"],
   ["vikhyatk/moondream1"],
   ["OpenGVLab/InternVL-Chat-V1-5", "--device-map", "cuda:0"],
