@@ -388,6 +388,38 @@ async def fuyu_prompt_from_messages(messages: list[Message], img_tok = "", img_e
 
     return images, prompt
 
+async def emu_images_prompt_system_from_messages(messages: list[Message], img_tok = "[<IMG_PLH>]"):
+    prompt = ''
+    images = []
+    system_message = None
+
+    for m in messages:
+        if m.role == 'user':
+            text = ''
+            has_image = False
+
+            for c in m.content:
+                if c.type == 'image_url':
+                    images.extend([ await url_to_image(c.image_url.url) ])
+                    has_image = True
+                if c.type == 'text':
+                    text = c.text
+            
+            img_tag = img_tok if has_image else ''
+            prompt += f" [USER]: {img_tag}{text}"
+        elif m.role == 'assistant':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f" [ASSISTANT]: {c.text}</s>"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    system_message = c.text
+
+    prompt += " [ASSISTANT]:"
+
+    return images, prompt, system_message
+
 async def prompt_history_images_system_from_messages(messages: list[Message], img_tok = "<image>\n", url_handler = url_to_image):
     history = []
     images = []
@@ -444,7 +476,7 @@ def guess_model_format(model_name: str) -> str:
 
     model_format_match_map = {
         'llama2': ['bakllava', '8x7b', 'mistral', 'mixtral'],
-        'llama3': ['llama-3-vision'],
+        'llama3': ['llama-3-vision', '360vl'],
         'gemma': ['gemma', '-2b'],
         'vicuna': ['vicuna', '13b'],
         'vicuna0': ['yi-vl'],
@@ -525,3 +557,9 @@ def guess_backend(model_name: str) -> str:
     
     if 'mantis' in model_id:
         return 'mantis'
+    
+    if 'emu' in model_id:
+        return 'emu'
+    
+    if '360vl' in model_id:
+        return '360vl'

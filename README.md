@@ -24,6 +24,9 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [HuggingFaceM4/idefics2](https://huggingface.co/HuggingFaceM4) 
 - - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (main docker only, wont gpu split)
 - - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (main docker only, wont gpu split)
+- [X] [qihoo360](https://huggingface.co/qihoo360)
+- - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
+- - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (loading error, [see note](https://huggingface.co/qihoo360/360VL-70B/discussions/1))
 - [X] [LlavaNext](https://huggingface.co/llava-hf) (main docker only)
 - - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf) (main docker only)
 - - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf) (main docker only)
@@ -39,6 +42,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (main docker only, wont gpu split)
 - [X] [BAAI](https://huggingface.co/BAAI/)
+- - [X] [Emu2-Chat](https://huggingface.co/BAAI/Emu2-Chat) (main docker only, may need the --max-memory option to GPU split)
 - - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V) (main docker only)
 - [X] [TIGER-Lab](https://huggingface.co/TIGER-Lab)
 - - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (main docker only, wont gpu split)
@@ -76,6 +80,9 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 Version: 0.14.0
 
+- docker-compose.yml: Assume the runtime supports the device (ie. nvidia)
+- new model support: qihoo360/360VL-8B, qihoo360/360VL-70B (70B loading error, [see note](https://huggingface.co/qihoo360/360VL-70B/discussions/1))
+- new model support: BAAI/Emu2-Chat, Can be slow to load, may need --max-memory option control the loading on multiple gpus
 - new model support: TIGER-Labs/Mantis: Mantis-8B-siglip-llama3, Mantis-8B-clip-llama3, Mantis-8B-Fuyu
 
 
@@ -145,7 +152,8 @@ For MiniGemini support the docker image is recommended. See `prepare_minigemini.
 ## Usage
 
 ```
-usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--no-trust-remote-code] [-4] [-8] [-F] [-P PORT] [-H HOST] [--preload]
+usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4] [-8] [-F]
+                 [-P PORT] [-H HOST] [--preload]
 
 OpenedAI Vision API Server
 
@@ -161,6 +169,8 @@ options:
                         Set the torch device for the model. Ex. cpu, cuda:1 (default: auto)
   --device-map DEVICE_MAP
                         Set the default device map policy for the model. (auto, balanced, sequential, balanced_low_0, cuda:1, etc.) (default: auto)
+  --max-memory MAX_MEMORY
+                        (emu2 only) Set the per cuda device_map max_memory. Ex. 0:22GiB,1:22GiB,cpu:128GiB (default: None)
   --no-trust-remote-code
                         Don't trust remote code (required for many models) (default: False)
   -4, --load-in-4bit    load in 4bit (doesn't work with all models) (default: False)

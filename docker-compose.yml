@@ -15,7 +15,7 @@ services:
       - ./model_conf_tests.json:/app/model_conf_tests.json
     ports:
       - 5006:5006
-    runtime: nvidia
+    #runtime: nvidia
     deploy:
       resources:
         reservations:

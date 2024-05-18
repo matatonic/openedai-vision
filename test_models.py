@@ -5,6 +5,7 @@ import sys
 import requests
 import argparse
 import subprocess
+import traceback
 from datauri import DataURI
 from openai import OpenAI
 import torch
@@ -106,6 +107,7 @@ def test(cmd_args: list[str]) -> int:
     try:
         results = single_round()
     except Exception as e:
+        traceback.print_exc()
         note = f'Test failed with Exception: {e}'
         print(f"{note}")
         results = [False]

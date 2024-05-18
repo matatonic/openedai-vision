@@ -65,6 +65,7 @@ def parse_args(argv=None):
     parser.add_argument('-f', '--format', action='store', default=None, help="Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15, gemma) (doesn't work with all models)")
     parser.add_argument('-d', '--device', action='store', default="auto", help="Set the torch device for the model. Ex. cpu, cuda:1")
     parser.add_argument('--device-map', action='store', default=os.environ.get('OPENEDAI_DEVICE_MAP', "auto"), help="Set the default device map policy for the model. (auto, balanced, sequential, balanced_low_0, cuda:1, etc.)")
+    parser.add_argument('--max-memory', action='store', default=None, help="(emu2 only) Set the per cuda device_map max_memory. Ex. 0:22GiB,1:22GiB,cpu:128GiB")
     parser.add_argument('--no-trust-remote-code', action='store_true', help="Don't trust remote code (required for many models)")
     parser.add_argument('-4', '--load-in-4bit', action='store_true', help="load in 4bit (doesn't work with all models)")
     parser.add_argument('-8', '--load-in-8bit', action='store_true', help="load in 8bit (doesn't work with all models)")
@@ -105,6 +106,9 @@ if __name__ == "__main__":
         extra_params['use_flash_attn'] = True
     
     extra_params['trust_remote_code'] = not args.no_trust_remote_code
+    if args.max_memory:
+        dev_map_max_memory = {int(dev_id) if dev_id not in ['cpu', 'disk'] else dev_id: mem for dev_id, mem in [dev_mem.split(':') for dev_mem in args.max_memory.split(',')]}
+        extra_params['max_memory'] = dev_map_max_memory
     
     vision_qna = backend.VisionQnA(args.model, args.device, args.device_map, extra_params, format=args.format)
 

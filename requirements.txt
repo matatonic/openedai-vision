@@ -42,6 +42,9 @@ transformers_stream_generator
 loguru
 sse_starlette
 
+# 360vl
+logger
+
 # alt
 #transformers==4.36.2
 
