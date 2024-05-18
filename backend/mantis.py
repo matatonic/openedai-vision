@@ -30,7 +30,7 @@ class VisionQnA(VisionQnABase):
 
         params = self.get_generation_params(request, default_params)
 
-        response, history = chat_mllava(prompt, images, self.model, self.processor, history=history, **params)
+        response, history = chat_mllava(prompt, images, self.model, self.processor, history=history if history else None, **params)
 
         return response
 
