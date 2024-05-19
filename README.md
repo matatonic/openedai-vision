@@ -25,6 +25,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [HuggingFaceM4/idefics2](https://huggingface.co/HuggingFaceM4) 
 - - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (main docker only, wont gpu split)
 - - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (main docker only, wont gpu split)
+- - [X] [idefics2-8b-chatty](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty) (main docker only, wont gpu split)
+- - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (main docker only, wont gpu split)
 - [X] [qihoo360](https://huggingface.co/qihoo360)
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
 - - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (loading error, [see note](https://huggingface.co/qihoo360/360VL-70B/discussions/1), also too large for me to test)
