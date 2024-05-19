@@ -81,6 +81,7 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 Version 0.14.1
 
+- new model support: idefics2-8b-chatty, idefics2-8b-chatty-AWQ (it worked already, no code change)
 - new model support: XComposer2-VL-1.8B (it worked already, no code change)
 
 Version: 0.14.0
