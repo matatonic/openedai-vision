@@ -21,6 +21,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended)
 - - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] (wont gpu split)
 - - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit)
+- - [X] [XComposer2-VL-1.8B](https://huggingface.co/internlm/internlm-xcomposer2-vl-1_8b)
 - [X] [HuggingFaceM4/idefics2](https://huggingface.co/HuggingFaceM4) 
 - - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (main docker only, wont gpu split)
 - - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (main docker only, wont gpu split)
@@ -77,6 +78,10 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.14.1
+
+- new model support: XComposer2-VL-1.8B (it worked already, no code change)
 
 Version: 0.14.0
 

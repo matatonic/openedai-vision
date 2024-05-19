@@ -19,6 +19,7 @@
   ["internlm/internlm-xcomposer2-4khd-7b", "--use-flash-attn", "--device-map", "cuda:0"],
   ["internlm/internlm-xcomposer2-7b", "--use-flash-attn", "--device-map", "cuda:0"],
   ["internlm/internlm-xcomposer2-vl-7b", "--use-flash-attn", "--device-map", "cuda:0"],
+  ["internlm/internlm-xcomposer2-vl-1_8b", "--use-flash-attn", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V-2", "--use-flash-attn", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V", "--use-flash-attn", "--device-map", "cuda:0"],
   ["llava-hf/bakLlava-v1-hf", "--use-flash-attn", "--device-map", "cuda:0"],
