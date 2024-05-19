@@ -26,7 +26,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (main docker only, wont gpu split)
 - [X] [qihoo360](https://huggingface.co/qihoo360)
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
-- - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (loading error, [see note](https://huggingface.co/qihoo360/360VL-70B/discussions/1))
+- - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (loading error, [see note](https://huggingface.co/qihoo360/360VL-70B/discussions/1), also too large for me to test)
 - [X] [LlavaNext](https://huggingface.co/llava-hf) (main docker only)
 - - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf) (main docker only)
 - - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf) (main docker only)
@@ -81,7 +81,7 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 Version: 0.14.0
 
 - docker-compose.yml: Assume the runtime supports the device (ie. nvidia)
-- new model support: qihoo360/360VL-8B, qihoo360/360VL-70B (70B loading error, [see note](https://huggingface.co/qihoo360/360VL-70B/discussions/1))
+- new model support: qihoo360/360VL-8B, qihoo360/360VL-70B (70B loading error, [see note](https://huggingface.co/qihoo360/360VL-70B/discussions/1), also too large for me to test)
 - new model support: BAAI/Emu2-Chat, Can be slow to load, may need --max-memory option control the loading on multiple gpus
 - new model support: TIGER-Labs/Mantis: Mantis-8B-siglip-llama3, Mantis-8B-clip-llama3, Mantis-8B-Fuyu
 

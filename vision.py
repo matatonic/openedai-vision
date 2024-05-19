@@ -78,19 +78,6 @@ def parse_args(argv=None):
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
 
-    if args.model in ['01-ai/Yi-VL-34B', '01-ai/Yi-VL-6B']:
-        if False:
-            # 💩 fake wrapper for compatibility... but it doesn't work anyways?
-            # OSError: Incorrect path_or_model_id: '01-ai/Yi-VL-6B/vit/clip-vit-H-14-laion2B-s32B-b79K-yi-vl-6B-448'. Please provide either the path to a local folder or the repo_id of a model on the Hub.
-            
-            os.chdir("Yi/VL")
-            os.environ['PYTHONPATH'] = '.'
-            os.system(f"huggingface-cli download --quiet {args.model} --local-dir {args.model}")
-            os.execvp("python", ["python", "openai_api.py", "--model-path", args.model, "--port", f"{args.port}", "--host", args.host])
-            sys.exit(0) # not reached
-        else:
-            os.system(f"huggingface-cli download --quiet {args.model} --local-dir {args.model}")
-    
     if not args.backend:
         args.backend = guess_backend(args.model)
 
