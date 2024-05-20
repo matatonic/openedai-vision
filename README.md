@@ -13,6 +13,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5) (wont gpu split yet, 4bit not recommended)
 - - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8) (wont gpu split yet)
 - [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM)
+- - [X] [cogvlm2-llama3-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B)
+- - [X] [cogvlm2-llama3-chinese-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B)
 - - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)
 - [X] [InternLM](https://huggingface.co/internlm/)
@@ -29,7 +31,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (main docker only, wont gpu split)
 - [X] [qihoo360](https://huggingface.co/qihoo360)
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
-- - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (loading error, [see note](https://huggingface.co/qihoo360/360VL-70B/discussions/1), also too large for me to test)
+- - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
 - [X] [LlavaNext](https://huggingface.co/llava-hf) (main docker only)
 - - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf) (main docker only)
 - - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf) (main docker only)
@@ -39,9 +41,6 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [llava-v1.5-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-7b-hf)
 - - [X] [llava-v1.5-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-13b-hf)
 - - [ ] [llava-v1.5-bakLlava-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-bakLlava-7b-hf) (currently errors)
-- [X] [01-ai/Yi-VL](https://huggingface.co/01-ai)
-- - [ ] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B) (currently errors)
-- - [ ] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B) (currently errors)
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (main docker only, wont gpu split)
 - [X] [BAAI](https://huggingface.co/BAAI/)
@@ -72,6 +71,9 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [MGM-34B-HD](https://huggingface.co/YanweiLi/MGM-34B-HD) (alternate docker only)
 - - [X] [MGM-8x7B-HD](https://huggingface.co/YanweiLi/MGM-8x7B-HD) (alternate docker only)
 - [X] [qnguyen3/nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (main docker only, wont gpu split)
+- [ ] [01-ai/Yi-VL](https://huggingface.co/01-ai)
+- - [ ] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B) (currently errors)
+- - [ ] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B) (currently errors)
 - [ ] [Deepseek-VL-7b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-7b-chat)
 - [ ] [Deepseek-VL-1.3b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat)
 - [ ] [NousResearch/Obsidian-3B-V0.5](https://huggingface.co/NousResearch/Obsidian-3B-V0.5)
@@ -81,6 +83,10 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version 0.15.0
+
+- new model support: cogvlm2-llama3-chinese-chat-19B, cogvlm2-llama3-chat-19B
+
 Version 0.14.1
 
 - new model support: idefics2-8b-chatty, idefics2-8b-chatty-AWQ (it worked already, no code change)
@@ -89,7 +95,7 @@ Version 0.14.1
 Version: 0.14.0
 
 - docker-compose.yml: Assume the runtime supports the device (ie. nvidia)
-- new model support: qihoo360/360VL-8B, qihoo360/360VL-70B (70B loading error, [see note](https://huggingface.co/qihoo360/360VL-70B/discussions/1), also too large for me to test)
+- new model support: qihoo360/360VL-8B, qihoo360/360VL-70B (70B is untested, too large for me)
 - new model support: BAAI/Emu2-Chat, Can be slow to load, may need --max-memory option control the loading on multiple gpus
 - new model support: TIGER-Labs/Mantis: Mantis-8B-siglip-llama3, Mantis-8B-clip-llama3, Mantis-8B-Fuyu
 

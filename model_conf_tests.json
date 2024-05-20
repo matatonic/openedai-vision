@@ -7,6 +7,8 @@
   ["qnguyen3/nanoLLaVA", "--use-flash-attn", "--device-map", "cuda:0"],
   ["echo840/Monkey"],
   ["echo840/Monkey-Chat"],
+  ["THUDM/cogvlm2-llama3-chat-19B"],
+  ["THUDM/cogvlm2-llama3-chinese-chat-19B"],
   ["THUDM/cogvlm-chat-hf"],
   ["THUDM/cogagent-chat-hf"],
   ["Qwen/Qwen-VL-Chat"],

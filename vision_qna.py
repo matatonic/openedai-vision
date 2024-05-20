@@ -536,8 +536,11 @@ def guess_backend(model_name: str) -> str:
 
     if 'yi-vl' in model_id:
         return 'yi-vl'
-    
-    if 'thudm/cog' in model_id:
+
+    if 'cogvlm2' in model_id:
+        return 'cogvlm2'
+
+    if 'cogagent-' in model_id or 'cogvlm-' in model_id:
         return 'cogvlm'
     
     if 'fuyu' in model_id:
