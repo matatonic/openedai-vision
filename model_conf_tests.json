@@ -1,6 +1,7 @@
 [
   ["vikhyatk/moondream2", "--use-flash-attn"],
   ["OpenGVLab/InternVL-Chat-V1-5", "--device-map", "cuda:0"],
+  ["OpenGVLab/Mini-InternVL-Chat-2B-V1-5"],
   ["HuggingFaceM4/idefics2-8b-chatty", "--use-flash-attn", "--device-map", "cuda:0"],
   ["HuggingFaceM4/idefics2-8b", "--use-flash-attn", "--device-map", "cuda:0"],
   ["qihoo360/360VL-8B", "--use-flash-attn"],

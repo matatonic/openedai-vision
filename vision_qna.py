@@ -546,7 +546,7 @@ def guess_backend(model_name: str) -> str:
     if 'fuyu' in model_id:
         return 'fuyu'
     
-    if 'internvl-chat-v1-5' in model_id:
+    if 'internvl-chat-v1-5' in model_id or 'mini-internvl-chat-2b-v1-5' in model_id:
         return 'internvl-chat-v1-5'
     
     if 'idefics2' in model_id:
