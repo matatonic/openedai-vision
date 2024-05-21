@@ -30,6 +30,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (main docker only, wont gpu split)
 - - [X] [idefics2-8b-chatty](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty) (main docker only, wont gpu split)
 - - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (main docker only, wont gpu split)
+- [X] [Microsoft](https://huggingface.co/microsoft/)
+- - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct) (main docker only)
 - [X] [qihoo360](https://huggingface.co/qihoo360)
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
 - - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
@@ -83,6 +85,10 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.16.0
+
+- new model support: microsoft/Phi-3-vision-128k-instruct
 
 Version 0.15.1
 

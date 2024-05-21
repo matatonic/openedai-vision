@@ -420,6 +420,30 @@ async def emu_images_prompt_system_from_messages(messages: list[Message], img_to
 
     return images, prompt, system_message
 
+async def phi3_prompt_from_messages(messages: list[Message]):
+    n = 1
+    img_tok = "<|image_{}|>\n"
+    prompt = ''
+    images = []
+
+    for m in messages:
+        img_tag = ''
+        
+        for c in m.content:
+            if c.type == 'image_url':
+                images.extend([ await url_to_image(c.image_url.url) ])
+                img_tag += img_tok.format(n)
+                n += 1
+        
+        for c in m.content:
+            if c.type == 'text':
+                prompt += f"<|{m.role}|>\n{img_tag}{c.text}<|end|>\n"
+    
+    prompt += '<|assistant|>\n'
+
+    return images, prompt
+
+
 async def prompt_history_images_system_from_messages(messages: list[Message], img_tok = "<image>\n", url_handler = url_to_image):
     history = []
     images = []
@@ -566,3 +590,6 @@ def guess_backend(model_name: str) -> str:
     
     if '360vl' in model_id:
         return '360vl'
+    
+    if "phi-3-vision" in model_id:
+        return 'phi3'
