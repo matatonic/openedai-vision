@@ -86,6 +86,10 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version 0.16.1
+
+- Add "start with" parameter to pre-fill assistant response & backend support (doesn't work with all models) - aka 'Sure,' support.
+
 Version 0.16.0
 
 - new model support: microsoft/Phi-3-vision-128k-instruct
@@ -213,23 +217,25 @@ options:
 
 Usage
 ```
-usage: chat_with_image.py [-h] [-s SYSTEM_PROMPT] [-m MAX_TOKENS] [-t TEMPERATURE] [-p TOP_P] [-u] [-1] image_url [questions ...]
+usage: chat_with_image.py [-h] [-s SYSTEM_PROMPT] [-S START_WITH] [-m MAX_TOKENS] [-t TEMPERATURE] [-p TOP_P] [-u] [-1] image_url [questions ...]
 
 Test vision using OpenAI
 
 positional arguments:
   image_url             URL or image file to be tested
-  questions             The question to ask the image
+  questions             The question to ask the image (default: None)
 
 options:
   -h, --help            show this help message and exit
   -s SYSTEM_PROMPT, --system-prompt SYSTEM_PROMPT
+  -S START_WITH, --start-with START_WITH
+                        Start reply with, ex. 'Sure, ' (doesn't work with all models) (default: None)
   -m MAX_TOKENS, --max-tokens MAX_TOKENS
   -t TEMPERATURE, --temperature TEMPERATURE
   -p TOP_P, --top_p TOP_P
   -u, --keep-remote-urls
-                        Normally, http urls are converted to data: urls for better latency.
-  -1, --single          Single turn Q&A, output is only the model response.
+                        Normally, http urls are converted to data: urls for better latency. (default: False)
+  -1, --single          Single turn Q&A, output is only the model response. (default: False)
 ```
 
 Example:

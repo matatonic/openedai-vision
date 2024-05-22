@@ -29,6 +29,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Test vision using OpenAI',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-s', '--system-prompt', type=str, default=None)
+    parser.add_argument('-S', '--start-with', type=str, default=None, help="Start reply with, ex. 'Sure, ' (doesn't work with all models)")
     parser.add_argument('-m', '--max-tokens', type=int, default=None)
     parser.add_argument('-t', '--temperature', type=float, default=None)
     parser.add_argument('-p', '--top_p', type=float, default=None)
@@ -61,6 +62,8 @@ if __name__ == '__main__':
     messages.extend([{ "role": "user", "content": content }])
 
     while True:
+        if args.start_with:
+            messages.extend([{ "role": "assistant", "content": [{ "type": "text", "text": args.start_with }] }])
         response = client.chat.completions.create(model="gpt-4-vision-preview", messages=messages, **params)
 
         if args.single:

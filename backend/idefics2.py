@@ -5,6 +5,8 @@ from vision_qna import *
 
 # "HuggingFaceM4/idefics2-8b"
 # "HuggingFaceM4/idefics2-8b-AWQ"
+# "HuggingFaceM4/idefics2-8b-chatty
+# "HuggingFaceM4/idefics2-8b-chatty-AWQ
 
 class VisionQnA(VisionQnABase):
     model_name: str = "idefics2"

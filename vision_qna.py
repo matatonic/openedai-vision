@@ -163,6 +163,11 @@ async def images_hfmessages_from_messages(messages: list[Message], url_handler =
 async def phi15_prompt_from_messages(messages: list[Message], img_tok = "<image>", img_end = ''): # </image>
     prompt = ''
     images = []
+    generation_msg = "Answer:"
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
 
     for m in messages:
         if m.role == 'user':
@@ -183,13 +188,18 @@ async def phi15_prompt_from_messages(messages: list[Message], img_tok = "<image>
                 if c.type == 'text':
                     prompt += f"{c.text}\n\n"  # fake system prompt
 
-    prompt += "Answer:"
+    prompt += generation_msg
 
     return images, prompt
 
 async def vicuna0_prompt_from_messages(messages: list[Message], img_tok = "<image_placeholder>\n"):
     prompt = ''
     images = []
+    generation_msg = "### Assistant:"
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
 
     for m in messages:
         if m.role == 'user':
@@ -214,13 +224,19 @@ async def vicuna0_prompt_from_messages(messages: list[Message], img_tok = "<imag
                 if c.type == 'text':
                     prompt += f"{c.text}\n\n"
 
-    prompt += "### Assistant:"
+    prompt += generation_msg
 
     return images, prompt
+
 
 async def vicuna_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
     prompt = ''
     images = []
+    generation_msg = "ASSISTANT:"
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
 
     for m in messages:
         if m.role == 'user':
@@ -245,7 +261,7 @@ async def vicuna_prompt_from_messages(messages: list[Message], img_tok = "<image
                 if c.type == 'text':
                     prompt += f"{c.text}\n\n"
 
-    prompt += "ASSISTANT:"
+    prompt += generation_msg
 
     return images, prompt
 
@@ -281,6 +297,11 @@ async def llama2_prompt_from_messages(messages: list[Message], img_tok = "<image
 async def llama3_prompt_from_messages(messages: list[Message], img_tok = "<image>"):
     prompt = ''
     images = []
+    generation_msg = '<|start_header_id|>assistant<|end_header_id|>\n\n'
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
 
     for m in messages:
         has_image = False
@@ -296,13 +317,18 @@ async def llama3_prompt_from_messages(messages: list[Message], img_tok = "<image
             if c.type == 'text':
                 prompt += f"<|start_header_id|>{m.role}<|end_header_id|>\n\n{img_tag}{c.text.strip()}<|eot_id|>"
     
-    prompt += '<|start_header_id|>assistant<|end_header_id|>\n\n'
+    prompt += generation_msg
 
     return images, prompt
 
 async def chatml_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
     prompt = ''
     images = []
+    generation_msg = "<|im_start|>assistant\n"
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
 
     for m in messages:
         if m.role == 'user':
@@ -327,13 +353,18 @@ async def chatml_prompt_from_messages(messages: list[Message], img_tok = "<image
                 if c.type == 'text':
                     prompt += f"<|im_start|>system\n{c.text}<|im_end|>"
 
-    prompt += f"<|im_start|>assistant\n"
+    prompt += generation_msg
 
     return images, prompt
 
 async def gemma_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
     prompt = ''
     images = []
+    generation_msg = "<start_of_turn>model\n"
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
 
     for m in messages:
         if m.role == 'user':
@@ -359,7 +390,7 @@ async def gemma_prompt_from_messages(messages: list[Message], img_tok = "<image>
                     prompt += f"<start_of_turn>system\n{c.text}<end_of_turn>" # fake it
 
 
-    prompt += f"<start_of_turn>model\n"
+    prompt += generation_msg
 
     return images, prompt
 
@@ -393,6 +424,12 @@ async def emu_images_prompt_system_from_messages(messages: list[Message], img_to
     images = []
     system_message = None
 
+    generation_msg = ' [ASSISTANT]:'
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
+
     for m in messages:
         if m.role == 'user':
             text = ''
@@ -416,7 +453,7 @@ async def emu_images_prompt_system_from_messages(messages: list[Message], img_to
                 if c.type == 'text':
                     system_message = c.text
 
-    prompt += " [ASSISTANT]:"
+    prompt += generation_msg
 
     return images, prompt, system_message
 
@@ -425,6 +462,11 @@ async def phi3_prompt_from_messages(messages: list[Message]):
     img_tok = "<|image_{}|>\n"
     prompt = ''
     images = []
+    generation_msg = '<|assistant|>\n'
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
 
     for m in messages:
         img_tag = ''
@@ -439,7 +481,7 @@ async def phi3_prompt_from_messages(messages: list[Message]):
             if c.type == 'text':
                 prompt += f"<|{m.role}|>\n{img_tag}{c.text}<|end|>\n"
     
-    prompt += '<|assistant|>\n'
+    prompt += generation_msg
 
     return images, prompt
 

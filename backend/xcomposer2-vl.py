@@ -12,6 +12,7 @@ warnings.filterwarnings('ignore')
 
 # internlm/internlm-xcomposer2-vl-7b # ~21GB
 # internlm/internlm-xcomposer2-vl-7b-4bit # ~12GB
+# internlm/internlm-xcomposer2-vl-1_8b # ~8GB
 
 class InternLMXComposer2QForCausalLM(auto_gptq.modeling.BaseGPTQForCausalLM):
     layers_block_name = "model.layers"
