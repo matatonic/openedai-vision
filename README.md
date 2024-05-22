@@ -60,7 +60,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2)
 - [X] [Moondream1](https://huggingface.co/vikhyatk/moondream1) (alternate docker only)
 - [X] [openbmb](https://huggingface.co/openbmb)
-- - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
+- - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5) (main docker only)
 - - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2)
 - - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V)
 - - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
