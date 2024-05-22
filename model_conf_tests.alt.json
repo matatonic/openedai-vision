@@ -42,6 +42,7 @@
   ["llava-hf/llava-1.5-13b-hf", "--use-flash-attn", "--device-map", "cuda:0"],
   ["llava-hf/llava-1.5-7b-hf", "--load-in-4bit", "--use-flash-attn"],
   ["llava-hf/llava-1.5-7b-hf", "--use-flash-attn", "--device-map", "cuda:0"],
+  ["openbmb/MiniCPM-Llama3-V-2_5", "--use-flash-attn", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V", "--use-flash-attn", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V-2", "--use-flash-attn", "--device-map", "cuda:0"],
   ["qihoo360/360VL-8B", "--use-flash-attn", "--load-in-4bit"],

@@ -60,6 +60,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2)
 - [X] [Moondream1](https://huggingface.co/vikhyatk/moondream1) (alternate docker only)
 - [X] [openbmb](https://huggingface.co/openbmb)
+- - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
 - - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2)
 - - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V)
 - - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
@@ -85,6 +86,10 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.17.0
+
+- new model support: openbmb/MiniCPM-Llama3-V-2_5
 
 Version 0.16.1
 
@@ -113,7 +118,6 @@ Version: 0.14.0
 - new model support: qihoo360/360VL-8B, qihoo360/360VL-70B (70B is untested, too large for me)
 - new model support: BAAI/Emu2-Chat, Can be slow to load, may need --max-memory option control the loading on multiple gpus
 - new model support: TIGER-Labs/Mantis: Mantis-8B-siglip-llama3, Mantis-8B-clip-llama3, Mantis-8B-Fuyu
-
 
 Version: 0.13.0
 

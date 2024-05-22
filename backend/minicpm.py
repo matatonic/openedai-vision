@@ -2,11 +2,12 @@ from transformers import AutoTokenizer, AutoModel
 
 from vision_qna import *
 
-# openbmb/MiniCPM-V 
-# aka OmniLMM-3B
+# openbmb/MiniCPM-Llama3-V-2_5
+# openbmb/MiniCPM-V-2
+# openbmb/MiniCPM-V aka OmniLMM-3B
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "omnilmm3b"
+    model_name: str = "minicpm"
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
@@ -50,7 +51,7 @@ class VisionQnA(VisionQnABase):
         if params.get('do_sample', False):
             params = self.get_generation_params(request, default_sampling_params)
 
-        answer, context, _ = self.model.chat(
+        answer = self.model.chat(
             image=image,
             msgs=msgs,
             context=None,
@@ -58,5 +59,8 @@ class VisionQnA(VisionQnABase):
             sampling=params.get('do_sample', False),
             **params,
         )
+
+        if not isinstance(answer, str):
+            answer = answer[0]
 
         return answer

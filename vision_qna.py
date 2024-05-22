@@ -585,8 +585,8 @@ def guess_backend(model_name: str) -> str:
     if 'deepseek' in model_id:
         return 'deepseek-vl'
 
-    if 'minicpm-v' in model_id:
-        return 'omnilmm3b'
+    if 'minicpm' in model_id:
+        return 'minicpm'
 
     if 'omnilmm-12b' in model_id:
         return 'omnilmm12b'

@@ -46,6 +46,7 @@
   ["llava-hf/llava-v1.6-vicuna-7b-hf", "--use-flash-attn"],
   ["microsoft/Phi-3-vision-128k-instruct", "--use-flash-attn", "--load-in-4bit"],
   ["microsoft/Phi-3-vision-128k-instruct", "--use-flash-attn"],
+  ["openbmb/MiniCPM-Llama3-V-2_5", "--use-flash-attn", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V", "--use-flash-attn", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V-2", "--use-flash-attn", "--device-map", "cuda:0"],
   ["qihoo360/360VL-70B", "--use-flash-attn", "--load-in-4bit"],
