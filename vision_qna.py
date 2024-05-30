@@ -357,6 +357,38 @@ async def chatml_prompt_from_messages(messages: list[Message], img_tok = "<image
 
     return images, prompt
 
+async def phintern_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
+    prompt = ''
+    images = []
+    generation_msg = "<s><|assistant|>\n"
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
+
+    for m in messages:
+        if m.role == 'user':
+            text = ''
+            has_image = False
+
+            for c in m.content:
+                if c.type == 'image_url':
+                    images.extend([ await url_to_image(c.image_url.url) ])
+                    has_image = True
+                if c.type == 'text':
+                    text = c.text
+
+            img_tag = img_tok if has_image else ''
+            prompt += f"<s><|user|>\n{img_tag}{text}<|end|>"
+        elif m.role == 'assistant':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"<s><|assistant|>\n{c.text}<|end|>"
+
+    prompt += generation_msg
+
+    return images, prompt
+
 async def gemma_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
     prompt = ''
     images = []
@@ -530,6 +562,8 @@ async def prompt_from_messages(messages: list[Message], format: str) -> str:
         'chatml': chatml_prompt_from_messages,
         'gemma': gemma_prompt_from_messages,
         'fuyu': fuyu_prompt_from_messages,
+        'phintern': phintern_prompt_from_messages,
+
     }
 
     if format not in known_formats:
@@ -549,6 +583,7 @@ def guess_model_format(model_name: str) -> str:
         'phi15': ['moondream1', 'moondream2', 'monkey'],
         'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5'],
         'fuyu': ['fuyu'],
+        'phintern': ['internvl-chat-4b'],
     }
     for format, options in model_format_match_map.items():
         if any(x in model_id for x in options):
@@ -614,7 +649,10 @@ def guess_backend(model_name: str) -> str:
     
     if 'internvl-chat-v1-5' in model_id or 'mini-internvl-chat-2b-v1-5' in model_id:
         return 'internvl-chat-v1-5'
-    
+
+    if 'internvl-chat-4b' in model_id:
+        return 'phintern'    
+
     if 'idefics2' in model_id:
         return 'idefics2'
     
