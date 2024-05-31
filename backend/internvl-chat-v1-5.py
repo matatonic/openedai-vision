@@ -91,7 +91,10 @@ class VisionQnA(VisionQnABase):
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
-        
+
+        if not format:
+            self.format = guess_model_format(model_id)
+
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModel.from_pretrained(**self.params).eval()
 
@@ -105,7 +108,11 @@ class VisionQnA(VisionQnABase):
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
     async def chat_with_images(self, request: ImageChatRequest) -> str:
-        images, prompt = await chatml_prompt_from_messages(request.messages, img_tok='')
+
+        if self.format == 'phintern':
+            images, prompt = await phintern_prompt_from_messages(request.messages, img_tok='')
+        else:
+            images, prompt = await chatml_prompt_from_messages(request.messages, img_tok='')
         
         images = [load_image(image).to(self.model.dtype).cuda() for image in images]
         if len(images) > 1:

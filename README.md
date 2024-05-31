@@ -12,6 +12,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
 - - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5) (wont gpu split yet, 4bit not recommended)
 - - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8) (wont gpu split yet)
+- - [X] [Mini-InternVL-Chat-4B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-4B-V1-5)
 - - [X] [Mini-InternVL-Chat-2B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-2B-V1-5)
 - [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM)
 - - [X] [cogvlm2-llama3-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B)
@@ -32,6 +33,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (main docker only, wont gpu split)
 - [X] [Microsoft](https://huggingface.co/microsoft/)
 - - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct) (main docker only)
+- [X] [failspy](https://huggingface.co/failspy)
+- - [X] [Phi-3-vision-128k-instruct-abliterated-alpha](https://huggingface.co/failspy/Phi-3-vision-128k-instruct-abliterated-alpha)
 - [X] [qihoo360](https://huggingface.co/qihoo360)
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
 - - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
@@ -86,6 +89,11 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.18.0
+
+- new model support: OpenGVLab/Mini-InternVL-Chat-4B-V1-5, thanks [@Ph0rk0z](https://github.com/Ph0rk0z)
+- new model support: failspy/Phi-3-vision-128k-instruct-abliterated-alpha
 
 Version 0.17.0
 
