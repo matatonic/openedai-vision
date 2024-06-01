@@ -105,10 +105,10 @@ class VisionQnA(VisionQnABase):
 
         self.model.img_context_token_id = self.tokenizer.convert_tokens_to_ids('<IMG_CONTEXT>')
 
-        if self.format == 'phintern' and self.tokenizer.convert_tokens_to_ids('<|end|>') != 0:
-            self.eos_token_id = self.tokenizer.convert_tokens_to_ids('<|end|>')
-        elif self.tokenizer.convert_tokens_to_ids('<|im_end|>') != 0:
-            self.eos_token_id = self.tokenizer.convert_tokens_to_ids('<|im_end|>')  # 92542, InternLM2
+        self.eos_token = '<|end|>' if self.format == 'phintern' else '<|im_end|>'
+
+        if self.tokenizer.convert_tokens_to_ids(self.eos_token) != 0:
+            self.eos_token_id = self.tokenizer.convert_tokens_to_ids(self.eos_token)  # 92542, InternLM2
         else:
             self.eos_token_id = self.tokenizer.eos_token_id
 
@@ -151,4 +151,4 @@ class VisionQnA(VisionQnABase):
         )
         response = self.tokenizer.decode(output[0], skip_special_tokens=True)
 
-        return response.split('<|im_end|>')[0].strip()
+        return response.split(self.eos_token)[0].strip()

@@ -91,6 +91,10 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version 0.19.1
+
+- really Fix <|end|> token for Mini-InternVL-Chat-4B-V1-5, thanks again [@Ph0rk0z](https://github.com/Ph0rk0z)
+
 Version 0.19.0
 
 - new model support: tiiuae/falcon-11B-vlm
