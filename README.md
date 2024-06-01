@@ -57,6 +57,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (main docker only, wont gpu split)
 - - [X] [Mantis-8B-Fuyu](https://huggingface.co/TIGER-Lab/Mantis-8B-Fuyu) (main docker only, wont gpu split)
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
+- [X] [falcon-11B-vlm](https://huggingface.co/tiiuae/falcon-11B-vlm)
 - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
 - [X] [Monkey](https://huggingface.co/echo840/Monkey)
 - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
@@ -89,6 +90,12 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.19.0
+
+- new model support: tiiuae/falcon-11B-vlm
+- add --max-tiles option for InternVL-Chat-V1-5 and xcomposer2-4khd backends. Tiles use more vram for higher resolution, the default is 6 and 40 respectively, but both are trained up to 40. Some context length warnings may appear near the limits of the model.
+- Fix <|end|> token for Mini-InternVL-Chat-4B-V1-5, thanks again [@Ph0rk0z](https://github.com/Ph0rk0z)
 
 Version 0.18.0
 
@@ -193,8 +200,7 @@ For MiniGemini support the docker image is recommended. See `prepare_minigemini.
 ## Usage
 
 ```
-usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4] [-8] [-F]
-                 [-P PORT] [-H HOST] [--preload]
+usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4] [-8] [-F] [-T MAX_TILES] [-P PORT] [-H HOST] [--preload]
 
 OpenedAI Vision API Server
 
@@ -217,10 +223,11 @@ options:
   -4, --load-in-4bit    load in 4bit (doesn't work with all models) (default: False)
   -8, --load-in-8bit    load in 8bit (doesn't work with all models) (default: False)
   -F, --use-flash-attn  Use Flash Attention 2 (doesn't work with all models or GPU) (default: False)
+  -T MAX_TILES, --max-tiles MAX_TILES
+                        Change the maximum number of tiles. [1-40+] (uses more VRAM for higher resolution, doesn't work with all models) (default: None)
   -P PORT, --port PORT  Server tcp port (default: 5006)
   -H HOST, --host HOST  Host to listen on, Ex. localhost (default: 0.0.0.0)
   --preload             Preload model and exit. (default: False)
-
 ```
 
 ## Sample API Usage

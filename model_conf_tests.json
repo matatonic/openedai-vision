@@ -5,10 +5,12 @@
   ["HuggingFaceM4/idefics2-8b-AWQ", "--use-flash-attn", "--device-map", "cuda:0"],
   ["HuggingFaceM4/idefics2-8b-chatty", "--use-flash-attn", "--device-map", "cuda:0"],
   ["HuggingFaceM4/idefics2-8b-chatty-AWQ", "--use-flash-attn", "--device-map", "cuda:0"],
+  ["OpenGVLab/InternVL-Chat-V1-5", "--device-map", "cuda:0", "--max-tiles", "40"],
   ["OpenGVLab/InternVL-Chat-V1-5", "--device-map", "cuda:0"],
   ["OpenGVLab/InternVL-Chat-V1-5", "--load-in-4bit", "--device-map", "cuda:0"],
   ["OpenGVLab/InternVL-Chat-V1-5-Int8", "--device-map", "cuda:0"],
   ["OpenGVLab/Mini-InternVL-Chat-2B-V1-5"],
+  ["OpenGVLab/Mini-InternVL-Chat-4B-V1-5", "--max-tiles", "40"],
   ["OpenGVLab/Mini-InternVL-Chat-4B-V1-5"],
   ["Qwen/Qwen-VL-Chat"],
   ["THUDM/cogagent-chat-hf", "--load-in-4bit"],
@@ -57,5 +59,6 @@
   ["qnguyen3/nanoLLaVA", "--use-flash-attn", "--device-map", "cuda:0"],
   ["qnguyen3/nanoLLaVA", "--use-flash-attn", "--load-in-4bit", "--device-map", "cuda:0"],
   ["qresearch/llama-3-vision-alpha-hf", "--device", "cuda:0"],
+  ["tiiuae/falcon-11B-vlm", "--use-flash-attn"],
   ["vikhyatk/moondream2", "--use-flash-attn"]
 ]

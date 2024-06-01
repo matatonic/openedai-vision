@@ -518,6 +518,42 @@ async def phintern_prompt_from_messages(messages: list[Message], img_tok = "<ima
 
     return images, prompt
 
+async def falcon_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
+    prompt = ''
+    images = []
+    generation_msg = "Falcon:"
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
+
+    for m in messages:
+        if m.role == 'user':
+            text = ''
+            has_image = False
+
+            for c in m.content:
+                if c.type == 'image_url':
+                    images.extend([ await url_to_image(c.image_url.url) ])
+                    has_image = True
+                if c.type == 'text':
+                    text = c.text
+            
+            img_tag = img_tok if has_image else ''
+            prompt += f"User:{img_tag}{text} "
+        elif m.role == 'assistant':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"Falcon:{c.text}"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f"{c.text}\n\n"
+
+    prompt += generation_msg
+
+    return images, prompt
+
 
 async def prompt_history_images_system_from_messages(messages: list[Message], img_tok = "<image>\n", url_handler = url_to_image):
     history = []
@@ -554,16 +590,18 @@ async def prompt_history_images_system_from_messages(messages: list[Message], im
 
 async def prompt_from_messages(messages: list[Message], format: str) -> str:
     known_formats = {
-        'phi15': phi15_prompt_from_messages,
-        'vicuna0': vicuna0_prompt_from_messages,
-        'vicuna': vicuna_prompt_from_messages,
+        'chatml': chatml_prompt_from_messages,
+        'falcon': falcon_prompt_from_messages,
+        'fuyu': fuyu_prompt_from_messages,
+        'gemma': gemma_prompt_from_messages,
         'llama2': llama2_prompt_from_messages,
         'llama3': llama3_prompt_from_messages,
         'mistral': llama2_prompt_from_messages, # simplicity
-        'chatml': chatml_prompt_from_messages,
-        'gemma': gemma_prompt_from_messages,
-        'fuyu': fuyu_prompt_from_messages,
+        'phi15': phi15_prompt_from_messages,
+        'phi3': phi3_prompt_from_messages,
         'phintern': phintern_prompt_from_messages,
+        'vicuna': vicuna_prompt_from_messages,
+        'vicuna0': vicuna0_prompt_from_messages,
     }
 
     if format not in known_formats:
@@ -575,15 +613,17 @@ def guess_model_format(model_name: str) -> str:
     model_id = model_name.lower()
 
     model_format_match_map = {
+        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5'],
+        'falcon': ['falcon'],
+        'fuyu': ['fuyu'],
+        'gemma': ['gemma', '-2b'],
         'llama2': ['bakllava', '8x7b', 'mistral', 'mixtral'],
         'llama3': ['llama-3-vision', '360vl'],
-        'gemma': ['gemma', '-2b'],
+        'phi15': ['moondream1', 'moondream2', 'monkey'],
+        'phi3': ['phi3'],
+        'phintern': ['internvl-chat-4b'],
         'vicuna': ['vicuna', '13b'],
         'vicuna0': ['yi-vl'],
-        'phi15': ['moondream1', 'moondream2', 'monkey'],
-        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5'],
-        'fuyu': ['fuyu'],
-        'phintern': ['internvl-chat-4b'],
     }
     for format, options in model_format_match_map.items():
         if any(x in model_id for x in options):
@@ -668,5 +708,8 @@ def guess_backend(model_name: str) -> str:
     if '360vl' in model_id:
         return '360vl'
     
-    if "phi-3-vision" in model_id:
+    if "phi-3" in model_id:
         return 'phi3'
+    
+    if 'falcon' in model_id:
+        return 'llavanext'

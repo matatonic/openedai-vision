@@ -8,6 +8,9 @@ from torchvision.transforms.functional import InterpolationMode
 # OpenGVLab/InternVL-Chat-V1-5
 # OpenGVLab/InternVL-Chat-V1-5-Int8
 # OpenGVLab/Mini-InternVL-Chat-2B-V1-5
+# OpenGVLab/Mini-InternVL-Chat-4B-V1-5
+
+MAX_TILES = 6
 
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
@@ -37,7 +40,7 @@ def find_closest_aspect_ratio(aspect_ratio, target_ratios, width, height, image_
                 best_ratio = ratio
     return best_ratio
 
-def dynamic_preprocess(image, min_num=1, max_num=6, image_size=448, use_thumbnail=False):
+def dynamic_preprocess(image, min_num=1, max_num=MAX_TILES, image_size=448, use_thumbnail=False):
     orig_width, orig_height = image.size
     aspect_ratio = orig_width / orig_height
 
@@ -76,7 +79,7 @@ def dynamic_preprocess(image, min_num=1, max_num=6, image_size=448, use_thumbnai
     return processed_images
 
 
-def load_image(image, input_size=448, max_num=6):
+def load_image(image, input_size=448, max_num=MAX_TILES):
     #image = Image.open(image_file).convert('RGB')
     transform = build_transform(input_size=input_size)
     images = dynamic_preprocess(image, image_size=input_size, use_thumbnail=True, max_num=max_num)
@@ -95,12 +98,16 @@ class VisionQnA(VisionQnABase):
         if not format:
             self.format = guess_model_format(model_id)
 
+        self.max_tiles = extra_params.get('max_tiles', MAX_TILES)
+
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModel.from_pretrained(**self.params).eval()
 
         self.model.img_context_token_id = self.tokenizer.convert_tokens_to_ids('<IMG_CONTEXT>')
 
-        if self.tokenizer.convert_tokens_to_ids('<|im_end|>') != 0:
+        if self.format == 'phintern' and self.tokenizer.convert_tokens_to_ids('<|end|>') != 0:
+            self.eos_token_id = self.tokenizer.convert_tokens_to_ids('<|end|>')
+        elif self.tokenizer.convert_tokens_to_ids('<|im_end|>') != 0:
             self.eos_token_id = self.tokenizer.convert_tokens_to_ids('<|im_end|>')  # 92542, InternLM2
         else:
             self.eos_token_id = self.tokenizer.eos_token_id
@@ -114,7 +121,7 @@ class VisionQnA(VisionQnABase):
         else:
             images, prompt = await chatml_prompt_from_messages(request.messages, img_tok='')
         
-        images = [load_image(image).to(self.model.dtype).cuda() for image in images]
+        images = [load_image(image, max_num=self.max_tiles).to(self.model.dtype).cuda() for image in images]
         if len(images) > 1:
             pixel_values = torch.cat(images, dim=0)
         else:

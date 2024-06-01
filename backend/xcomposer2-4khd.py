@@ -9,22 +9,25 @@ logging.set_verbosity_error()
 warnings.filterwarnings('ignore')
 
 # "internlm/internlm-xcomposer2-4khd-7b"
+MAX_TILES = 40
 
-def calc_hd(image):
+def calc_hd(image, max_num=MAX_TILES):
     # Not sure if this is correct, but there are no instructions for how to set it
     img = Image.open(image)
     width, height = img.size
     del img
 
-    return ceil(width // 336) * ceil(height // 336)
+    return min(ceil(width // 336) * ceil(height // 336), max_num)
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "internvl-chat-v1-5"
+    model_name: str = "internlm-xcomposer2-4khd-7b"
     format: str = "chatml"
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
         
+        self.max_tiles = extra_params.get('max_tiles', MAX_TILES)
+
         torch.set_grad_enabled(False)
         
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
@@ -47,6 +50,6 @@ class VisionQnA(VisionQnABase):
         params = self.get_generation_params(request, default_params)
 
         with torch.cuda.amp.autocast():
-            response, history = self.model.chat(self.tokenizer, query=prompt, image=images[-1], hd_num=calc_hd(images[-1]), history=history, **params)
+            response, history = self.model.chat(self.tokenizer, query=prompt, image=images[-1], hd_num=calc_hd(images[-1], max_num=self.max_tiles), history=history, **params)
 
         return response

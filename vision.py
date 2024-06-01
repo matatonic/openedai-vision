@@ -70,6 +70,7 @@ def parse_args(argv=None):
     parser.add_argument('-4', '--load-in-4bit', action='store_true', help="load in 4bit (doesn't work with all models)")
     parser.add_argument('-8', '--load-in-8bit', action='store_true', help="load in 8bit (doesn't work with all models)")
     parser.add_argument('-F', '--use-flash-attn', action='store_true', help="Use Flash Attention 2 (doesn't work with all models or GPU)")
+    parser.add_argument('-T', '--max-tiles', action='store', default=None, type=int, help="Change the maximum number of tiles. [1-40+] (uses more VRAM for higher resolution, doesn't work with all models)")
     parser.add_argument('-P', '--port', action='store', default=5006, type=int, help="Server tcp port")
     parser.add_argument('-H', '--host', action='store', default='0.0.0.0', help="Host to listen on, Ex. localhost")
     parser.add_argument('--preload', action='store_true', help="Preload model and exit.")
@@ -91,6 +92,8 @@ if __name__ == "__main__":
         extra_params['load_in_8bit'] = True
     if args.use_flash_attn:
         extra_params['use_flash_attn'] = True
+    if args.max_tiles:
+        extra_params['max_tiles'] = args.max_tiles
     
     extra_params['trust_remote_code'] = not args.no_trust_remote_code
     if args.max_memory:
