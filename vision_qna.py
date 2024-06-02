@@ -613,7 +613,7 @@ def guess_model_format(model_name: str) -> str:
     model_id = model_name.lower()
 
     model_format_match_map = {
-        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5'],
+        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b'],
         'falcon': ['falcon'],
         'fuyu': ['fuyu'],
         'gemma': ['gemma', '-2b'],

@@ -50,8 +50,14 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (main docker only, wont gpu split)
 - [X] [BAAI](https://huggingface.co/BAAI/)
-- - [X] [Emu2-Chat](https://huggingface.co/BAAI/Emu2-Chat) (main docker only, may need the --max-memory option to GPU split)
+- - [X] [BAAI/Bunny-v1_0-2B-zh](https://huggingface.co/BAAI/Bunny-v1_0-2B-zh)
+- - [X] [BAAI/Bunny-v1_0-3B-zh](https://huggingface.co/BAAI/Bunny-v1_0-3B-zh)
+- - [X] [BAAI/Bunny-v1_0-3B](https://huggingface.co/BAAI/Bunny-v1_0-3B)
+- - [X] [BAAI/Bunny-v1_0-4B](https://huggingface.co/BAAI/Bunny-v1_0-4B)
+- - [X] [BAAI/Bunny-v1_1-4B](https://huggingface.co/BAAI/Bunny-v1_1-4B)
+- - [X] [BAAI/Bunny-v1_1-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-v1_1-Llama-3-8B-V)
 - - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V) (main docker only)
+- - [X] [Emu2-Chat](https://huggingface.co/BAAI/Emu2-Chat) (main docker only, may need the --max-memory option to GPU split)
 - [X] [TIGER-Lab](https://huggingface.co/TIGER-Lab)
 - - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (main docker only, wont gpu split)
 - - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (main docker only, wont gpu split)
@@ -90,6 +96,11 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.20.0
+
+- enable hf_transfer for faster model downloads (over 300MB/s)
+- 6 new Bunny models from [BAAI](https://huggingface.co/BAAI): [Bunny-v1_0-3B-zh](https://huggingface.co/BAAI/Bunny-v1_0-3B-zh), [Bunny-v1_0-3B](https://huggingface.co/BAAI/Bunny-v1_0-3B), [Bunny-v1_0-4B](https://huggingface.co/BAAI/Bunny-v1_0-4B), [Bunny-v1_1-4B](https://huggingface.co/BAAI/Bunny-v1_1-4B), [Bunny-v1_1-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-v1_1-Llama-3-8B-V)
 
 Version 0.19.1
 

@@ -6,7 +6,14 @@ import warnings
 logging.set_verbosity_error()
 warnings.filterwarnings('ignore')
 
-# "BAAI/Bunny-Llama-3-8B-V"
+# BAAI/Bunny-Llama-3-8B-V - vicuna (llama3?)
+# BAAI/Bunny-v1_0-2B-zh
+# BAAI/Bunny-v1_0-3B-zh
+# BAAI/Bunny-v1_0-3B
+# BAAI/Bunny-v1_0-4B - vicuna (phi3??)
+# BAAI/Bunny-v1_1-4B - vicuna (phi2??)
+# BAAI/Bunny-v1_1-Llama-3-8B-V - vicuna (llama3??)
+
 
 class VisionQnA(VisionQnABase):
     model_name: str = "bunny"

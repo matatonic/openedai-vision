@@ -1,5 +1,11 @@
 [
   ["BAAI/Bunny-Llama-3-8B-V"],
+  ["BAAI/Bunny-v1_0-2B-zh"],
+  ["BAAI/Bunny-v1_0-3B"],
+  ["BAAI/Bunny-v1_0-3B-zh"],
+  ["BAAI/Bunny-v1_0-4B"],
+  ["BAAI/Bunny-v1_1-4B"],
+  ["BAAI/Bunny-v1_1-Llama-3-8B-V"],
   ["BAAI/Emu2-Chat", "--max-memory=0:78GiB,1:20GiB"],
   ["HuggingFaceM4/idefics2-8b", "--use-flash-attn", "--device-map", "cuda:0"],
   ["HuggingFaceM4/idefics2-8b-AWQ", "--use-flash-attn", "--device-map", "cuda:0"],

@@ -9,6 +9,7 @@ https://github.com/Dao-AILab/flash-attention/releases/download/v2.5.8/flash_attn
 https://github.com/bdashore3/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.2.2cxx11abiFALSE-cp311-cp311-win_amd64.whl; platform_system == "Windows" and python_version == "3.11"
 https://github.com/bdashore3/flash-attention/releases/download/v2.5.8/flash_attn-2.5.8+cu122torch2.2.2cxx11abiFALSE-cp310-cp310-win_amd64.whl; platform_system == "Windows" and python_version == "3.10"
 flash_attn; python_version != "3.10" and python_version != "3.11"
+hf_transfer
 openai
 peft
 protobuf
