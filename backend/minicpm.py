@@ -14,7 +14,7 @@ class VisionQnA(VisionQnABase):
 
         # bugs with 4bit, RuntimeError: mat1 and mat2 must have the same dtype, but got Float and BFloat16
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
-        self.model = AutoModel.from_pretrained(**self.params).to(dtype=self.params['torch_dtype']).eval()
+        self.model = AutoModel.from_pretrained(**self.params).eval().to(dtype=torch.float16)
     
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
