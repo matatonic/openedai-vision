@@ -44,6 +44,8 @@
   ["THUDM/cogvlm2-llama3-chat-19B"],
   ["THUDM/cogvlm2-llama3-chinese-chat-19B", "--load-in-4bit"],
   ["THUDM/cogvlm2-llama3-chinese-chat-19B"],
+  ["THUDM/glm-4v-9b", "--device-map", "cuda:0", "--load-in-4bit"],
+  ["THUDM/glm-4v-9b", "--device-map", "cuda:0"],
   ["TIGER-Lab/Mantis-8B-Fuyu", "--device-map", "cuda:0", "--load-in-4bit"],
   ["TIGER-Lab/Mantis-8B-Fuyu", "--device-map", "cuda:0"],
   ["TIGER-Lab/Mantis-8B-clip-llama3", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],

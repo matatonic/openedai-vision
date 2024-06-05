@@ -19,6 +19,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [cogvlm2-llama3-chinese-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B)
 - - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)
+- - [X] [glm-4v-9b](https://huggingface.co/THUDM/glm-4v-9b) (wont gpu split)
 - [X] [InternLM](https://huggingface.co/internlm/)
 - - [X] [XComposer2-4KHD-7b](https://huggingface.co/internlm/internlm-xcomposer2-4khd-7b) (wont gpu split)
 - - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (wont gpu split)
@@ -98,6 +99,10 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.22.0
+
+- new model support: THUDM/glm-4v-9b
 
 Version 0.21.0
 

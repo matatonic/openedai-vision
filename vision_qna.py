@@ -485,7 +485,6 @@ async def phi3_prompt_from_messages(messages: list[Message], img_tok = "<image>\
 
     return images, prompt
 
-
 async def phintern_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
     prompt = ''
     images = []
@@ -554,7 +553,6 @@ async def falcon_prompt_from_messages(messages: list[Message], img_tok = "<image
 
     return images, prompt
 
-
 async def prompt_history_images_system_from_messages(messages: list[Message], img_tok = "<image>\n", url_handler = url_to_image):
     history = []
     images = []
@@ -585,7 +583,33 @@ async def prompt_history_images_system_from_messages(messages: list[Message], im
 
     return prompt, history, images, system_prompt
 
+async def glm4v_prompt_from_messages(messages: list[Message], img_tok = "<|begin_of_image|><|endoftext|><|end_of_image|>", url_handler = url_to_image):
+    prompt = '[gMASK]<sop>'
+    images = []
+    generation_msg = '<|assistant|>\n'
 
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
+
+    for m in messages:
+        img_tag = ''
+        metadata = '' # not used
+
+        # TODO: handle tool role and build system prompt?
+        
+        for c in m.content:
+            if c.type == 'image_url':
+                images.extend([ await url_to_image(c.image_url.url) ])
+                img_tag += img_tok
+        
+        for c in m.content:
+            if c.type == 'text':
+                prompt += f"<|{m.role}|>{metadata}\n{img_tag}{c.text}"
+    
+    prompt += generation_msg
+
+    return images, prompt
 
 
 async def prompt_from_messages(messages: list[Message], format: str) -> str:
@@ -594,6 +618,7 @@ async def prompt_from_messages(messages: list[Message], format: str) -> str:
         'falcon': falcon_prompt_from_messages,
         'fuyu': fuyu_prompt_from_messages,
         'gemma': gemma_prompt_from_messages,
+        'glm4v': glm4v_prompt_from_messages,
         'llama2': llama2_prompt_from_messages,
         'llama3': llama3_prompt_from_messages,
         'mistral': llama2_prompt_from_messages, # simplicity
@@ -617,6 +642,7 @@ def guess_model_format(model_name: str) -> str:
         'falcon': ['falcon'],
         'fuyu': ['fuyu'],
         'gemma': ['gemma', '-2b'],
+        'glm4v': ['glm-4v'],
         'llama2': ['bakllava', '8x7b', 'mistral', 'mixtral'],
         'llama3': ['llama-3-vision', '360vl'],
         'phi15': ['moondream1', 'moondream2', 'monkey'],
@@ -684,6 +710,9 @@ def guess_backend(model_name: str) -> str:
     if 'cogagent-' in model_id or 'cogvlm-' in model_id:
         return 'cogvlm'
     
+    if 'glm-4v' in model_id:
+        return 'glm-4v'
+
     if 'fuyu' in model_id:
         return 'fuyu'
     
@@ -717,3 +746,4 @@ def guess_backend(model_name: str) -> str:
     
     if 'falcon' in model_id:
         return 'llavanext'
+    
