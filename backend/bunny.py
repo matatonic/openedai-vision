@@ -8,7 +8,7 @@ warnings.filterwarnings('ignore')
 
 # BAAI/Bunny-Llama-3-8B-V - vicuna (llama3?)
 # BAAI/Bunny-v1_0-2B-zh
-# BAAI/Bunny-v1_0-3B-zh
+# BAAI/Bunny-v1_0-3B-zh (wont 4bit)
 # BAAI/Bunny-v1_0-3B
 # BAAI/Bunny-v1_0-4B - vicuna (phi3??)
 # BAAI/Bunny-v1_1-4B - vicuna (phi2??)
@@ -18,6 +18,7 @@ warnings.filterwarnings('ignore')
 class VisionQnA(VisionQnABase):
     model_name: str = "bunny"
     format: str = "vicuna"
+    vision_layers: List[str] = ["vision_tower", "mm_projector"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
@@ -25,8 +26,12 @@ class VisionQnA(VisionQnABase):
         torch.set_default_device(self.device)
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
-        self.model = AutoModelForCausalLM.from_pretrained(**self.params).to(self.device).eval()
-    
+        self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
+
+        # bitsandbytes already moves the model to the device, so we don't need to do it again.
+        if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
+            self.model = self.model.to(self.device)
+
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
     async def chat_with_images(self, request: ImageChatRequest) -> str:

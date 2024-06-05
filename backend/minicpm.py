@@ -8,13 +8,17 @@ from vision_qna import *
 
 class VisionQnA(VisionQnABase):
     model_name: str = "minicpm"
+    vision_layers: List[str] = ["resampler", "vpm"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
 
-        # bugs with 4bit, RuntimeError: mat1 and mat2 must have the same dtype, but got Float and BFloat16
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
-        self.model = AutoModel.from_pretrained(**self.params).to(dtype=self.params['torch_dtype']).eval()
+        self.model = AutoModel.from_pretrained(**self.params).eval()
+
+        # bitsandbytes already moves the model to the device, so we don't need to do it again.
+        if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
+            self.model = self.model.to(dtype=self.params['torch_dtype'], device=self.device)
     
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     

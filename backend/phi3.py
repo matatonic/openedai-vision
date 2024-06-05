@@ -6,6 +6,7 @@ from vision_qna import *
 
 class VisionQnA(VisionQnABase):
     model_name: str = "phi3"
+    vision_layers: List[str] = ["vision_embed_tokens"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
@@ -16,7 +17,7 @@ class VisionQnA(VisionQnABase):
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     
     async def chat_with_images(self, request: ImageChatRequest) -> str:
-        images, prompt = await phi3_prompt_from_messages(request.messages)
+        images, prompt = await phi3_prompt_from_messages(request.messages, img_tok = "<|image_{}|>\n") # numbered image token
 
         inputs = self.processor(prompt, images=images, return_tensors="pt").to(self.model.device)
 

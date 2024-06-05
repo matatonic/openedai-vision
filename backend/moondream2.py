@@ -9,7 +9,8 @@ class VisionQnA(VisionQnABase):
     model_name: str = "moondream2"
     revision: str = '2024-03-13' # 'main'
     format: str = 'phi15'
-    
+    vision_layers: List[str] = ["vision_encoder"]
+
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
 
@@ -19,7 +20,7 @@ class VisionQnA(VisionQnABase):
         self.tokenizer = AutoTokenizer.from_pretrained(model_id)
         self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
     
-#        # bitsandbytes already moves the model to the device, so we don't need to do it again.
+        # bitsandbytes already moves the model to the device, so we don't need to do it again.
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
            self.model = self.model.to(self.device)
 

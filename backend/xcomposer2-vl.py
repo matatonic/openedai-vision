@@ -38,7 +38,7 @@ class VisionQnA(VisionQnABase):
             if self.params['torch_dtype'] == torch.bfloat16:
                 self.params['torch_dtype'] = torch.float16
 
-            # XXX TODO: use_marlin=True
+            # XXX TODO: use_marlin=True - bugs for now
             torch.set_grad_enabled(False)
             auto_gptq.modeling._base.SUPPORTED_MODELS = ["internlm"]
             self.model = InternLMXComposer2QForCausalLM.from_quantized(model_name_or_path=model_id, **self.params)

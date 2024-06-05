@@ -1,5 +1,4 @@
 import os
-import uuid
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 from vision_qna import *
@@ -10,6 +9,7 @@ from vision_qna import *
 class VisionQnA(VisionQnABase):
     model_name: str = "monkey"
     format: str = 'qwen' # phi15-ish
+    vision_layers: List[str] = ["vision", "vision_tower", "resampler", "visual", "in_proj","out_proj","c_fc","c_proj"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)

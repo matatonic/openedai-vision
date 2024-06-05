@@ -23,9 +23,14 @@ from vision_qna import *
 # YanweiLi/MGM-8x7B-HD
 # YanweiLi/MGM-8x7B
 
+# TODO:
+# YanweiLi/MGM-8B-HD
+# YanweiLi/MGM-8B
+
 class VisionQnA(VisionQnABase):
     model_name: str = "minigemini"
     format: str = "llama2"
+    vision_layers: List[str] = ["vision_tower", "vision_tower_aux", "vlm_uni_aux_projector", "vlm_uni_val_projector"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)

@@ -41,7 +41,11 @@ class VisionQnA(VisionQnABase):
         if self.params['torch_dtype'] == torch.bfloat16:
             self.params['torch_dtype'] = torch.float16
 
-        self.model = AutoModelForVision2Seq.from_pretrained(**self.params).to(self.device)
+        self.model = AutoModelForVision2Seq.from_pretrained(**self.params)
+
+        # bitsandbytes already moves the model to the device, so we don't need to do it again.
+        if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
+           self.model = self.model.to(self.device)
 
         print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
     

@@ -11,15 +11,15 @@ RUN git clone https://github.com/TIGER-AI-Lab/Mantis.git --single-branch /app/Ma
 WORKDIR /app
 COPY requirements.txt .
 ARG VERSION=latest
-RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.36.2" >> requirements.txt; else echo "transformers>=4.39.0\nautoawq" >> requirements.txt ; fi
+RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.36.2" >> requirements.txt; else echo "transformers>=4.41.2\nautoawq>=0.2.5" >> requirements.txt ; fi
 # TODO: nvidia apex wheel
 RUN --mount=type=cache,target=/root/.cache/pip pip install -U -r requirements.txt
 
 WORKDIR /app/MGM
-RUN pip install --no-cache-dir --no-deps -e .
+RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps -e .
 
 WORKDIR /app/Mantis
-RUN pip install --no-cache-dir --no-deps -e .
+RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps -e .
 
 WORKDIR /app
 

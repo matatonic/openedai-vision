@@ -12,7 +12,8 @@ from vision_qna import *
 
 class VisionQnA(VisionQnABase):
     model_name: str = "360vl"
-    format = "llama3"
+    format: str = "llama3"
+    vision_layers: List[str] = ["vision_tower", "embed_tokens", "mm_projector_ctt", "mm_projector_ori"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)

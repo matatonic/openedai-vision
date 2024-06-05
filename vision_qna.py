@@ -33,6 +33,7 @@ class VisionQnABase:
     model_name: str = None
     format: str = None
     revision: str = 'main'
+    vision_layers: List[str] = [] #"vision_model", "resampler", "vision", "vision_tower"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         self.device, self.dtype = self.select_device_dtype(device)
@@ -51,7 +52,8 @@ class VisionQnABase:
                     bnb_4bit_quant_type='nf4',
                     bnb_4bit_use_double_quant=True, # XXX make this an option
                     bnb_4bit_compute_dtype=self.dtype,
-                    load_in_4bit_fp32_cpu_offload=False,
+                    llm_int8_skip_modules=self.vision_layers,
+#                    load_in_4bit_fp32_cpu_offload=False,
                 )
             }
             self.params.update(load_in_4bit_params)
@@ -59,7 +61,8 @@ class VisionQnABase:
             load_in_8bit_params = {
                 'quantization_config': BitsAndBytesConfig(
                     load_in_8bit=True,
-                    load_in_8bit_fp32_cpu_offload=False,
+                    llm_int8_skip_modules=self.vision_layers,
+#                    load_in_8bit_fp32_cpu_offload=False,
                 )
             }
             self.params.update(load_in_8bit_params)
@@ -71,10 +74,7 @@ class VisionQnABase:
             self.params.update(flash_attn_params)
 
         if extra_params.get('trust_remote_code', False):
-            flash_attn_params = {
-                "trust_remote_code": True,
-            }
-            self.params.update(flash_attn_params)
+            self.params.update({"trust_remote_code": True })
 
         if format:
             self.format =  format
@@ -457,9 +457,9 @@ async def emu_images_prompt_system_from_messages(messages: list[Message], img_to
 
     return images, prompt, system_message
 
-async def phi3_prompt_from_messages(messages: list[Message]):
+# img_tok = "<|image_{}|>\n" is also ok
+async def phi3_prompt_from_messages(messages: list[Message], img_tok = "<image>\n"):
     n = 1
-    img_tok = "<|image_{}|>\n"
     prompt = ''
     images = []
     generation_msg = '<|assistant|>\n'
@@ -620,7 +620,7 @@ def guess_model_format(model_name: str) -> str:
         'llama2': ['bakllava', '8x7b', 'mistral', 'mixtral'],
         'llama3': ['llama-3-vision', '360vl'],
         'phi15': ['moondream1', 'moondream2', 'monkey'],
-        'phi3': ['phi3'],
+        'phi3': ['phi3', 'phi-3'],
         'phintern': ['internvl-chat-4b'],
         'vicuna': ['vicuna', '13b'],
         'vicuna0': ['yi-vl'],
@@ -708,6 +708,10 @@ def guess_backend(model_name: str) -> str:
     if '360vl' in model_id:
         return '360vl'
     
+    # before phi3
+    if 'xgen-mm' in model_id:
+        return 'xgen-mm'
+
     if "phi-3" in model_id:
         return 'phi3'
     
