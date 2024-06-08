@@ -35,6 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--top_p', type=float, default=None)
     parser.add_argument('-u', '--keep-remote-urls', action='store_true', help="Normally, http urls are converted to data: urls for better latency.")
     parser.add_argument('-1', '--single', action='store_true', help='Single turn Q&A, output is only the model response.')
+    parser.add_argument('--no-stream', action='store_true', help='Disable streaming response.')
     parser.add_argument('image_url', type=str, help='URL or image file to be tested')
     parser.add_argument('questions', type=str, nargs='*', help='The question to ask the image')
     args = parser.parse_args()
@@ -48,6 +49,7 @@ if __name__ == '__main__':
         params['temperature'] = args.temperature
     if args.top_p is not None:
         params['top_p'] = args.top_p
+    params['stream'] = not args.no_stream
 
     image_url = args.image_url
 
@@ -64,17 +66,30 @@ if __name__ == '__main__':
     while True:
         if args.start_with:
             messages.extend([{ "role": "assistant", "content": [{ "type": "text", "text": args.start_with }] }])
+        
         response = client.chat.completions.create(model="gpt-4-vision-preview", messages=messages, **params)
 
+        if not args.single:
+            print(f"Answer: ", end='', flush=True)
+        
+        assistant_text = ''
+
+        if args.no_stream:
+            assistant_text = response.choices[0].message.content
+            print(assistant_text)
+        else:
+            for chunk in response:
+                assistant_text += chunk.choices[0].delta.content
+                print(chunk.choices[0].delta.content, end='', flush=True)
+            
+            print('')
+
         if args.single:
-            print(response.choices[0].message.content)
             break
 
-        print(f"Answer: {response.choices[0].message.content}\n")
-        
         image_url = None
         try:
-            q = input("Question: ")
+            q = input("\nQuestion: ")
 
             if q.startswith('http') or q.startswith('data:') or q.startswith('file:'):
                 image_url = q
@@ -90,7 +105,7 @@ if __name__ == '__main__':
             break
         
         content = [{"type": "image_url", "image_url": { "url": image_url } }] if image_url else []
-        content.extend([{ 'type': 'text', 'text': response.choices[0].message.content }])
+        content.extend([{ 'type': 'text', 'text': assistant_text }])
         messages.extend([{ "role": "assistant", "content": content },
                          { "role": "user", "content": [{ 'type': 'text', 'text': q }] }])
 

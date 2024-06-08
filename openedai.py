@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
+from loguru import logger
 
 class OpenAIStub(FastAPI):
     def __init__(self, **kwargs) -> None:
@@ -14,6 +15,20 @@ class OpenAIStub(FastAPI):
             allow_methods=["*"],
             allow_headers=["*"]
         )
+
+        @self.middleware("http")
+        async def log_requests(request: Request, call_next):
+            logger.debug(f"Request path: {request.url.path}")
+            logger.debug(f"Request method: {request.method}")
+            logger.debug(f"Request headers: {request.headers}")
+            logger.debug(f"Request query params: {request.query_params}")
+
+            response = await call_next(request)
+
+            logger.debug(f"Response status code: {response.status_code}")
+            logger.debug(f"Response headers: {response.headers}")
+
+            return response
 
         @self.get('/v1/billing/usage')
         @self.get('/v1/dashboard/billing/usage')

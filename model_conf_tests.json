@@ -103,6 +103,10 @@
   ["qresearch/llama-3-vision-alpha-hf", "--device", "cuda:0"],
   ["tiiuae/falcon-11B-vlm", "--use-flash-attn", "--load-in-4bit"],
   ["tiiuae/falcon-11B-vlm", "--use-flash-attn"],
+  ["togethercomputer/Llama-3-8B-Dragonfly-Med-v1", "--load-in-4bit"],
+  ["togethercomputer/Llama-3-8B-Dragonfly-Med-v1"],
+  ["togethercomputer/Llama-3-8B-Dragonfly-v1", "--load-in-4bit"],
+  ["togethercomputer/Llama-3-8B-Dragonfly-v1"],
   ["vikhyatk/moondream2", "--use-flash-attn", "--load-in-4bit"],
   ["vikhyatk/moondream2", "--use-flash-attn"]
 ]

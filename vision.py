@@ -3,10 +3,13 @@ import gc
 import os
 import sys
 import time
+import json
 import argparse
 import importlib
 from contextlib import asynccontextmanager
 import uvicorn
+from sse_starlette import EventSourceResponse
+from loguru import logger
 
 import openedai
 import torch
@@ -26,32 +29,77 @@ app = openedai.OpenAIStub(lifespan=lifespan)
 @app.post(path="/v1/chat/completions")
 async def vision_chat_completions(request: ImageChatRequest):
 
+    t_id = int(time.time())
+    r_id = f"chatcmpl-{t_id}"
+
+    if request.stream:
+        def chat_streaming_chunk(content):
+            chunk = {
+                "id": r_id,
+                "object": "chat.completions.chunk",
+                "created": t_id,
+                "model": vision_qna.model_name,
+                "choices": [{
+                    "index": 0,
+                    "finish_reason": None,
+                    "delta": {'role': 'assistant', 'content': content},
+                }],
+            }
+            return chunk
+
+        async def streamer():
+            yield {"data": json.dumps(chat_streaming_chunk(''))}
+
+            # TODO: count tokens
+            dat = ''
+            async for resp in vision_qna.stream_chat_with_images(request):
+                print(resp, end='')
+                dat += resp
+                if not resp or chr(0xfffd) in dat: # partial unicode char
+                    continue
+                
+                yield {"data": json.dumps(chat_streaming_chunk(dat))}
+                dat = ''
+
+            chunk = chat_streaming_chunk(dat)
+            chunk['choices'][0]['finish_reason'] = "stop" # XXX
+            chunk['usage'] = {
+                "prompt_tokens": 1, # XXX
+                "completion_tokens": 1, # XXX
+                "total_tokens": 1,  # XXX
+            }
+
+            yield {"data": json.dumps(chunk)}
+
+        return EventSourceResponse(streamer())
+    # else:
+
     text = await vision_qna.chat_with_images(request)
 
-    choices = [ {
+    vis_chat_resp = {
+        "id": r_id,
+        "object": "chat.completion", # chat.completions.chunk for stream
+        "created": t_id,
+        "model": vision_qna.model_name,
+        "system_fingerprint": "fp_111111111",
+        "choices": [ {
             "index": 0,
             "message": {
                 "role": "assistant",
                 "content": text,
             },
             "logprobs": None,
-            "finish_reason": "stop"
-        }
-    ]
-    t_id = int(time.time())
-    vis_chat_resp = {
-        "id": f"chatcmpl-{t_id}",
-        "object": "chat.completion",
-        "created": t_id,
-        "model": vision_qna.model_name,
-        "system_fingerprint": "fp_111111111",
-        "choices": choices,
+            "finish_reason": "stop", # XXX
+        } ],
         "usage": {
-            "prompt_tokens": 0,
-            "completion_tokens": 0,
-            "total_tokens": 0
+            "prompt_tokens": 0, # XXX
+            "completion_tokens": 0, # XXX
+            "total_tokens": 0, # XXX
         }
     }
+
+    if os.environ.get('OPENEDAI_DEBUG', False):
+        print(f'Response: {vis_chat_resp}')
 
     return vis_chat_resp
 
@@ -71,6 +119,7 @@ def parse_args(argv=None):
     parser.add_argument('-8', '--load-in-8bit', action='store_true', help="load in 8bit (doesn't work with all models)")
     parser.add_argument('-F', '--use-flash-attn', action='store_true', help="Use Flash Attention 2 (doesn't work with all models or GPU)")
     parser.add_argument('-T', '--max-tiles', action='store', default=None, type=int, help="Change the maximum number of tiles. [1-40+] (uses more VRAM for higher resolution, doesn't work with all models)")
+    parser.add_argument('-L', '--log-level', default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], help="Set the log level")
     parser.add_argument('-P', '--port', action='store', default=5006, type=int, help="Server tcp port")
     parser.add_argument('-H', '--host', action='store', default='0.0.0.0', help="Host to listen on, Ex. localhost")
     parser.add_argument('--preload', action='store_true', help="Preload model and exit.")
@@ -95,6 +144,9 @@ if __name__ == "__main__":
     if args.max_tiles:
         extra_params['max_tiles'] = args.max_tiles
     
+    logger.remove()
+    logger.add(sink=sys.stderr, level=args.log_level)
+
     extra_params['trust_remote_code'] = not args.no_trust_remote_code
     if args.max_memory:
         dev_map_max_memory = {int(dev_id) if dev_id not in ['cpu', 'disk'] else dev_id: mem for dev_id, mem in [dev_mem.split(':') for dev_mem in args.max_memory.split(',')]}

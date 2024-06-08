@@ -65,6 +65,9 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (wont gpu split)
 - - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (wont gpu split)
 - - [X] [Mantis-8B-Fuyu](https://huggingface.co/TIGER-Lab/Mantis-8B-Fuyu) (wont gpu split)
+- [X] [Together.ai](https://huggingface.co/togethercomputer)
+- - [X] [Llama-3-8B-Dragonfly-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-v1)
+- - [X] [Llama-3-8B-Dragonfly-Med-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-Med-v1) 
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [falcon-11B-vlm](https://huggingface.co/tiiuae/falcon-11B-vlm)
 - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
@@ -99,6 +102,12 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.23.0
+
+- New model support: Together.ai's Llama-3-8B-Dragonfly-v1, Llama-3-8B-Dragonfly-Med-v1 (medical image model)
+- Compatibility: chatboxai.app can now use openedai-vision as a backend!
+- Initial support for streaming (real streaming for some [dragonfly, internvl-chat-v1-5], fake streaming for the rest). More to come.
 
 Version 0.22.0
 

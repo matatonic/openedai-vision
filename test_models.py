@@ -178,6 +178,24 @@ if __name__ == '__main__':
         answer = response.choices[0].message.content
         return answer
 
+    def generate_stream_response(image_url, prompt):
+
+        messages = [{ "role": "system", "content": [{ 'type': 'text', 'text': args.system_prompt }] }] if args.system_prompt else []
+        messages.extend([
+            { "role": "user", "content": [
+                { "type": "image_url", "image_url": { "url": image_url } },
+                { "type": "text", "text": prompt },
+            ]}])
+
+        response = client.chat.completions.create(model="gpt-4-vision-preview", messages=messages, **params, stream=True)
+        answer = ''
+        for chunk in response:
+            if chunk.choices[0].delta.content:
+                answer += chunk.choices[0].delta.content
+            
+        return answer
+
+
 
     def single_round():
         # XXX TODO: timeout
@@ -205,6 +223,17 @@ if __name__ == '__main__':
                     break
             else:
                 print(f"{name}[data]: pass{', got: ' + answer if args.verbose else ''}")
+
+            answer = generate_stream_response(data_url, "What is the subject of the image?")
+            correct = name in answer.lower()
+            results.extend([correct])
+            if not correct:
+                print(f"{name}[data_stream]: fail, got: {answer}")
+                if args.abort_on_fail:
+                    break
+            else:
+                print(f"{name}[data_stream]: pass{', got: ' + answer if args.verbose else ''}")
+
 
         return results
 

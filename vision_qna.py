@@ -1,13 +1,13 @@
+import asyncio
 import io
 import uuid
 import requests
 from datauri import DataURI
 from PIL import Image
 import torch
-from typing import Optional, List, Literal
+from typing import Optional, List, Literal, AsyncGenerator
 from pydantic import BaseModel
-from transformers import BitsAndBytesConfig
-from transformers.image_utils import load_image
+from transformers import BitsAndBytesConfig, TextIteratorStreamer
 
 class ImageURL(BaseModel):
     url: str
@@ -28,6 +28,7 @@ class ImageChatRequest(BaseModel):
     max_tokens: int = 512
     temperature: float = None
     top_p: float = None
+    stream: bool = False
 
 class VisionQnABase:
     model_name: str = None
@@ -91,8 +92,13 @@ class VisionQnABase:
         dtype = self.select_dtype(device)
         return device, dtype
     
+    # implement one or both of the stream/chat_with_images functions
     async def chat_with_images(self, request: ImageChatRequest) -> str:
-        pass
+        return ''.join([r async for r in self.stream_chat_with_images(request)])
+
+    # implement one or both of the stream/chat_with_images functions
+    async def stream_chat_with_images(self, request: ImageChatRequest):
+        yield await self.chat_with_images(request)
 
     def get_generation_params(self, request: ImageChatRequest, default_params = {}) -> dict:
         params = {
@@ -117,7 +123,6 @@ class VisionQnABase:
         return params
 
 async def url_to_image(img_url: str) -> Image.Image:
-    #return load_image(img_url)
     if img_url.startswith('http'):
         response = requests.get(img_url)
 
@@ -600,7 +605,7 @@ async def glm4v_prompt_from_messages(messages: list[Message], img_tok = "<|begin
         
         for c in m.content:
             if c.type == 'image_url':
-                images.extend([ await url_to_image(c.image_url.url) ])
+                images.extend([ await url_handler(c.image_url.url) ])
                 img_tag += img_tok
         
         for c in m.content:
@@ -747,3 +752,5 @@ def guess_backend(model_name: str) -> str:
     if 'falcon' in model_id:
         return 'llavanext'
     
+    if 'dragonfly' in model_id:
+        return 'dragonfly'
