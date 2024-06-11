@@ -36,10 +36,14 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await prompt_from_messages(request.messages, self.format)
 
-        text_chunks = [self.tokenizer(chunk).input_ids for chunk in prompt.split('<image>')]
-        input_ids = torch.tensor(text_chunks[0] + [-200] + text_chunks[1][1:], dtype=torch.long).unsqueeze(0).to(self.model.device)
+        if not images:
+            input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids.to(self.model.device)
+            image_tensor = None
+        else:
+            text_chunks = [self.tokenizer(chunk).input_ids for chunk in prompt.split('<image>')]
+            input_ids = torch.tensor(text_chunks[0] + [-200] + text_chunks[1][1:], dtype=torch.long).unsqueeze(0).to(self.model.device)
 
-        image_tensor = self.model.process_images(images, self.model.config).to(dtype=self.model.dtype, device=self.model.device)
+            image_tensor = self.model.process_images(images, self.model.config).to(dtype=self.model.dtype, device=self.model.device)
 
         default_params = dict(
             repetition_penalty=1.0,

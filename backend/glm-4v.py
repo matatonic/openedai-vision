@@ -8,7 +8,7 @@ from vision_qna import *
 class VisionQnA(VisionQnABase):
     model_name: str = "glm-4v"
     format: str = 'glm-4v'
-    vision_layers: List[str] = ['transformer.vision']
+    vision_layers: List[str] = ['vision']
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
@@ -35,8 +35,6 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await glm4v_prompt_from_messages(request.messages)
 
-        images = torch.stack([ self.transform(img) for img in images ])
-
         input_ids = self.tokenizer.encode(prompt)
         inputs = self.tokenizer.batch_encode_plus(
             [input_ids],
@@ -48,7 +46,9 @@ class VisionQnA(VisionQnABase):
             add_special_tokens=False
         )
 
-        inputs["images"] = images
+        if images:
+            inputs["images"] = torch.stack([ self.transform(img) for img in images ])
+
         inputs = inputs.to(device=self.device)
 
         default_params = {

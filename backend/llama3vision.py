@@ -4,6 +4,8 @@ from vision_qna import *
 
 # qresearch/llama-3-vision-alpha-hf
 
+# Doesn't support generation without images
+
 class VisionQnA(VisionQnABase):
     model_name: str = "llamavision"
     format: str = "llama3"

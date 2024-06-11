@@ -20,7 +20,7 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await phi3_prompt_from_messages(request.messages, img_tok = "<|image_{}|>\n") # numbered image token
 
-        inputs = self.processor(prompt, images=images, return_tensors="pt").to(self.model.device)
+        inputs = self.processor(prompt, images=images if images else None, return_tensors="pt").to(self.model.device)
 
         default_params = { 
             "do_sample": False, 

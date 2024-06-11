@@ -49,7 +49,7 @@ class VisionQnA(VisionQnABase):
         inputs = self.model.build_input_ids(
             text=[prompt],
             tokenizer=self.tokenizer,
-            image=images
+            image=images if images else None
         )
 
         default_params = {
@@ -63,7 +63,7 @@ class VisionQnA(VisionQnABase):
         generation_kwargs = dict(
             input_ids=inputs["input_ids"],
             attention_mask=inputs["attention_mask"],
-            image=inputs["image"].to(self.params['torch_dtype']),
+            image=inputs["image"].to(self.params['torch_dtype']) if images else None,
             **params,
         )
 

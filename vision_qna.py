@@ -11,6 +11,9 @@ from pydantic import BaseModel
 from transformers import BitsAndBytesConfig, TextIteratorStreamer
 from loguru import logger
 
+# When models require an image but no image given
+transparent_pixel_url = 'data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII='
+
 class ImageURL(BaseModel):
     url: str
     detail: Optional[str] = "auto" # auto -> low (512) or high (Nx512) based on res.

@@ -5,6 +5,7 @@ from vision_qna import *
 # llava-hf/bakLlava-v1-hf # llama2
 # llava-hf/llava-1.5-7b-hf # vicuna
 # llava-hf/llava-1.5-13b-hf # vicuna
+# Doesn't support execution without images
 
 class VisionQnA(VisionQnABase):
     model_name: str = "llava"
@@ -27,6 +28,7 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
                                
         images, prompt = await prompt_from_messages(request.messages, self.format)
+
         inputs = self.processor(prompt, images, return_tensors="pt").to(self.device)
 
         params = self.get_generation_params(request)

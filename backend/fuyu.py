@@ -25,7 +25,7 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await prompt_from_messages(request.messages, self.format)
 
-        inputs = self.processor(text=prompt, images=images[0], return_tensors="pt").to(self.model.device)
+        inputs = self.processor(text=prompt, images=images[0] if images else None, return_tensors="pt").to(self.model.device)
 
         params = self.get_generation_params(request)
 

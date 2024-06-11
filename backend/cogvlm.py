@@ -23,6 +23,9 @@ class VisionQnA(VisionQnABase):
         
         query, history, images, system_message = await prompt_history_images_system_from_messages(
             request.messages, img_tok='', url_handler=url_to_image)
+        
+        if len(images) < 1:
+            images = [ await url_to_image(transparent_pixel_url) ]
 
         input_by_model = self.model.build_conversation_input_ids(self.tokenizer, query=query, history=history, images=images)
         

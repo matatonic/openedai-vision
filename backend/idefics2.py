@@ -54,7 +54,7 @@ class VisionQnA(VisionQnABase):
         images, hfmessages = await images_hfmessages_from_messages(request.messages)
 
         prompt = self.processor.apply_chat_template(hfmessages, add_generation_prompt=True)
-        inputs = self.processor(text=prompt, images=images, return_tensors="pt").to(device=self.model.device)
+        inputs = self.processor(text=prompt, images=images if images else None, return_tensors="pt").to(device=self.model.device)
 
         # Generate
         params = self.get_generation_params(request)

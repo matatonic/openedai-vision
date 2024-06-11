@@ -41,6 +41,9 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await llama3_prompt_from_messages(request.messages, img_tok='')
 
+        if not images:
+            images = [ await url_to_image(transparent_pixel_url) ]
+
         inputs = self.processor(text=[prompt], images=images, max_length=2048, return_tensors="pt", is_generate=True).to(device=self.model.device)
 
         default_params = {

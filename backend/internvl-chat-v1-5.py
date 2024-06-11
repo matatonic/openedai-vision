@@ -128,10 +128,16 @@ class VisionQnA(VisionQnABase):
         images = [load_image(image, max_num=self.max_tiles).to(self.model.dtype).cuda() for image in images]
         if len(images) > 1:
             pixel_values = torch.cat(images, dim=0)
-        else:
+        elif len(images) > 0:
             pixel_values = images[0]
-
-        image_tokens = '<img>' + '<IMG_CONTEXT>' * self.model.num_image_token * pixel_values.shape[0] + '</img>\n'
+        else:
+            pixel_values = None
+        
+        if pixel_values is not None:
+            image_tokens = '<img>' + '<IMG_CONTEXT>' * self.model.num_image_token * pixel_values.shape[0] + '</img>\n'
+        else:
+            image_tokens = ''
+            
         model_inputs = self.tokenizer(image_tokens + prompt, return_tensors='pt')
         input_ids = model_inputs['input_ids'].cuda()
         attention_mask = model_inputs['attention_mask'].cuda()

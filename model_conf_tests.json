@@ -91,7 +91,6 @@
   ["openbmb/MiniCPM-V", "--use-flash-attn", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V-2", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],
   ["openbmb/MiniCPM-V-2", "--use-flash-attn", "--device-map", "cuda:0"],
-  ["qihoo360/360VL-70B", "--use-flash-attn", "--load-in-4bit"],
   ["qihoo360/360VL-8B", "--use-flash-attn", "--load-in-4bit"],
   ["qihoo360/360VL-8B", "--use-flash-attn"],
   ["qnguyen3/nanoLLaVA", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],

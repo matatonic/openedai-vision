@@ -103,6 +103,10 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version 0.24.1
+
+- Compatibility: Support generation without images for most models. (llava based models still require an image)
+
 Version 0.24.0
 
 - Full streaming support for almost all models.

@@ -47,10 +47,13 @@ class VisionQnA(VisionQnABase):
         input_ids = self.tokenizer.encode(prompt, return_tensors="pt")
 
         input_id_list = input_ids[0].tolist()
-        input_id_list[input_id_list.index(128049)]=-200
-        input_ids = torch.tensor(input_id_list, dtype=input_ids.dtype, device=input_ids.device).unsqueeze(0)
+        try:
+            input_id_list[input_id_list.index(128049)] = -200
+            image_tensor = self.model.process_images_slid_window(images[0], self.image_processor).unsqueeze(0)
+        except ValueError as e:
+            pass
 
-        image_tensor = self.model.process_images_slid_window(images[0], self.image_processor).unsqueeze(0)
+        input_ids = torch.tensor(input_id_list, dtype=input_ids.dtype, device=input_ids.device).unsqueeze(0)
 
         default_params = dict(
             num_beams=1,
@@ -60,7 +63,7 @@ class VisionQnA(VisionQnABase):
 
         generation_kwargs = dict(
             input_ids=input_ids.to(device=self.device),
-            images=image_tensor.to(dtype=self.dtype, device=self.device),
+            images=image_tensor.to(dtype=self.dtype, device=self.device) if images else None,
             eos_token_id=self.terminators,
             **params,
         )

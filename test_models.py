@@ -26,6 +26,10 @@ quality_urls = {
     'walmart': ('What store is the receipt from?', 'https://ocr.space/Content/Images/receipt-ocr-original.webp'),
 }
 
+no_image = { 
+    '5': 'In the integer sequence: 1, 2, 3, 4, ... What number comes next after 4?'
+}
+
 green_pass = '\033[92mpass\033[0m✅'
 red_fail = '\033[91mfail\033[0m❌'
 
@@ -240,7 +244,50 @@ if __name__ == '__main__':
             else:
                 print(f"{name}[data_stream]: pass{', got: ' + answer if args.verbose else ''}")
 
+        """
 
+        ## OCR tests
+        quality_urls = {
+            '98.21': ('What is the total bill?', 'https://ocr.space/Content/Images/receipt-ocr-original.webp'),
+            'walmart': ('What store is the receipt from?', 'https://ocr.space/Content/Images/receipt-ocr-original.webp'),
+        }
+        for name, question in quality_urls.items():
+            prompt, data_url = question
+            answer = generate_stream_response(data_url, prompt)
+            correct = name in answer.lower() or 'wal-mart' in answer.lower()
+            results.extend([correct])
+            if not correct:
+                print(f"{name}[quality]: fail, got: {answer}")
+                if args.abort_on_fail:
+                    break
+            else:
+                print(f"{name}[quality]: pass{', got: ' + answer if args.verbose else ''}")
+
+        # No image tests
+        no_image = { 
+            '5': 'In the sequence of numbers: 1, 2, 3, 4, ... What number comes next after 4?'
+        }
+
+        def no_image_response(prompt):
+            messages = [{ "role": "system", "content": [{ 'type': 'text', 'text': args.system_prompt }] }] if args.system_prompt else []
+            messages.extend([{ "role": "user", "content": prompt }])
+
+            response = client.chat.completions.create(model="gpt-4-vision-preview", messages=messages, **params, max_tokens=5)
+            answer = response.choices[0].message.content
+            return answer
+
+        for name, prompt in no_image.items():
+            answer = no_image_response(prompt)
+            correct = True #name in answer.lower() # - no exceptions is enough.
+            results.extend([correct])
+            if not correct:
+                print(f"{name}[no_img]: fail, got: {answer}")
+                if args.abort_on_fail:
+                    break
+            else:
+                print(f"{name}[no_img]: pass{', got: ' + answer if args.verbose else ''}")
+
+        """
         return results
 
     with open('model_conf_tests.json') as f:

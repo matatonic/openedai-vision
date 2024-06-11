@@ -27,10 +27,12 @@ class VisionQnA(VisionQnABase):
             system_prompt =  "You are an helpful assistant."
             
         # 1st dialogue turn
-        query = self.tokenizer.from_list_format([
-            {'image': files[-1] if files else []},
-            {'text': prompt},
-        ])
+        if files:
+            query_list = [{'image': files[-1]}, {'text': prompt}]
+        else:
+            query_list = [{'text': prompt}]
+
+        query = self.tokenizer.from_list_format(query_list)
 
         default_params = {
             'top_p': 0.3,

@@ -7,6 +7,8 @@ from vision_qna import *
 # llava-hf/llava-v1.6-mistral-7b-hf # llama2
 # tiiuae/falcon-11B-vlm # falcon
 
+# llavanext doesn't support generation without images
+
 class VisionQnA(VisionQnABase):
     model_name: str = "llavanext"
     format: str = 'llama2'

@@ -38,10 +38,14 @@ class VisionQnA(VisionQnABase):
         default_system = ("A chat between a curious user and an artificial intelligence assistant. "
             "The assistant gives helpful, detailed, and polite answers to the user's questions.")
 
-        inputs = self.image_processor(images, return_tensors="pt", image_aspect_ratio='anyres').to(dtype=self.model.dtype)
         language_inputs = self.tokenizer([prompt], return_tensors="pt")
-        inputs.update(language_inputs)
-        inputs = {name: tensor.to(device=self.model.device) for name, tensor in inputs.items()}
+        if images:
+            inputs = self.image_processor(images, return_tensors="pt", image_aspect_ratio='anyres').to(dtype=self.model.dtype)
+            inputs.update(language_inputs)
+            inputs = {name: tensor.to(device=self.model.device) for name, tensor in inputs.items()}
+        else:
+            inputs = language_inputs.to(device=self.model.device)
+            inputs['pixel_values'] = None
 
         default_params = {
             'pad_token_id': self.tokenizer.pad_token_id,
