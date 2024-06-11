@@ -14,7 +14,6 @@ warnings.filterwarnings('ignore')
 # BAAI/Bunny-v1_1-4B - vicuna (phi2??)
 # BAAI/Bunny-v1_1-Llama-3-8B-V - vicuna (llama3??)
 
-
 class VisionQnA(VisionQnABase):
     model_name: str = "bunny"
     format: str = "vicuna"
@@ -32,9 +31,9 @@ class VisionQnA(VisionQnABase):
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
             self.model = self.model.to(self.device)
 
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await prompt_from_messages(request.messages, self.format)
 
         text_chunks = [self.tokenizer(chunk).input_ids for chunk in prompt.split('<image>')]
@@ -42,8 +41,22 @@ class VisionQnA(VisionQnABase):
 
         image_tensor = self.model.process_images(images, self.model.config).to(dtype=self.model.dtype, device=self.model.device)
 
-        params = self.get_generation_params(request)
-        output_ids = self.model.generate(input_ids, images=image_tensor, **params)
+        default_params = dict(
+            repetition_penalty=1.0,
+        )
 
-        response = self.tokenizer.decode(output_ids[0][input_ids.shape[1]:], skip_special_tokens=True).strip()
-        return response
+        params = self.get_generation_params(request, default_params=default_params)
+
+        generation_kwargs = dict(
+            input_ids=input_ids,
+            images=image_tensor,
+            **params,
+        )
+
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.tokenizer.eos_token)
+            if end == -1:
+                yield new_text
+            else:
+                yield new_text[:end]
+                break

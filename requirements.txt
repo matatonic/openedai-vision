@@ -10,6 +10,7 @@ https://github.com/bdashore3/flash-attention/releases/download/v2.5.9.post1/flas
 https://github.com/bdashore3/flash-attention/releases/download/v2.5.9.post1/flash_attn-2.5.9.post1+cu122torch2.2.2cxx11abiFALSE-cp310-cp310-win_amd64.whl; platform_system == "Windows" and python_version == "3.10"
 flash_attn; python_version != "3.10" and python_version != "3.11"
 hf_transfer
+loguru
 openai
 peft
 protobuf
@@ -17,6 +18,7 @@ pydantic
 python-datauri
 requests
 sentencepiece
+sse_starlette
 torch==2.2.*
 uvicorn
 xformers
@@ -38,10 +40,6 @@ matplotlib
 optimum
 tiktoken
 transformers_stream_generator
-
-# Yi-VL / CogVLM
-loguru
-sse_starlette
 
 # 360vl
 logger

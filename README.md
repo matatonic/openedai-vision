@@ -103,10 +103,17 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version 0.24.0
+
+- Full streaming support for almost all models.
+- Update vikhyatk/moondream2 to 2024-05-20 + streaming
+- API compatibility improvements, strip extra leading space if present
+- Revert: no more 4bit double quant (slower for insignificant vram savings - protest and it may come back as an option)
+
 Version 0.23.0
 
 - New model support: Together.ai's Llama-3-8B-Dragonfly-v1, Llama-3-8B-Dragonfly-Med-v1 (medical image model)
-- Compatibility: chatboxai.app can now use openedai-vision as a backend!
+- Compatibility: [web.chatboxai.app](https://web.chatboxai.app/) can now use openedai-vision as an OpenAI API Compatible backend!
 - Initial support for streaming (real streaming for some [dragonfly, internvl-chat-v1-5], fake streaming for the rest). More to come.
 
 Version 0.22.0
@@ -236,7 +243,8 @@ For MiniGemini support the docker image is recommended. See `prepare_minigemini.
 ## Usage
 
 ```
-usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4] [-8] [-F] [-T MAX_TILES] [-P PORT] [-H HOST] [--preload]
+usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4]
+                 [-8] [-F] [-T MAX_TILES] [-L {DEBUG,INFO,WARNING,ERROR,CRITICAL}] [-P PORT] [-H HOST] [--preload]
 
 OpenedAI Vision API Server
 
@@ -260,10 +268,13 @@ options:
   -8, --load-in-8bit    load in 8bit (doesn't work with all models) (default: False)
   -F, --use-flash-attn  Use Flash Attention 2 (doesn't work with all models or GPU) (default: False)
   -T MAX_TILES, --max-tiles MAX_TILES
-                        Change the maximum number of tiles. [1-40+] (uses more VRAM for higher resolution, doesn't work with all models) (default: None)
+                        Change the maximum number of tiles. [1-55+] (uses more VRAM for higher resolution, doesn't work with all models) (default: None)
+  -L {DEBUG,INFO,WARNING,ERROR,CRITICAL}, --log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}
+                        Set the log level (default: INFO)
   -P PORT, --port PORT  Server tcp port (default: 5006)
   -H HOST, --host HOST  Host to listen on, Ex. localhost (default: 0.0.0.0)
   --preload             Preload model and exit. (default: False)
+
 ```
 
 ## Sample API Usage
@@ -272,7 +283,7 @@ options:
 
 Usage
 ```
-usage: chat_with_image.py [-h] [-s SYSTEM_PROMPT] [-S START_WITH] [-m MAX_TOKENS] [-t TEMPERATURE] [-p TOP_P] [-u] [-1] image_url [questions ...]
+usage: chat_with_image.py [-h] [-s SYSTEM_PROMPT] [-S START_WITH] [-m MAX_TOKENS] [-t TEMPERATURE] [-p TOP_P] [-u] [-1] [--no-stream] image_url [questions ...]
 
 Test vision using OpenAI
 
@@ -291,6 +302,8 @@ options:
   -u, --keep-remote-urls
                         Normally, http urls are converted to data: urls for better latency. (default: False)
   -1, --single          Single turn Q&A, output is only the model response. (default: False)
+  --no-stream           Disable streaming response. (default: False)
+
 ```
 
 Example:

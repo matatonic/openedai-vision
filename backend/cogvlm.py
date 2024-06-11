@@ -17,9 +17,9 @@ class VisionQnA(VisionQnABase):
         self.tokenizer = LlamaTokenizer.from_pretrained("lmsys/vicuna-7b-v1.5")
         self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
     
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         
         query, history, images, system_message = await prompt_history_images_system_from_messages(
             request.messages, img_tok='', url_handler=url_to_image)
@@ -36,8 +36,18 @@ class VisionQnA(VisionQnABase):
             inputs['cross_images'] = [[input_by_model['cross_images'][0].to(self.model.device).to(self.model.dtype)]]
 
         params = self.get_generation_params(request)
-        del params['top_k']
-        response = self.model.generate(**inputs, **params)
-        answer = self.tokenizer.decode(response[0][inputs['input_ids'].size(1):].cpu(), skip_special_tokens=True).strip()
 
-        return answer
+        del params['top_k']
+
+        generation_kwargs = dict(
+            **inputs,
+            **params,
+        )
+
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.tokenizer.eos_token)
+            if end == -1:
+                yield new_text
+            else:
+                yield new_text[:end]
+                break

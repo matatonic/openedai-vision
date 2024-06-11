@@ -1,13 +1,15 @@
-import asyncio
 import io
 import uuid
 import requests
+import queue
+from threading import Thread
 from datauri import DataURI
 from PIL import Image
 import torch
-from typing import Optional, List, Literal, AsyncGenerator
+from typing import Optional, List, Literal, AsyncGenerator, Union
 from pydantic import BaseModel
 from transformers import BitsAndBytesConfig, TextIteratorStreamer
+from loguru import logger
 
 class ImageURL(BaseModel):
     url: str
@@ -20,7 +22,8 @@ class Content(BaseModel):
 
 class Message(BaseModel):
     role: str
-    content: List[Content]
+    content: Union[str, List[Content]]
+    name: str = None
 
 class ImageChatRequest(BaseModel):
     model: str # = "gpt-4-vision-preview"
@@ -34,9 +37,11 @@ class VisionQnABase:
     model_name: str = None
     format: str = None
     revision: str = 'main'
-    vision_layers: List[str] = [] #"vision_model", "resampler", "vision", "vision_tower"]
+    vision_layers: List[str] = [] # "vision_model", "resampler", "vision", "vision_tower"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
+        self._model_id = model_id
+
         self.device, self.dtype = self.select_device_dtype(device)
 
         self.params = {
@@ -50,11 +55,10 @@ class VisionQnABase:
             load_in_4bit_params = {
                 'quantization_config': BitsAndBytesConfig(
                     load_in_4bit=True,
-                    bnb_4bit_quant_type='nf4',
-                    bnb_4bit_use_double_quant=True, # XXX make this an option
+#                    bnb_4bit_quant_type='nf4',
+#                    bnb_4bit_use_double_quant=True, # XXX gone for now, make this an option
                     bnb_4bit_compute_dtype=self.dtype,
                     llm_int8_skip_modules=self.vision_layers,
-#                    load_in_4bit_fp32_cpu_offload=False,
                 )
             }
             self.params.update(load_in_4bit_params)
@@ -63,7 +67,6 @@ class VisionQnABase:
                 'quantization_config': BitsAndBytesConfig(
                     load_in_8bit=True,
                     llm_int8_skip_modules=self.vision_layers,
-#                    load_in_8bit_fp32_cpu_offload=False,
                 )
             }
             self.params.update(load_in_8bit_params)
@@ -80,6 +83,10 @@ class VisionQnABase:
         if format:
             self.format =  format
 
+        torch.set_grad_enabled(False)
+
+    def loaded_banner(self):
+        print(f"Loaded {self._model_id} on device: {self.model.device} with dtype: {self.model.dtype}")
 
     def select_device(self):
         return 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
@@ -91,13 +98,22 @@ class VisionQnABase:
         device = self.select_device() if device == 'auto' else device
         dtype = self.select_dtype(device)
         return device, dtype
-    
+
+    def repack_message_content(self, request: ImageChatRequest) -> ImageChatRequest:
+        """ Repack messages to remove string "content" messages and convert to List[Content] """
+
+        for m in request.messages:
+            if isinstance(m.content, str):
+                m.content = [ Content(type='text', text=m.content) ]
+
+        return request
+
     # implement one or both of the stream/chat_with_images functions
     async def chat_with_images(self, request: ImageChatRequest) -> str:
         return ''.join([r async for r in self.stream_chat_with_images(request)])
 
     # implement one or both of the stream/chat_with_images functions
-    async def stream_chat_with_images(self, request: ImageChatRequest):
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         yield await self.chat_with_images(request)
 
     def get_generation_params(self, request: ImageChatRequest, default_params = {}) -> dict:
@@ -121,6 +137,34 @@ class VisionQnABase:
             params["top_p"] = request.top_p
 
         return params
+
+def threaded_streaming_generator(generate, tokenizer, generation_kwargs):
+    streamer = TextIteratorStreamer(tokenizer, skip_special_tokens=True, skip_prompt=True, timeout=60)
+
+    generation_kwargs['streamer'] = streamer
+
+    exq = queue.Queue()
+
+    def wrapper():
+        try:
+            with torch.no_grad():
+                generate(**generation_kwargs)
+
+        except Exception as e:
+            #logger.exception(e)
+            exq.put(e)
+            streamer.end()
+
+    t = Thread(target=wrapper)
+    t.start()
+
+    for text in streamer:
+        if text:
+            yield text
+
+    if not exq.empty():
+        raise exq.get_nowait()
+
 
 async def url_to_image(img_url: str) -> Image.Image:
     if img_url.startswith('http'):
@@ -165,7 +209,7 @@ async def images_hfmessages_from_messages(messages: list[Message], url_handler =
     return images, hfmessages
 
 
-async def phi15_prompt_from_messages(messages: list[Message], img_tok = "<image>", img_end = ''): # </image>
+async def phi15_prompt_from_messages(messages: list[Message], img_tok = "<image>", img_end = '', url_handler = url_to_image): # </image>
     prompt = ''
     images = []
     generation_msg = "Answer:"
@@ -179,8 +223,9 @@ async def phi15_prompt_from_messages(messages: list[Message], img_tok = "<image>
             p = ''
             for c in m.content:
                 if c.type == 'image_url':
-                    images.extend([ await url_to_image(c.image_url.url) ])
-                    p = img_tok + p + img_end
+                    img_data = await url_handler(c.image_url.url)
+                    images.extend([img_data])
+                    p = img_tok.format(img_data) + p + img_end # this is a bit strange, but it works for Monkey and filenames
                 if c.type == 'text':
                     p += f"{c.text}\n\n" # Question:
             prompt += p

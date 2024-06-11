@@ -33,17 +33,15 @@ class VisionQnA(VisionQnABase):
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
            self.model = self.model.to(dtype=self.dtype, device=self.device)
 
-        self.eos_id = "<|eot_id|>"
-        self.eos_token_id = self.tokenizer.encode(self.eos_id, add_special_tokens=False)
+        self.eos_token = "<|eot_id|>"
+        self.eos_token_id = self.tokenizer.encode(self.eos_token, add_special_tokens=False)
     
-        print(f"Loaded {model_id} on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
 
-    async def stream_chat_with_images(self, request: ImageChatRequest):
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await llama3_prompt_from_messages(request.messages, img_tok='')
 
         inputs = self.processor(text=[prompt], images=images, max_length=2048, return_tensors="pt", is_generate=True).to(device=self.model.device)
-
-        streamer = TextIteratorStreamer(self.tokenizer, skip_special_tokens=False, skip_prompt=True)
 
         default_params = {
             'max_new_tokens': 1024,
@@ -56,14 +54,10 @@ class VisionQnA(VisionQnABase):
         generation_kwargs = dict(
             **inputs,
             **params,
-            streamer=streamer,
         )
 
-        t = Thread(target=self.model.generate, kwargs=generation_kwargs)
-        t.start()
-
-        for new_text in streamer:
-            end = new_text.find(self.eos_id)
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.processor.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.eos_token)
             if end == -1:
                 yield new_text
             else:

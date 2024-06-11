@@ -29,6 +29,8 @@ app = openedai.OpenAIStub(lifespan=lifespan)
 @app.post(path="/v1/chat/completions")
 async def vision_chat_completions(request: ImageChatRequest):
 
+    request = vision_qna.repack_message_content(request)
+
     t_id = int(time.time())
     r_id = f"chatcmpl-{t_id}"
 
@@ -49,16 +51,23 @@ async def vision_chat_completions(request: ImageChatRequest):
 
         async def streamer():
             yield {"data": json.dumps(chat_streaming_chunk(''))}
+            logger.debug(f"sse_chunk: ['']")
 
             # TODO: count tokens
+            skip_first_space = True
             dat = ''
             async for resp in vision_qna.stream_chat_with_images(request):
-                print(resp, end='')
+                if skip_first_space:
+                    skip_first_space = False
+                    if resp[:1] == ' ':
+                        resp = resp[1:]
+
                 dat += resp
                 if not resp or chr(0xfffd) in dat: # partial unicode char
                     continue
-                
+
                 yield {"data": json.dumps(chat_streaming_chunk(dat))}
+                logger.debug(f"sse_chunk: {[dat]}")
                 dat = ''
 
             chunk = chat_streaming_chunk(dat)
@@ -70,6 +79,7 @@ async def vision_chat_completions(request: ImageChatRequest):
             }
 
             yield {"data": json.dumps(chunk)}
+            logger.debug(f"sse_chunk: {[dat]} + ['DONE']")
 
         return EventSourceResponse(streamer())
     # else:
@@ -118,7 +128,7 @@ def parse_args(argv=None):
     parser.add_argument('-4', '--load-in-4bit', action='store_true', help="load in 4bit (doesn't work with all models)")
     parser.add_argument('-8', '--load-in-8bit', action='store_true', help="load in 8bit (doesn't work with all models)")
     parser.add_argument('-F', '--use-flash-attn', action='store_true', help="Use Flash Attention 2 (doesn't work with all models or GPU)")
-    parser.add_argument('-T', '--max-tiles', action='store', default=None, type=int, help="Change the maximum number of tiles. [1-40+] (uses more VRAM for higher resolution, doesn't work with all models)")
+    parser.add_argument('-T', '--max-tiles', action='store', default=None, type=int, help="Change the maximum number of tiles. [1-55+] (uses more VRAM for higher resolution, doesn't work with all models)")
     parser.add_argument('-L', '--log-level', default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], help="Set the log level")
     parser.add_argument('-P', '--port', action='store', default=5006, type=int, help="Server tcp port")
     parser.add_argument('-H', '--host', action='store', default='0.0.0.0', help="Host to listen on, Ex. localhost")

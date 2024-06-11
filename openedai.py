@@ -22,6 +22,7 @@ class OpenAIStub(FastAPI):
             logger.debug(f"Request method: {request.method}")
             logger.debug(f"Request headers: {request.headers}")
             logger.debug(f"Request query params: {request.query_params}")
+            logger.debug(f"Request body: {await request.body()}") # can be huge...
 
             response = await call_next(request)
 

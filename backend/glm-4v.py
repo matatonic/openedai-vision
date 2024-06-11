@@ -30,9 +30,9 @@ class VisionQnA(VisionQnABase):
             ]
         )
 
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await glm4v_prompt_from_messages(request.messages)
 
         images = torch.stack([ self.transform(img) for img in images ])
@@ -58,9 +58,17 @@ class VisionQnA(VisionQnABase):
 
         params = self.get_generation_params(request, default_params)
 
-        with torch.no_grad():
-            outputs = self.model.generate(**inputs, **params)
+#        streamer = TextIteratorStreamer(self.tokenizer, skip_special_tokens=False, skip_prompt=True)
 
-        answer = self.tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True).strip()
+        generation_kwargs = dict(
+            **inputs,
+            **params,
+        )
 
-        return answer
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.tokenizer.eos_token)
+            if end == -1:
+                yield new_text
+            else:
+                yield new_text[:end]
+                break

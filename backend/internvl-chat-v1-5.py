@@ -114,10 +114,10 @@ class VisionQnA(VisionQnABase):
         else:
             self.eos_token_id = self.tokenizer.eos_token_id
 
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
 
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         if self.format == 'phintern':
             images, prompt = await phintern_prompt_from_messages(request.messages, img_tok='')
         else:
@@ -131,45 +131,10 @@ class VisionQnA(VisionQnABase):
         else:
             pixel_values = images[0]
 
-        default_params = {
-            'num_beams': 1,
-            'max_new_tokens': 512,
-            'do_sample': False,
-            'eos_token_id': self.eos_token_id,
-        }
-
-        generation_config = self.get_generation_params(request, default_params)
-
-        del generation_config['use_cache']
-
         image_tokens = '<img>' + '<IMG_CONTEXT>' * self.model.num_image_token * pixel_values.shape[0] + '</img>\n'
         model_inputs = self.tokenizer(image_tokens + prompt, return_tensors='pt')
         input_ids = model_inputs['input_ids'].cuda()
         attention_mask = model_inputs['attention_mask'].cuda()
-        
-        output = self.model.generate(
-            pixel_values=pixel_values,
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-            **generation_config,
-        )
-        response = self.tokenizer.decode(output[0], skip_special_tokens=True)
-
-        return response.split(self.eos_token)[0].strip()
-
-    async def stream_chat_with_images(self, request: ImageChatRequest):
-        if self.format == 'phintern':
-            images, prompt = await phintern_prompt_from_messages(request.messages, img_tok='')
-        else:
-            images, prompt = await chatml_prompt_from_messages(request.messages, img_tok='')
-        
-        # TODO: use detail to set max tiles if detail=low (=512)
-        # if .detail == 'low': max_num=1
-        images = [load_image(image, max_num=self.max_tiles).to(self.model.dtype).cuda() for image in images]
-        if len(images) > 1:
-            pixel_values = torch.cat(images, dim=0)
-        else:
-            pixel_values = images[0]
 
         default_params = {
             'num_beams': 1,
@@ -178,29 +143,18 @@ class VisionQnA(VisionQnABase):
             'eos_token_id': self.eos_token_id,
         }
 
-        generation_config = self.get_generation_params(request, default_params)
+        params = self.get_generation_params(request, default_params)
 
-        del generation_config['use_cache']
-
-        image_tokens = '<img>' + '<IMG_CONTEXT>' * self.model.num_image_token * pixel_values.shape[0] + '</img>\n'
-        model_inputs = self.tokenizer(image_tokens + prompt, return_tensors='pt')
-        input_ids = model_inputs['input_ids'].cuda()
-        attention_mask = model_inputs['attention_mask'].cuda()
+        del params['use_cache']
         
-        streamer = TextIteratorStreamer(self.tokenizer, skip_special_tokens=False, skip_prompt=True)
-
         generation_kwargs = dict(
             pixel_values=pixel_values,
             input_ids=input_ids,
             attention_mask=attention_mask,
-            **generation_config,
-            streamer=streamer,
+            **params,
         )
 
-        t = Thread(target=self.model.generate, kwargs=generation_kwargs)
-        t.start()
-
-        for new_text in streamer:
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
             end = new_text.find(self.eos_token)
             if end == -1:
                 yield new_text

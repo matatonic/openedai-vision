@@ -33,10 +33,15 @@ class VisionQnA(VisionQnABase):
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
             self.model = self.model.to(self.device)
 
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await prompt_from_messages(request.messages, self.format)
+
+        encoded_images = self.model.process_images(images, self.model.config).to(dtype=self.model.dtype)
+        text_chunks = [self.tokenizer(chunk).input_ids for chunk in prompt.split('<image>')]
+        text_with_img_tok = join_int_lists(text_chunks, -200) # -200 == <image>
+        input_ids = torch.tensor(text_with_img_tok, dtype=torch.long).unsqueeze(0)
 
         default_params = {
             'top_p': 0.8,
@@ -44,15 +49,18 @@ class VisionQnA(VisionQnABase):
             'do_sample': True,
             'pad_token_id': self.tokenizer.eos_token_id,
         }
-        encoded_images = self.model.process_images(images, self.model.config).to(dtype=self.model.dtype)
-
         params = self.get_generation_params(request, default_params=default_params)
 
-        text_chunks = [self.tokenizer(chunk).input_ids for chunk in prompt.split('<image>')]
+        generation_kwargs = dict(
+            input_ids=input_ids,
+            images=encoded_images,
+            **params
+        )
 
-        text_with_img_tok = join_int_lists(text_chunks, -200) # -200 == <image>
-        input_ids = torch.tensor(text_with_img_tok, dtype=torch.long).unsqueeze(0)
-        output = self.model.generate(input_ids, images=encoded_images, **params)
-
-        response = self.tokenizer.decode(output[0][input_ids.size(1):].cpu(), skip_special_tokens=True)
-        return response
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.tokenizer.eos_token)
+            if end == -1:
+                yield new_text
+            else:
+                yield new_text[:end]
+                break

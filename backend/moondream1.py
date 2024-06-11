@@ -20,11 +20,12 @@ class VisionQnA(VisionQnABase):
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
             self.model = self.model.to(self.device)
 
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
 
     async def chat_with_images(self, request: ImageChatRequest) -> str:
         images, prompt = await prompt_from_messages(request.messages, self.format)
-        encoded_images = self.model.encode_image(images[0]).to(self.model.device)
+
+        encoded_images = self.model.encode_image(images[0]).to(self.model.device) if images else None
 
         params = self.get_generation_params(request)
 

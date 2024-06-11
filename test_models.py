@@ -21,6 +21,11 @@ urls = {
     'leaf': 'https://images.freeimages.com/images/large-previews/cd7/gingko-biloba-1058537.jpg',
 }
 
+quality_urls = {
+    '98.21': ('What is the total bill?', 'https://ocr.space/Content/Images/receipt-ocr-original.webp'),
+    'walmart': ('What store is the receipt from?', 'https://ocr.space/Content/Images/receipt-ocr-original.webp'),
+}
+
 green_pass = '\033[92mpass\033[0m✅'
 red_fail = '\033[91mfail\033[0m❌'
 
@@ -68,7 +73,7 @@ def test(cmd_args: list[str]) -> int:
     print(f"### Test start")
     print("Launching server", end='', flush=True)
 
-    proc = subprocess.Popen(['python', 'vision.py', '-m'] + cmd_args,
+    proc = subprocess.Popen(['python', 'vision.py', '--log-level', args.log_level, '-m'] + cmd_args,
                             stdout=subprocess.DEVNULL if args.quiet else sys.stdout,
                             stderr=subprocess.DEVNULL if args.quiet else sys.stderr)
 
@@ -153,6 +158,7 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--verbose', action='store_true', help="Verbose")
     parser.add_argument('--abort-on-fail', action='store_true', help="Abort testing on fail.")
     parser.add_argument('--quiet', action='store_true', help="Less test noise.")
+    parser.add_argument('-L', '--log-level', default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], help="Set the log level")
     args = parser.parse_args()
 
     client = OpenAI(base_url='http://localhost:5006/v1', api_key='skip')

@@ -10,6 +10,7 @@ transformers.logging.set_verbosity_error()
 class VisionQnA(VisionQnABase):
     model_name: str = "cogvlm2"
     format: str = 'llama3'
+    vision_layers: List[str] = ['vision']
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
@@ -17,9 +18,9 @@ class VisionQnA(VisionQnABase):
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
     
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         
         query, history, images, system_message = await prompt_history_images_system_from_messages(
             request.messages, img_tok='', url_handler=url_to_image)
@@ -42,7 +43,17 @@ class VisionQnA(VisionQnABase):
 
         params = self.get_generation_params(request, default_params)
 
-        response = self.model.generate(**inputs, **params)
-        answer = self.tokenizer.decode(response[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True).strip()
+#        streamer = TextIteratorStreamer(self.tokenizer, skip_special_tokens=False, skip_prompt=True)
 
-        return answer
+        generation_kwargs = dict(
+            **inputs,
+            **params,
+        )
+
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.tokenizer.eos_token)
+            if end == -1:
+                yield new_text
+            else:
+                yield new_text[:end]
+                break

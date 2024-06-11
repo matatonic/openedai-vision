@@ -8,7 +8,7 @@ from vision_qna import *
 
 class VisionQnA(VisionQnABase):
     model_name: str = "monkey"
-    format: str = 'qwen' # phi15-ish
+    format: str = 'phi15' # phi15-ish
     vision_layers: List[str] = ["vision", "vision_tower", "resampler", "visual", "in_proj","out_proj","c_fc","c_proj"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
@@ -19,61 +19,49 @@ class VisionQnA(VisionQnABase):
 
         self.tokenizer.padding_side = 'left'
         self.tokenizer.pad_token_id = self.tokenizer.eod_id
+        self.eos_token = self.tokenizer.decode(self.tokenizer.eod_id) # <|endoftext|>
 
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
-        files = []
-        prompt = ''
-        default_params = {
-            'top_p': None,
-            'do_sample': False,
-        }
-    
-        for m in request.messages:
-            if m.role == 'user':
-                p = ''
-                for c in m.content:
-                    if c.type == 'image_url':
-                        filename = await url_to_file(c.image_url.url)
-                        p = '<img>' + filename + '</img> ' + p
-                        files.extend([filename])
-                    if c.type == 'text':
-                        p += f"{c.text}\n\n" # Question:
-                prompt += p
-            elif m.role == 'assistant':
-                for c in m.content:
-                    if c.type == 'text':
-                        prompt += f"Answer: {c.text}\n\n"
-            elif m.role == 'system':
-                for c in m.content:
-                    if c.type == 'text':
-                        prompt += f"{c.text}\n\n" # fake system prompt... doesn't really work.
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
+        try: # 
+            files, prompt = await phi15_prompt_from_messages(request.messages, img_tok = "<img>{}</img> ", img_end = '', url_handler = url_to_file)
 
-        prompt += "Answer:"
+            input_ids = self.tokenizer(prompt, return_tensors='pt', padding='longest')
 
-        input_ids = self.tokenizer(prompt, return_tensors='pt', padding='longest')
+            attention_mask = input_ids.attention_mask.to(self.model.device)
+            input_ids = input_ids.input_ids.to(self.model.device)
 
-        attention_mask = input_ids.attention_mask.to(self.model.device)
-        input_ids = input_ids.input_ids.to(self.model.device)
+            default_params = {
+                'top_p': None,
+                'do_sample': False,
+            }
 
-        params = self.get_generation_params(request, default_params=default_params)
+            params = self.get_generation_params(request, default_params=default_params)
 
-        pred = self.model.generate(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-            num_beams=1,
-            min_new_tokens=1,
-            length_penalty=1,
-            num_return_sequences=1,
-            output_hidden_states=True,
-            pad_token_id=self.tokenizer.eod_id,
-            eos_token_id=self.tokenizer.eod_id,
-            **params,
-        )
-        response = self.tokenizer.decode(pred[0][input_ids.size(1):].cpu(), skip_special_tokens=True).strip()
+            generation_kwargs = dict(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                num_beams=1,
+                min_new_tokens=1,
+                length_penalty=1,
+                num_return_sequences=1,
+                output_hidden_states=True,
+                pad_token_id=self.tokenizer.eod_id,
+                eos_token_id=self.tokenizer.eod_id,
+                **params,
+            )
 
-        for f in files:
-            os.remove(f)
+            for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
+                end = new_text.find(self.eos_token)
+                if end == -1:
+                    yield new_text
+                else:
+                    yield new_text[:end]
+                    break
 
-        return response
+        
+        finally:
+            for f in files:
+                os.remove(f)
+

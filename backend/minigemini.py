@@ -13,7 +13,10 @@ from mgm.mm_utils import process_images, tokenizer_image_token
 
 from vision_qna import *
 
-# YanweiLi/MGM-2B
+# YanweiLi/MGM-2B (no 4bit)
+#  out = bnb.matmul_4bit(x, self.weight.t(), bias=bias, quant_state=self.weight.quant_state)
+# AttributeError: 'Parameter' object has no attribute 'quant_state'
+
 # YanweiLi/MGM-7B
 # YanweiLi/MGM-7B-HD
 # YanweiLi/MGM-13B
@@ -46,7 +49,7 @@ class VisionQnA(VisionQnABase):
         self.tokenizer, self.model, self.image_processor, self.context_len = load_pretrained_model(
             model_id, None, model_name, **self.params)
     
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
     async def chat_with_images(self, request: ImageChatRequest) -> str:
         image_convert, prompt = await prompt_from_messages(request.messages, self.format)

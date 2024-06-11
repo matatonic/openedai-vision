@@ -7,7 +7,7 @@ from vision_qna import *
 
 class VisionQnA(VisionQnABase):
     model_name: str = "moondream2"
-    revision: str = '2024-03-13' # 'main'
+    revision: str = '2024-05-20' # 'main'
     format: str = 'phi15'
     vision_layers: List[str] = ["vision_encoder"]
 
@@ -24,21 +24,29 @@ class VisionQnA(VisionQnABase):
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
            self.model = self.model.to(self.device)
 
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
-        images, prompt = await prompt_from_messages(request.messages, format=self.format)
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
+        images, prompt = await prompt_from_messages(request.messages, self.format)
 
-        encoded_images = self.model.encode_image(images).to(self.device)
+        encoded_images = self.model.encode_image(images) if images else None
+        inputs_embeds = self.model.input_embeds(prompt, encoded_images, self.tokenizer)
 
         params = self.get_generation_params(request)
         
-        answer = self.model.generate(
-            encoded_images,
-            prompt,
-            eos_text="<END>",
-            tokenizer=self.tokenizer,
+        #streamer = TextIteratorStreamer(self.tokenizer, skip_special_tokens=False, skip_prompt=True)
+
+        generation_kwargs = dict(
+            eos_token_id=self.tokenizer.eos_token_id,
+            bos_token_id=self.tokenizer.bos_token_id,
+            pad_token_id=self.tokenizer.bos_token_id,
+            inputs_embeds=inputs_embeds,
             **params,
-        )[0]
-        answer = re.sub("<$|<END$", "", answer).strip()
-        return answer
+        )
+        for new_text in threaded_streaming_generator(generate=self.model.text_model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.tokenizer.eos_token)
+            if end == -1:
+                yield new_text
+            else:
+                yield new_text[:end]
+                break

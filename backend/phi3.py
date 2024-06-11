@@ -3,6 +3,7 @@ from transformers import AutoProcessor, AutoModelForCausalLM
 from vision_qna import *
 
 # microsoft/Phi-3-vision-128k-instruct
+# failspy/Phi-3-vision-128k-instruct-abliterated-alpha
 
 class VisionQnA(VisionQnABase):
     model_name: str = "phi3"
@@ -14,22 +15,29 @@ class VisionQnA(VisionQnABase):
         self.processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
     
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await phi3_prompt_from_messages(request.messages, img_tok = "<|image_{}|>\n") # numbered image token
 
         inputs = self.processor(prompt, images=images, return_tensors="pt").to(self.model.device)
 
         default_params = { 
-            "temperature": 0.0, 
             "do_sample": False, 
             "eos_token_id": self.processor.tokenizer.eos_token_id,
         } 
 
         params = self.get_generation_params(request, default_params)
 
-        output = self.model.generate(**inputs, **params)
-        response = self.processor.decode(output[0][inputs.input_ids.shape[1]:], skip_special_tokens=True, clean_up_tokenization_spaces=False)
+        generation_kwargs = dict(
+            **inputs,
+            **params,
+        )
 
-        return response
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.processor.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.processor.tokenizer.eos_token)
+            if end == -1:
+                yield new_text
+            else:
+                yield new_text[:end]
+                break

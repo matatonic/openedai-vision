@@ -7,7 +7,7 @@ from vision_qna import *
 class VisionQnA(VisionQnABase):
     model_name: str = "generic"
     format: str = 'phi3'
-    vision_layers: List[str] = ['vision_encoder']
+    vision_layers: List[str] = ['vision_encoder', 'vision_tokenizer']
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
@@ -15,17 +15,25 @@ class VisionQnA(VisionQnABase):
         # Doesn't work with accelerate
         # Errors:
         # NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
+        # also doesn't work with --load-in-4bit for the same reason
         self.params['low_cpu_mem_usage'] = False
         del self.params['device_map']
 
-        self.model = AutoModelForVision2Seq.from_pretrained(**self.params).to(self.device)
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False), use_fast=False, legacy=False)
-        self.image_processor = AutoImageProcessor.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
+        self.model = AutoModelForVision2Seq.from_pretrained(**self.params).eval()
+
+        # bitsandbytes already moves the model to the device, so we don't need to do it again.
+        if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
+           self.model = self.model.to(self.device)
+
         self.tokenizer = self.model.update_special_tokens(self.tokenizer)
 
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.image_processor = AutoImageProcessor.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
+        self.eos_token = "<|end|>"
+
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await phi3_prompt_from_messages(request.messages, img_tok = "<image>\n")
         default_system = ("A chat between a curious user and an artificial intelligence assistant. "
             "The assistant gives helpful, detailed, and polite answers to the user's questions.")
@@ -50,8 +58,15 @@ class VisionQnA(VisionQnABase):
         # errors
         del params['use_cache']
 
-        output = self.model.generate(**inputs, **params)
+        generation_kwargs = dict(
+            **inputs,
+            **params,
+        )
 
-        response = self.tokenizer.decode(output[0], skip_special_tokens=True).split("<|end|>")[0]
-
-        return response
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.eos_token)
+            if end == -1:
+                yield new_text
+            else:
+                yield new_text[:end]
+                break

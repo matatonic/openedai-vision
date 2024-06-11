@@ -20,51 +20,51 @@ class VisionQnA(VisionQnABase):
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
             self.model = self.model.to(dtype=self.params['torch_dtype'], device=self.device)
     
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
     
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
-        # 3B
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         image = None
         msgs = []
-        #system_prompt = ''
-        default_sampling_params = {
-            'do_sample': True,
-            'top_p': 0.8,
-            'top_k': 100,
-            'temperature': 0.6,
-        }
+        system_prompt = None
 
         for m in request.messages:
             if m.role == 'user':
                 for c in m.content:
                     if c.type == 'image_url':
                         image = await url_to_image(c.image_url.url)
-                    if c.type == 'text':
-                        msgs.extend([{ 'role': 'user', 'content': c.text }])
-            elif m.role == 'assistant':
-                for c in m.content:
-                    if c.type == 'text':
-                        msgs.extend([{ 'role': 'assistant', 'content': c.text }])
-            elif m.role == 'system':
-                for c in m.content:
-                    if c.type == 'text':
-                        msgs.extend([{ 'role': 'user', 'content': c.text }, { 'role': 'assistant', 'content': "OK" }])  # fake system prompt
+            for c in m.content:
+                if c.type == 'text':
+                    if m.role == 'system':
+                        system_prompt = c.text
+                    else:
+                        msgs.extend([{ 'role': m.role, 'content': c.text }])
 
-        # default uses num_beams: 3, but if sampling is requested, switch the defaults.
-        params = self.get_generation_params(request)
-        if params.get('do_sample', False):
-            params = self.get_generation_params(request, default_sampling_params)
 
-        answer = self.model.chat(
-            image=image,
-            msgs=msgs,
-            context=None,
-            tokenizer=self.tokenizer,
-            sampling=params.get('do_sample', False),
-            **params,
-        )
+        # default uses num_beams: 3, but if streaming/sampling is requested, switch the defaults.
+        default_sampling_params = {
+            'do_sample': True,
+            'top_p': 0.8,
+            'top_k': 100,
+            'temperature': 0.6,
+        }
+        params = self.get_generation_params(request, default_sampling_params)
 
-        if not isinstance(answer, str):
-            answer = answer[0]
+        with torch.cuda.amp.autocast():
+            answer = self.model.chat(
+                image=image,
+                msgs=msgs,
+                context=None,
+                tokenizer=self.tokenizer,
+                sampling=True,
+                system_prompt=system_prompt,
+                stream=True,
+                **params,
+            )
 
-        return answer
+        if isinstance(answer, str):
+            answer = [answer]
+
+        for new_text in answer:
+            if isinstance(new_text, str):
+                yield new_text
+

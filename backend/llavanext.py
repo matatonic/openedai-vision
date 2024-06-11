@@ -24,17 +24,28 @@ class VisionQnA(VisionQnABase):
         self.processor = LlavaNextProcessor.from_pretrained(model_id, use_fast=use_fast)
         self.model = LlavaNextForConditionalGeneration.from_pretrained(**self.params)
 
-        print(f"Loaded on device: {self.model.device} with dtype: {self.model.dtype}")
+        self.loaded_banner()
 
-    async def chat_with_images(self, request: ImageChatRequest) -> str:
-
+    async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await prompt_from_messages(request.messages, self.format)
+
         inputs = self.processor(prompt, images, return_tensors="pt").to(self.model.device)
 
-        # XXX pad_id to eos_id for less warnings
-        params = self.get_generation_params(request)
+        default_params = dict(
+            pad_token_id=self.processor.tokenizer.eos_token_id,
+        )
 
-        output = self.model.generate(**inputs, **params)
-        response = self.processor.decode(output[0][inputs['input_ids'].size(1):].cpu(), skip_special_tokens=True)
-        
-        return response.strip()
+        params = self.get_generation_params(request, default_params)
+
+        generation_kwargs = dict(
+            **inputs,
+            **params,
+        )
+
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.processor.tokenizer, generation_kwargs=generation_kwargs):
+            end = new_text.find(self.processor.tokenizer.eos_token)
+            if end == -1:
+                yield new_text
+            else:
+                yield new_text[:end]
+                break
