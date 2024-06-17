@@ -235,7 +235,7 @@ docker compose -f docker-compose.alt.yml pull
 
 ```shell
 # install the python dependencies
-pip install -U -r requirements.txt "transformers>=4.39.0" autoawq
+pip install -U -r requirements.txt "transformers>=4.41.2" "autoawq>=0.2.5"
 # OR install the python dependencies for the alt version
 pip install -U -r requirements.txt "transformers==4.36.2"
 # run the server with your chosen model
