@@ -665,7 +665,7 @@ async def glm4v_prompt_from_messages(messages: list[Message], img_tok = "<|begin
     return images, prompt
 
 async def florence_prompt_from_messages(messages: list[Message], url_handler = url_to_image):
-    prompt = '<CAPTION>' # "<CAPTION>", "<DETAILED_CAPTION>", "<MORE_DETAILED_CAPTION>", "<OCR>"
+    prompt = '<MORE_DETAILED_CAPTION>' # "<CAPTION>", "<DETAILED_CAPTION>", "<MORE_DETAILED_CAPTION>", "<OCR>"
     images = []
 
     for m in messages:
