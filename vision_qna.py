@@ -674,7 +674,7 @@ async def florence_prompt_from_messages(messages: list[Message], url_handler = u
                 images.extend([ await url_handler(c.image_url.url) ])
 
         for c in m.content:
-            if c.type == 'text':
+            if c.type == 'text' and c.text:
                 prompt = c.text # only one command at a time
 
     return images, prompt
