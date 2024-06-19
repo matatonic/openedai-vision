@@ -105,6 +105,10 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version 0.25.1
+
+- Fix typo in vision.sample.env
+
 Version 0.25.0
 
 - New model support: microsoft/Florence family of models. Not a chat model, but simple questions are ok and all commands are functional. ex "<MORE_DETAILED_CAPTION>", "<OCR>", "<OD>", etc.
