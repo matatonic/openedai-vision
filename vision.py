@@ -108,8 +108,7 @@ async def vision_chat_completions(request: ImageChatRequest):
         }
     }
 
-    if os.environ.get('OPENEDAI_DEBUG', False):
-        print(f'Response: {vis_chat_resp}')
+    logger.debug(f'Response: {vis_chat_resp}')
 
     return vis_chat_resp
 
@@ -141,7 +140,7 @@ if __name__ == "__main__":
     if not args.backend:
         args.backend = guess_backend(args.model)
 
-    print(f"Loading VisionQnA[{args.backend}] with {args.model}")
+    logger.info(f"Loading VisionQnA[{args.backend}] with {args.model}")
     backend = importlib.import_module(f'backend.{args.backend}')
 
     extra_params = {}

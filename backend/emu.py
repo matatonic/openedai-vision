@@ -2,7 +2,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from accelerate import init_empty_weights, infer_auto_device_map, load_checkpoint_and_dispatch
 from huggingface_hub import snapshot_download
-
+from loguru import logger
 from vision_qna import *
 
 # BAAI/Emu2-Chat
@@ -36,7 +36,7 @@ class VisionQnA(VisionQnABase):
             self.model = load_checkpoint_and_dispatch(self.model, checkpoint=checkpoint, device_map=device_map).eval()
 
         # self.model.device/dtype are overloaded with some other object
-        print(f"Loaded {model_id} on device: {self.device} with dtype: {self.params['torch_dtype']}")
+        logger.info(f"Loaded {model_id} on device: {self.device} with dtype: {self.params['torch_dtype']}")
     
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt, system = await emu_images_prompt_system_from_messages(request.messages)

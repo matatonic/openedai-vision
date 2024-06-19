@@ -34,6 +34,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (wont gpu split)
 - [X] [Microsoft](https://huggingface.co/microsoft/)
 - - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct)
+- - [X] [Florence-2-large-ft](https://huggingface.co/microsoft/Florence-2-large-ft)  (wont gpu split)
+- - [X] [Florence-2-base-ft](https://huggingface.co/microsoft/Florence-2-base-ft)  (wont gpu split)
 - [X] [failspy](https://huggingface.co/failspy)
 - - [X] [Phi-3-vision-128k-instruct-abliterated-alpha](https://huggingface.co/failspy/Phi-3-vision-128k-instruct-abliterated-alpha)
 - [X] [qihoo360](https://huggingface.co/qihoo360)
@@ -102,6 +104,11 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.25.0
+
+- New model support: microsoft/Florence family of models. Not a chat model, but simple questions are ok and all commands are functional. ex "<MORE_DETAILED_CAPTION>", "<OCR>", "<OD>", etc.
+- Improved error handling & logging
 
 Version 0.24.1
 

@@ -89,7 +89,7 @@ class VisionQnABase:
         torch.set_grad_enabled(False)
 
     def loaded_banner(self):
-        print(f"Loaded {self._model_id} on device: {self.model.device} with dtype: {self.model.dtype}")
+        logger.info(f"Loaded {self._model_id} on device: {self.model.device} with dtype: {self.model.dtype}")
 
     def select_device(self):
         return 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
@@ -664,11 +664,27 @@ async def glm4v_prompt_from_messages(messages: list[Message], img_tok = "<|begin
 
     return images, prompt
 
+async def florence_prompt_from_messages(messages: list[Message], url_handler = url_to_image):
+    prompt = '<CAPTION>' # "<CAPTION>", "<DETAILED_CAPTION>", "<MORE_DETAILED_CAPTION>", "<OCR>"
+    images = []
+
+    for m in messages:
+        for c in m.content:
+            if c.type == 'image_url':
+                images.extend([ await url_handler(c.image_url.url) ])
+
+        for c in m.content:
+            if c.type == 'text':
+                prompt = c.text # only one command at a time
+
+    return images, prompt
+
 
 async def prompt_from_messages(messages: list[Message], format: str) -> str:
     known_formats = {
         'chatml': chatml_prompt_from_messages,
         'falcon': falcon_prompt_from_messages,
+        'florence': florence_prompt_from_messages,
         'fuyu': fuyu_prompt_from_messages,
         'gemma': gemma_prompt_from_messages,
         'glm4v': glm4v_prompt_from_messages,
@@ -693,6 +709,7 @@ def guess_model_format(model_name: str) -> str:
     model_format_match_map = {
         'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b'],
         'falcon': ['falcon'],
+        'florence': ['florence'],
         'fuyu': ['fuyu'],
         'gemma': ['gemma', '-2b'],
         'glm4v': ['glm-4v'],
@@ -768,6 +785,9 @@ def guess_backend(model_name: str) -> str:
 
     if 'fuyu' in model_id:
         return 'fuyu'
+    
+    if 'florence' in model_id:
+        return 'florence'
     
     if 'internvl-chat' in model_id and '-v1-5' in model_id:
         return 'internvl-chat-v1-5'
