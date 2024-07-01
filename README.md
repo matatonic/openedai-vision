@@ -42,7 +42,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
 - - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
 - [X] [LlavaNext](https://huggingface.co/llava-hf)
-- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
+- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf) (currently errors, use an image before 0.26.0)
 - - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
 - - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf)
 - - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf)
