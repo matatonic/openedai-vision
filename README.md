@@ -36,6 +36,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct)
 - - [X] [Florence-2-large-ft](https://huggingface.co/microsoft/Florence-2-large-ft)  (wont gpu split)
 - - [X] [Florence-2-base-ft](https://huggingface.co/microsoft/Florence-2-base-ft)  (wont gpu split)
+- [X] [Cognitive Computations](https://huggingface.co/cognitivecomputations)
+- - [X] [dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b)
 - [X] [failspy](https://huggingface.co/failspy)
 - - [X] [Phi-3-vision-128k-instruct-abliterated-alpha](https://huggingface.co/failspy/Phi-3-vision-128k-instruct-abliterated-alpha)
 - [X] [qihoo360](https://huggingface.co/qihoo360)
@@ -104,6 +106,10 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.26.0
+
+- new model support: cognitivecomputations/dolphin-vision-72b
 
 Version 0.25.1
 

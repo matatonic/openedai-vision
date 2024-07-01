@@ -158,7 +158,7 @@ def threaded_streaming_generator(generate, tokenizer, generation_kwargs):
             exq.put(e)
             streamer.end()
 
-    t = Thread(target=wrapper)
+    t = Thread(target=wrapper, daemon=True)
     t.start()
 
     for text in streamer:
@@ -822,3 +822,6 @@ def guess_backend(model_name: str) -> str:
     
     if 'dragonfly' in model_id:
         return 'dragonfly'
+    
+    if 'dolphin-vision-72b' in model_id:
+        return 'dv-qwen'
