@@ -1,5 +1,4 @@
 [
-  ["OpenGVLab/InternVL2-4B"],
   ["YanweiLi/MGM-7B", "--load-in-4bit", "--use-flash-attn"],
   ["YanweiLi/MGM-7B", "--use-flash-attn"],
   ["YanweiLi/MGM-7B-HD", "--load-in-4bit", "--use-flash-attn"],
@@ -16,5 +15,9 @@
   ["YanweiLi/MGM-8x7B", "--use-flash-attn"],
   ["YanweiLi/MGM-8x7B-HD", "--load-in-4bit", "--use-flash-attn"],
   ["YanweiLi/MGM-8x7B-HD", "--use-flash-attn"],
+  ["internlm/internlm-xcomposer2-4khd-7b", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],
+  ["internlm/internlm-xcomposer2-7b", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],
+  ["internlm/internlm-xcomposer2-vl-1_8b", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],
+  ["internlm/internlm-xcomposer2-vl-7b", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],
   ["vikhyatk/moondream1"]
 ]
