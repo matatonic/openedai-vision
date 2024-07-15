@@ -10,6 +10,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 ## Model support
 
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
+- - [X] [InternVL2-76B](https://huggingface.co/OpenGVLab/InternVL2-76B)
 - - [X] [InternVL2-40B](https://huggingface.co/OpenGVLab/InternVL2-40B)
 - - [X] [InternVL2-26B](https://huggingface.co/OpenGVLab/InternVL2-26B)
 - - [X] [InternVL2-8B](https://huggingface.co/OpenGVLab/InternVL2-8B)
@@ -115,7 +116,7 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 Version 0.27.0
 
-- new model support: OpenGVLab/InternVL2 series of models (1B, 2B, 4B, 8B*, 26B*, 40B*) - *(current top open source models)
+- new model support: OpenGVLab/InternVL2 series of models (1B, 2B, 4B, 8B*, 26B*, 40B*, 76B) - *(current top open source models)
 
 Version 0.26.0
 
