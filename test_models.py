@@ -287,7 +287,6 @@ if __name__ == '__main__':
             else:
                 print(f"{name}[no_img]: pass{', got: ' + answer if args.verbose else ''}")
 
-        """
         return results
 
     with open('model_conf_tests.json') as f:
