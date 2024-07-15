@@ -40,7 +40,7 @@ class VisionQnA(VisionQnABase):
     async def chat_with_images(self, request: ImageChatRequest) -> str:
         images, prompt = await prompt_from_messages(request.messages, self.format)
         
-        inputs = self.processor(text=prompt, images=images[0], return_tensors="pt").to(device=self.model.device, dtype=self.model.dtype)
+        inputs = self.processor(text=prompt, images=images[0] if images else None, return_tensors="pt").to(device=self.model.device, dtype=self.model.dtype)
 
         default_params = {
             'do_sample': False,
