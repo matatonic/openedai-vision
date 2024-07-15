@@ -114,6 +114,10 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version 0.27.1
+
+- Complete support for chat *without* images (using placeholder images where required, 1x1 clear or 8x8 black as necessary)
+
 Version 0.27.0
 
 - new model support: OpenGVLab/InternVL2 series of models (1B, 2B, 4B, 8B*, 26B*, 40B*, 76B*) - *(current top open source models)
