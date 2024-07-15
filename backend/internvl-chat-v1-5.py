@@ -127,7 +127,7 @@ class VisionQnA(VisionQnABase):
     
 
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
-        images, prompt = await prompt_from_messages(request.messages)
+        images, prompt = await prompt_from_messages(request.messages, self.format)
         
         # TODO: use detail to set max tiles if detail=low (=512)
         # if .detail == 'low': max_num=1
