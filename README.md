@@ -10,7 +10,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 ## Model support
 
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
-- - [ ] [InternVL2-40B](https://huggingface.co/OpenGVLab/InternVL2-40B) (currently errors)
+- - [X] [InternVL2-40B](https://huggingface.co/OpenGVLab/InternVL2-40B)
 - - [X] [InternVL2-26B](https://huggingface.co/OpenGVLab/InternVL2-26B)
 - - [X] [InternVL2-8B](https://huggingface.co/OpenGVLab/InternVL2-8B)
 - - [X] [InternVL2-4B](https://huggingface.co/OpenGVLab/InternVL2-4B) (alternate docker only)
@@ -49,7 +49,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
 - - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
 - [X] [LlavaNext](https://huggingface.co/llava-hf)
-- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf) (currently errors, use an image before 0.26.0)
+- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
 - - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
 - - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf)
 - - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf)
@@ -115,8 +115,7 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 Version 0.27.0
 
-- new model support: OpenGVLab/InternVL2 series of models (40B still has errors, 4B requires alternate docker image)
-- 
+- new model support: OpenGVLab/InternVL2 series of models (1B, 2B, 4B, 8B*, 26B*, 40B*) - *(current top open source models)
 
 Version 0.26.0
 
