@@ -7,6 +7,7 @@ from vision_qna import *
 # openbmb/MiniCPM-V aka OmniLMM-3B
 
 class VisionQnA(VisionQnABase):
+    format: str = 'internal'
     model_name: str = "minicpm"
     vision_layers: List[str] = ["resampler", "vpm"]
     

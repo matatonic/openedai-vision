@@ -9,6 +9,7 @@ from vision_qna import *
 # HuggingFaceM4/idefics2-8b-chatty-AWQ
 
 class VisionQnA(VisionQnABase):
+    format: str = 'internal'
     model_name: str = "idefics2"
     vision_layers: List[str] = ['vision_model', 'connector']
     

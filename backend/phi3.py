@@ -6,6 +6,7 @@ from vision_qna import *
 # failspy/Phi-3-vision-128k-instruct-abliterated-alpha
 
 class VisionQnA(VisionQnABase):
+    format: str = 'phi3'
     model_name: str = "phi3"
     vision_layers: List[str] = ["vision_embed_tokens"]
     

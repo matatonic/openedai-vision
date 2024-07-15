@@ -5,6 +5,7 @@ from vision_qna import *
 # openbmb/OmniLMM-12B
 
 class VisionQnA(VisionQnABase):
+    format: str = 'internal'
     model_name: str = "omnilmm12b"
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):

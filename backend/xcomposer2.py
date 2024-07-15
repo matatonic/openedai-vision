@@ -26,6 +26,7 @@ class InternLMXComposer2QForCausalLM(auto_gptq.modeling.BaseGPTQForCausalLM):
     ]
 
 class VisionQnA(VisionQnABase):
+    format: str = 'internal'
     model_name: str = "xcomposer2"
     vision_layers: List[str] = ['vit', 'vision_proj']
 

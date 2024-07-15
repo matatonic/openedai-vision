@@ -4,6 +4,7 @@ from mantis.models.mfuyu import MFuyuForCausalLM, MFuyuProcessor
 from vision_qna import *
 
 class VisionQnA(VisionQnABase):
+    format: str = 'internal'
     model_name: str = "mantis"
     vision_layers: List[str] = ["vision_tower", "multi_modal_projector"]
     

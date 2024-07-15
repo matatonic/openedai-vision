@@ -111,7 +111,8 @@ class VisionQnA(VisionQnABase):
 
         self.max_tiles = extra_params.get('max_tiles', MAX_TILES)
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
+        use_fast = False if '40b' in model_id.lowe() else True
+        self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False), use_fast=use_fast)
         self.model = AutoModel.from_pretrained(**self.params).eval()
 
         self.model.img_context_token_id = self.tokenizer.convert_tokens_to_ids('<IMG_CONTEXT>')
