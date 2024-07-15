@@ -723,7 +723,7 @@ def guess_model_format(model_name: str) -> str:
     }
     # Exact match first
     for format, options in model_format_match_map.items():
-        if options == model_id:
+        if model_id in options:
             return format
     for format, options in model_format_match_map.items():
         if any(x in model_id for x in options):
