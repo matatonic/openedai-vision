@@ -37,7 +37,7 @@
   ["OpenGVLab/InternVL2-26B", "--device-map", "cuda:0"],
   ["OpenGVLab/InternVL2-40B", "--device-map", "cuda:0", "--load-in-4bit"],
   ["OpenGVLab/InternVL2-40B", "--device-map", "cuda:0"],
-  ["OpenGVLab/InternVL2-76B", "--device-map", "cuda:0", "--load-in-4bit"],
+  ["OpenGVLab/InternVL2-Llama3-76B", "--device-map", "cuda:0", "--load-in-4bit"],
   ["OpenGVLab/Mini-InternVL-Chat-2B-V1-5", "--load-in-4bit"],
   ["OpenGVLab/Mini-InternVL-Chat-2B-V1-5", "--max-tiles", "40", "--load-in-4bit"],
   ["OpenGVLab/Mini-InternVL-Chat-2B-V1-5", "--max-tiles", "40"],
