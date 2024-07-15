@@ -309,14 +309,18 @@ if __name__ == '__main__':
     
     print(f"### End tests.")
 
-    print("""# This sample env file can be used to set environment variables for the docker-compose.yml
+    fname = f"sample.env-{time.time()}"
+    with open(fname,'w') as results_file:
+        print("""# This sample env file can be used to set environment variables for the docker-compose.yml
 # Copy this file to vision.env and uncomment the model of your choice.
 HF_HOME=hf_home
 HF_HUB_ENABLE_HF_TRANSFER=1
 #HF_TOKEN=hf-...
-#CUDA_VISIBLE_DEVICES=1,0""")
+#CUDA_VISIBLE_DEVICES=1,0""", file=results_file)
 
-    for r in all_results:
-        cmdl = ' '.join(r['args'])
-        result = all(r['results'])
-        print(f"#CLI_COMMAND=\"python vision.py -m {cmdl}\"  # test {green_pass if result else red_fail}, time: {r['time']:.1f}s, mem: {r['mem']:.1f}GB, {r['note']}")
+        for r in all_results:
+            cmdl = ' '.join(r['args'])
+            result = all(r['results'])
+            print(f"#CLI_COMMAND=\"python vision.py -m {cmdl}\"  # test {green_pass if result else red_fail}, time: {r['time']:.1f}s, mem: {r['mem']:.1f}GB, {r['note']}", file=results_file)
+
+    print(open(fname,'r').read())
