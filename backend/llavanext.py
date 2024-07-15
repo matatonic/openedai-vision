@@ -32,7 +32,8 @@ class VisionQnA(VisionQnABase):
         images, prompt = await prompt_from_messages(request.messages, self.format)
 
         if len(images) < 1:
-            images = [ await url_to_image(transparent_pixel_url) ]
+            images = [ await url_to_image(black_pixel_url) ]
+            prompt = "<image>\n" + prompt
 
         inputs = self.processor(prompt, images, return_tensors="pt").to(self.model.device)
 

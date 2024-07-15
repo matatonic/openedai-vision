@@ -12,8 +12,8 @@ from transformers import BitsAndBytesConfig, TextIteratorStreamer
 from loguru import logger
 
 # When models require an image but no image given
-transparent_pixel_url = 'data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAADElEQVQI12NgGB4AAADIAAF8Y2l9AAAAAElFTkSuQmCC'
-#'data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII='
+black_pixel_url = 'data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAADElEQVQI12NgGB4AAADIAAF8Y2l9AAAAAElFTkSuQmCC'
+transparent_pixel_url = 'data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC'
 
 class ImageURL(BaseModel):
     url: str
