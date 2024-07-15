@@ -10,6 +10,13 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 ## Model support
 
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
+- - [X] [InternVL2-40B](https://huggingface.co/OpenGVLab/InternVL2-40B)
+- - [X] [InternVL2-26B](https://huggingface.co/OpenGVLab/InternVL2-26B)
+- - [X] [InternVL2-8B](https://huggingface.co/OpenGVLab/InternVL2-8B)
+- - [X] [InternVL2-4B](https://huggingface.co/OpenGVLab/InternVL2-4B) (alternate docker only)
+- - [X] [InternVL2-2B](https://huggingface.co/OpenGVLab/InternVL2-2B)
+- - [X] [InternVL2-2B-AWQ](https://huggingface.co/OpenGVLab/InternVL2-2B-AWQ)
+- - [X] [InternVL2-1B](https://huggingface.co/OpenGVLab/InternVL2-1B)
 - - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5) (wont gpu split yet)
 - - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8) (wont gpu split yet)
 - - [X] [Mini-InternVL-Chat-4B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-4B-V1-5)
@@ -42,7 +49,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
 - - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
 - [X] [LlavaNext](https://huggingface.co/llava-hf)
-- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf) (currently errors, use an image before 0.26.0)
+- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
 - - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
 - - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf)
 - - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf)
@@ -105,6 +112,10 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.27.0
+
+- new model support: OpenGVLab/InternVL2 series of models (1B, 2B, 4B, 8B*, 26B*, 40B*) - *(current top open source models)
 
 Version 0.26.0
 

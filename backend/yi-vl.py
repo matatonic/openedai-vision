@@ -18,7 +18,7 @@ from vision_qna import *
 
 class VisionQnA(VisionQnABase):
     model_name: str = "qwen-vl"
-    format: 'chatml'
+    format: str = 'chatml'
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)

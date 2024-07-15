@@ -9,7 +9,16 @@ from torchvision.transforms.functional import InterpolationMode
 # OpenGVLab/InternVL-Chat-V1-5
 # OpenGVLab/InternVL-Chat-V1-5-Int8
 # OpenGVLab/Mini-InternVL-Chat-2B-V1-5
-# OpenGVLab/Mini-InternVL-Chat-4B-V1-5
+# OpenGVLab/Mini-InternVL-Chat-4B-V1-5 (phintern)
+# OpenGVLab/InternVL2-1B
+# OpenGVLab/InternVL2-2B-AWQ (empty response)
+# OpenGVLab/InternVL2-2B
+# OpenGVLab/InternVL2-4B
+# OpenGVLab/InternVL2-4B (phintern)
+# OpenGVLab/InternVL2-8B
+# OpenGVLab/InternVL2-26B
+# OpenGVLab/InternVL2-40B (yi-34- nous-hermes-2)
+
 
 MAX_TILES = 6
 
@@ -118,10 +127,7 @@ class VisionQnA(VisionQnABase):
     
 
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
-        if self.format == 'phintern':
-            images, prompt = await phintern_prompt_from_messages(request.messages, img_tok='')
-        else:
-            images, prompt = await chatml_prompt_from_messages(request.messages, img_tok='')
+        images, prompt = await prompt_from_messages(request.messages, self.format)
         
         # TODO: use detail to set max tiles if detail=low (=512)
         # if .detail == 'low': max_num=1
@@ -134,11 +140,11 @@ class VisionQnA(VisionQnABase):
             pixel_values = None
         
         if pixel_values is not None:
-            image_tokens = '<img>' + '<IMG_CONTEXT>' * self.model.num_image_token * pixel_values.shape[0] + '</img>\n'
-        else:
-            image_tokens = ''
+            for img in images:
+                image_tokens = '<img>' + '<IMG_CONTEXT>' * self.model.num_image_token * img.size(0) + '</img>'
+                prompt = prompt.replace('<image>', image_tokens, 1)
             
-        model_inputs = self.tokenizer(image_tokens + prompt, return_tensors='pt')
+        model_inputs = self.tokenizer(prompt, return_tensors='pt')
         input_ids = model_inputs['input_ids'].cuda()
         attention_mask = model_inputs['attention_mask'].cuda()
 

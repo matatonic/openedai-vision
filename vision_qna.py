@@ -89,7 +89,7 @@ class VisionQnABase:
         torch.set_grad_enabled(False)
 
     def loaded_banner(self):
-        logger.info(f"Loaded {self._model_id} on device: {self.model.device} with dtype: {self.model.dtype}")
+        logger.info(f"Loaded {self._model_id} on device: {self.model.device} with dtype: {self.model.dtype} and template: {self.format}")
 
     def select_device(self):
         return 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'
@@ -707,7 +707,7 @@ def guess_model_format(model_name: str) -> str:
     model_id = model_name.lower()
 
     model_format_match_map = {
-        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b'],
+        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b', 'internvl2-'],
         'falcon': ['falcon'],
         'florence': ['florence'],
         'fuyu': ['fuyu'],
@@ -717,13 +717,18 @@ def guess_model_format(model_name: str) -> str:
         'llama3': ['llama-3-vision', '360vl'],
         'phi15': ['moondream1', 'moondream2', 'monkey'],
         'phi3': ['phi3', 'phi-3'],
-        'phintern': ['internvl-chat-4b'],
+        'phintern': ['internvl-chat-4b', 'opengvlab/internvl2-4b'],
         'vicuna': ['vicuna', '13b'],
         'vicuna0': ['yi-vl'],
     }
+    # Exact match first
+    for format, options in model_format_match_map.items():
+        if model_id in options:
+            return format
     for format, options in model_format_match_map.items():
         if any(x in model_id for x in options):
             return format
+
 
     return 'vicuna'
 
@@ -792,6 +797,9 @@ def guess_backend(model_name: str) -> str:
     if 'internvl-chat' in model_id and '-v1-5' in model_id:
         return 'internvl-chat-v1-5'
     
+    if 'internvl2-' in model_id:
+        return 'internvl-chat-v1-5'
+
     if 'idefics2' in model_id:
         return 'idefics2'
     
