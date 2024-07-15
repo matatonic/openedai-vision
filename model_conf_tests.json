@@ -1,11 +1,5 @@
 [
-  ["OpenGVLab/InternVL2-1B"],
-  ["OpenGVLab/InternVL2-2B-AWQ"],
-  ["OpenGVLab/InternVL2-2B"],
   ["OpenGVLab/InternVL2-4B"],
-  ["OpenGVLab/InternVL2-4B"],
-  ["OpenGVLab/InternVL2-8B"],
-  ["OpenGVLab/InternVL2-26B"],
   ["OpenGVLab/InternVL2-40B"],
 
   ["BAAI/Bunny-Llama-3-8B-V", "--load-in-4bit"],
@@ -35,7 +29,6 @@
   ["OpenGVLab/InternVL-Chat-V1-5", "--device-map", "cuda:0"],
   ["OpenGVLab/InternVL-Chat-V1-5-Int8", "--device-map", "cuda:0"],
   ["OpenGVLab/InternVL2-1B"],
-  ["OpenGVLab/InternVL2-2B-AWQ"],
   ["OpenGVLab/InternVL2-2B"],
   ["OpenGVLab/InternVL2-4B"],
   ["OpenGVLab/InternVL2-4B"],

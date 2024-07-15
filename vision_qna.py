@@ -717,13 +717,18 @@ def guess_model_format(model_name: str) -> str:
         'llama3': ['llama-3-vision', '360vl'],
         'phi15': ['moondream1', 'moondream2', 'monkey'],
         'phi3': ['phi3', 'phi-3'],
-        'phintern': ['internvl-chat-4b'],
+        'phintern': ['internvl-chat-4b', 'opengvlab/internvl2-4b'],
         'vicuna': ['vicuna', '13b'],
         'vicuna0': ['yi-vl'],
     }
+    # Exact match first
+    for format, options in model_format_match_map.items():
+        if options == model_id:
+            return format
     for format, options in model_format_match_map.items():
         if any(x in model_id for x in options):
             return format
+
 
     return 'vicuna'
 

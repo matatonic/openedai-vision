@@ -9,15 +9,15 @@ from torchvision.transforms.functional import InterpolationMode
 # OpenGVLab/InternVL-Chat-V1-5
 # OpenGVLab/InternVL-Chat-V1-5-Int8
 # OpenGVLab/Mini-InternVL-Chat-2B-V1-5
-# OpenGVLab/Mini-InternVL-Chat-4B-V1-5
+# OpenGVLab/Mini-InternVL-Chat-4B-V1-5 (phintern)
 # OpenGVLab/InternVL2-1B
-# OpenGVLab/InternVL2-2B-AWQ
+# OpenGVLab/InternVL2-2B-AWQ (empty response)
 # OpenGVLab/InternVL2-2B
 # OpenGVLab/InternVL2-4B
-# OpenGVLab/InternVL2-4B
+# OpenGVLab/InternVL2-4B (phintern)
 # OpenGVLab/InternVL2-8B
 # OpenGVLab/InternVL2-26B
-# OpenGVLab/InternVL2-40B
+# OpenGVLab/InternVL2-40B (yi-34- nous-hermes-2)
 
 
 MAX_TILES = 6
