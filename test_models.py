@@ -210,7 +210,6 @@ if __name__ == '__main__':
         results = []
         ### Single round
 
-        """
         # url tests
         for name, url in urls.items():
             answer = generate_response(url, "What is the subject of the image?")
@@ -245,6 +244,7 @@ if __name__ == '__main__':
                 print(f"{name}[data_stream]: pass{', got: ' + answer if args.verbose else ''}")
 
 
+        """
         ## OCR tests
         quality_urls = {
             '98.21': ('What is the total bill?', 'https://ocr.space/Content/Images/receipt-ocr-original.webp'),
