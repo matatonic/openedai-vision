@@ -115,9 +115,6 @@ class VisionQnA(VisionQnABase):
         self.model = AutoModel.from_pretrained(**self.params).eval()
 
         self.model.img_context_token_id = self.tokenizer.convert_tokens_to_ids('<IMG_CONTEXT>')
-        print(f"<IMG_CONTEXT> = {self.tokenizer.convert_tokens_to_ids('<IMG_CONTEXT>')}")
-        print(f"<img> = {self.tokenizer.convert_tokens_to_ids('<img>')}")
-        print(f"</img> = {self.tokenizer.convert_tokens_to_ids('</img>')}")
 
         self.eos_token = '<|end|>' if self.format == 'phintern' else '<|im_end|>'
 
@@ -130,10 +127,7 @@ class VisionQnA(VisionQnABase):
     
 
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
-        if self.format == 'phintern':
-            images, prompt = await phintern_prompt_from_messages(request.messages, img_tok='')
-        else:
-            images, prompt = await chatml_prompt_from_messages(request.messages, img_tok='')
+        images, prompt = await prompt_from_messages(request.messages)
         
         # TODO: use detail to set max tiles if detail=low (=512)
         # if .detail == 'low': max_num=1
@@ -146,11 +140,11 @@ class VisionQnA(VisionQnABase):
             pixel_values = None
         
         if pixel_values is not None:
-            image_tokens = '<img>' + '<IMG_CONTEXT>' * self.model.num_image_token * pixel_values.shape[0] + '</img>\n'
-        else:
-            image_tokens = ''
+            for img in images:
+                image_tokens = '<img>' + '<IMG_CONTEXT>' * self.model.num_image_token * img.size(0) + '</img>'
+                prompt = prompt.replace('<image>', image_tokens, 1)
             
-        model_inputs = self.tokenizer(image_tokens + prompt, return_tensors='pt')
+        model_inputs = self.tokenizer(prompt, return_tensors='pt')
         input_ids = model_inputs['input_ids'].cuda()
         attention_mask = model_inputs['attention_mask'].cuda()
 
