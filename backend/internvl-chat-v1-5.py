@@ -18,7 +18,7 @@ from torchvision.transforms.functional import InterpolationMode
 # OpenGVLab/InternVL2-8B
 # OpenGVLab/InternVL2-26B
 # OpenGVLab/InternVL2-40B (yi-34- nous-hermes-2)
-
+# OpenGVLab/InternVL2-Llama3-76B
 
 MAX_TILES = 6
 
@@ -143,7 +143,7 @@ class VisionQnA(VisionQnABase):
             for img in images:
                 image_tokens = '<img>' + '<IMG_CONTEXT>' * self.model.num_image_token * img.size(0) + '</img>'
                 prompt = prompt.replace('<image>', image_tokens, 1)
-            
+        
         model_inputs = self.tokenizer(prompt, return_tensors='pt')
         input_ids = model_inputs['input_ids'].cuda()
         attention_mask = model_inputs['attention_mask'].cuda()

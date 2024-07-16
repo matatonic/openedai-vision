@@ -16,7 +16,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [InternVL2-8B](https://huggingface.co/OpenGVLab/InternVL2-8B)
 - - [X] [InternVL2-4B](https://huggingface.co/OpenGVLab/InternVL2-4B) (alternate docker only)
 - - [X] [InternVL2-2B](https://huggingface.co/OpenGVLab/InternVL2-2B)
-- - [X] [InternVL2-2B-AWQ](https://huggingface.co/OpenGVLab/InternVL2-2B-AWQ)
+- - [X] [InternVL2-2B-AWQ](https://huggingface.co/OpenGVLab/InternVL2-2B-AWQ) (currently errors)
 - - [X] [InternVL2-1B](https://huggingface.co/OpenGVLab/InternVL2-1B)
 - - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5) (wont gpu split yet)
 - - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8) (wont gpu split yet)
