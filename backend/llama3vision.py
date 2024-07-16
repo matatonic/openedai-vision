@@ -31,6 +31,7 @@ class VisionQnA(VisionQnABase):
 
         if len(images) < 1:
             images = [ await url_to_image(black_pixel_url) ]
+            prompt = '<image>\n' + prompt
 
         input_ids = self.model.tokenizer_image_token(prompt, self.tokenizer, -200, return_tensors="pt").unsqueeze(0).to(self.device)
         image_inputs = self.model.processor(
