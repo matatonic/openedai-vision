@@ -12,7 +12,8 @@ from transformers import BitsAndBytesConfig, TextIteratorStreamer
 from loguru import logger
 
 # When models require an image but no image given
-transparent_pixel_url = 'data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII='
+black_pixel_url = 'data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAADElEQVQI12NgGB4AAADIAAF8Y2l9AAAAAElFTkSuQmCC'
+transparent_pixel_url = 'data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC'
 
 class ImageURL(BaseModel):
     url: str
@@ -89,7 +90,7 @@ class VisionQnABase:
         torch.set_grad_enabled(False)
 
     def loaded_banner(self):
-        logger.info(f"Loaded {self._model_id} on device: {self.model.device} with dtype: {self.model.dtype} and template: {self.format}")
+        logger.info(f"Loaded {self._model_id} [ device: {self.model.device}, dtype: {self.model.dtype}, template: {self.format} ]")
 
     def select_device(self):
         return 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'

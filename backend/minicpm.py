@@ -40,7 +40,7 @@ class VisionQnA(VisionQnABase):
                     else:
                         msgs.extend([{ 'role': m.role, 'content': c.text }])
 
-        if not image:
+        if image is None:
             image = await url_to_image(transparent_pixel_url)
 
         # default uses num_beams: 3, but if streaming/sampling is requested, switch the defaults.

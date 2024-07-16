@@ -52,7 +52,11 @@ class VisionQnA(VisionQnABase):
         self.loaded_banner()
     
     async def chat_with_images(self, request: ImageChatRequest) -> str:
-        image_convert, prompt = await prompt_from_messages(request.messages, self.format)
+        images, prompt = await prompt_from_messages(request.messages, self.format)
+
+        if len(images) < 1:
+            images = [ await url_to_image(black_pixel_url) ]
+            prompt = '<image>\n' + prompt
 
         if hasattr(self.model.config, 'image_size_aux'):
             if not hasattr(self.image_processor, 'image_size_raw'):
@@ -61,7 +65,7 @@ class VisionQnA(VisionQnABase):
             self.image_processor.crop_size['width'] = self.model.config.image_size_aux
             self.image_processor.size['shortest_edge'] = self.model.config.image_size_aux
 
-        image_tensor = process_images(image_convert, self.image_processor, self.model.config)
+        image_tensor = process_images(images, self.image_processor, self.model.config)
         
         image_grid = getattr(self.model.config, 'image_grid', 1)
         if hasattr(self.model.config, 'image_size_aux'):

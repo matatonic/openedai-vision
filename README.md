@@ -10,12 +10,13 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 ## Model support
 
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
+- - [X] [InternVL2-Llama3-76B](https://huggingface.co/OpenGVLab/InternVL2-Llama3-76B)
 - - [X] [InternVL2-40B](https://huggingface.co/OpenGVLab/InternVL2-40B)
 - - [X] [InternVL2-26B](https://huggingface.co/OpenGVLab/InternVL2-26B)
 - - [X] [InternVL2-8B](https://huggingface.co/OpenGVLab/InternVL2-8B)
 - - [X] [InternVL2-4B](https://huggingface.co/OpenGVLab/InternVL2-4B) (alternate docker only)
 - - [X] [InternVL2-2B](https://huggingface.co/OpenGVLab/InternVL2-2B)
-- - [X] [InternVL2-2B-AWQ](https://huggingface.co/OpenGVLab/InternVL2-2B-AWQ)
+- - [X] [InternVL2-2B-AWQ](https://huggingface.co/OpenGVLab/InternVL2-2B-AWQ) (currently errors)
 - - [X] [InternVL2-1B](https://huggingface.co/OpenGVLab/InternVL2-1B)
 - - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5) (wont gpu split yet)
 - - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8) (wont gpu split yet)
@@ -100,7 +101,9 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [MGM-34B-HD](https://huggingface.co/YanweiLi/MGM-34B-HD) (alternate docker only)
 - - [X] [MGM-8x7B-HD](https://huggingface.co/YanweiLi/MGM-8x7B-HD) (alternate docker only)
 - [X] [cognitivecomputations/dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b)
-- [X] [qnguyen3/nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (wont gpu split)
+- [X] [qnguyen3]
+- - [X] [nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (wont gpu split)
+- - [X] [nanoLLaVA-1.5](https://huggingface.co/qnguyen3/nanoLLaVA-1.5) (wont gpu split)
 - [ ] [01-ai/Yi-VL](https://huggingface.co/01-ai)
 - - [ ] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B) (currently errors)
 - - [ ] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B) (currently errors)
@@ -113,9 +116,15 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version 0.27.1
+
+- new model support: qnguyen3/nanoLLaVA-1.5
+- Complete support for chat *without* images (using placeholder images where required, 1x1 clear or 8x8 black as necessary)
+- Require transformers==4.41.2 (4.42 breaks many models)
+
 Version 0.27.0
 
-- new model support: OpenGVLab/InternVL2 series of models (1B, 2B, 4B, 8B*, 26B*, 40B*) - *(current top open source models)
+- new model support: OpenGVLab/InternVL2 series of models (1B, 2B, 4B, 8B*, 26B*, 40B*, 76B*) - *(current top open source models)
 
 Version 0.26.0
 
@@ -242,9 +251,9 @@ cp vision-alt.sample.env vision-alt.env
 
 2) You can run the server via docker compose like so:
 ```shell
-# for OpenedAI Vision Server (transformers>=4.39.0)
+# for OpenedAI Vision Server
 docker compose up
-# for OpenedAI Vision Server (alternate, for Mini-Gemini > 2B, used transformers==4.36.2)
+# for OpenedAI Vision Server (alternate, for Mini-Gemini > 2B, uses transformers==4.36.2)
 docker compose -f docker-compose.alt.yml up
 ```
 
@@ -262,7 +271,7 @@ docker compose -f docker-compose.alt.yml pull
 
 ```shell
 # install the python dependencies
-pip install -U -r requirements.txt "transformers>=4.41.2" "autoawq>=0.2.5"
+pip install -U -r requirements.txt "transformers==4.41.2" "autoawq>=0.2.5"
 # OR install the python dependencies for the alt version
 pip install -U -r requirements.txt "transformers==4.36.2"
 # run the server with your chosen model

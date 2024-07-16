@@ -8,7 +8,8 @@ import warnings
 transformers.logging.set_verbosity_error()
 warnings.filterwarnings('ignore')
 
-# 'qnguyen3/nanoLLaVA'
+# qnguyen3/nanoLLaVA
+# qnguyen3/nanoLLaVA-1.5
 
 def join_int_lists(int_lists, separator):
     result = []

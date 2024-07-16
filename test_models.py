@@ -205,12 +205,11 @@ if __name__ == '__main__':
             
         return answer
 
-
-
     def single_round():
         # XXX TODO: timeout
         results = []
         ### Single round
+
         # url tests
         for name, url in urls.items():
             answer = generate_response(url, "What is the subject of the image?")
@@ -244,8 +243,8 @@ if __name__ == '__main__':
             else:
                 print(f"{name}[data_stream]: pass{', got: ' + answer if args.verbose else ''}")
 
-        """
 
+        """
         ## OCR tests
         quality_urls = {
             '98.21': ('What is the total bill?', 'https://ocr.space/Content/Images/receipt-ocr-original.webp'),
@@ -262,6 +261,7 @@ if __name__ == '__main__':
                     break
             else:
                 print(f"{name}[quality]: pass{', got: ' + answer if args.verbose else ''}")
+        """
 
         # No image tests
         no_image = { 
@@ -287,7 +287,6 @@ if __name__ == '__main__':
             else:
                 print(f"{name}[no_img]: pass{', got: ' + answer if args.verbose else ''}")
 
-        """
         return results
 
     with open('model_conf_tests.json') as f:

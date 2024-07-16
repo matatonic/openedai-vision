@@ -40,6 +40,9 @@ class VisionQnA(VisionQnABase):
     async def chat_with_images(self, request: ImageChatRequest) -> str:
         images, prompt = await prompt_from_messages(request.messages, self.format)
         
+        if len(images) < 1:
+            images = [ await url_to_image(black_pixel_url) ]
+
         inputs = self.processor(text=prompt, images=images[0], return_tensors="pt").to(device=self.model.device, dtype=self.model.dtype)
 
         default_params = {
