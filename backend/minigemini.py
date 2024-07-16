@@ -56,7 +56,7 @@ class VisionQnA(VisionQnABase):
 
         if len(images) < 1:
             images = [ await url_to_image(black_pixel_url) ]
-            prompt = '<image>/n' + prompt
+            prompt = '<image>\n' + prompt
 
         if hasattr(self.model.config, 'image_size_aux'):
             if not hasattr(self.image_processor, 'image_size_raw'):
