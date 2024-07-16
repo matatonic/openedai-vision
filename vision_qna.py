@@ -90,7 +90,7 @@ class VisionQnABase:
         torch.set_grad_enabled(False)
 
     def loaded_banner(self):
-        logger.info(f"Loaded {self._model_id} on device: {self.model.device} with dtype: {self.model.dtype} and template: {self.format}")
+        logger.info(f"Loaded {self._model_id} [ device: {self.model.device}, dtype: {self.model.dtype}, template: {self.format} ]")
 
     def select_device(self):
         return 'cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu'

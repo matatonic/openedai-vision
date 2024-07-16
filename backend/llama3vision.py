@@ -29,6 +29,9 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         images, prompt = await prompt_from_messages(request.messages, self.format)
 
+        if len(images) < 1:
+            images = [ await url_to_image(transparent_pixel_url) ]
+
         input_ids = self.model.tokenizer_image_token(prompt, self.tokenizer, -200, return_tensors="pt").unsqueeze(0).to(self.device)
         image_inputs = self.model.processor(
             images=images,
