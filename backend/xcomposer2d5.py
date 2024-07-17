@@ -40,15 +40,14 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         prompt, history, files, meta_instruction = await prompt_history_images_system_from_messages(request.messages, img_tok='<ImageHere>', url_handler=url_to_file)
 
-        logger.debug(f"Files: {files}")
+        with torch.autocast(device_type='cuda', dtype=torch.float16):
+            inputs, im_mask, _ = self.model.interleav_wrap_chat(prompt, files, history=history, meta_instruction=meta_instruction, hd_num=self.max_tiles)
 
-        inputs, im_mask, _ = self.model.interleav_wrap_chat(prompt, files, history=history, meta_instruction=meta_instruction, hd_num=self.max_tiles)
-
-        inputs = {
-            k: v.to(self.device)
-            for k, v in inputs.items() if torch.is_tensor(v)
-        }
-        inputs['im_mask'] = im_mask
+            inputs = {
+                k: v.to(self.device)
+                for k, v in inputs.items() if torch.is_tensor(v)
+            }
+            inputs['im_mask'] = im_mask
 
         default_params = {
             #'num_beams': 3,
@@ -68,7 +67,7 @@ class VisionQnA(VisionQnABase):
 
         try:
             def wrapper(**kwargs):
-                with torch.cuda.amp.autocast(device_type='cuda', dtype=torch.float16):
+                with torch.autocast(device_type='cuda', dtype=torch.float16):
                     _ = self.model.generate(**kwargs)
 
             for new_text in threaded_streaming_generator(generate=wrapper, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
