@@ -852,5 +852,5 @@ def guess_backend(model_name: str) -> str:
     if 'dragonfly' in model_id:
         return 'dragonfly'
     
-    if 'dolphin-vision-72b' in model_id:
+    if 'dolphin-vision' in model_id:
         return 'dv-qwen'
