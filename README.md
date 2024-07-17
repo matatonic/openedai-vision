@@ -122,7 +122,8 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 Version 0.28.0
 
 - new model support: internlm-xcomposer2d5-7b
-- new model support: dolphin-vision-7b
+- new model support: dolphin-vision-7b (currently KeyError: 'bunny-qwen')
+- Pin glm-v-9B revision until we support transformers 4.42
 
 Version 0.27.1
 
