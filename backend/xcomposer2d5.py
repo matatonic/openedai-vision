@@ -1,5 +1,4 @@
 import os
-from math import ceil
 import warnings
 import torch
 from transformers import AutoTokenizer, AutoModel, logging
@@ -12,14 +11,6 @@ warnings.filterwarnings('ignore')
 # internlm/internlm-xcomposer2d5
 MAX_TILES = 24
 
-def calc_hd(image, max_num=MAX_TILES):
-    # Not sure if this is correct, but there are no instructions for how to set it
-    img = Image.open(image)
-    width, height = img.size
-    del img
-
-    return min(ceil(width // 336) * ceil(height // 336), max_num)
-
 class VisionQnA(VisionQnABase):
     model_name: str = "internlm-xcomposer2d5"
     format: str = "chatml"
@@ -28,12 +19,13 @@ class VisionQnA(VisionQnABase):
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
         
-        torch.set_default_dtype(self.dtype)
+        torch.set_grad_enabled(False)
 
         self.max_tiles = extra_params.get('max_tiles', MAX_TILES)
         
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModel.from_pretrained(**self.params).eval()
+        self.model.tokenizer = self.tokenizer
 
         # bitsandbytes already moves the model to the device, so we don't need to do it again.
         if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
@@ -79,7 +71,7 @@ class VisionQnA(VisionQnABase):
 
         try:
             def wrapper(**kwargs):
-                with torch.cuda.amp.autocast():
+                with torch.cuda.amp.autocast(device_type='cuda', dtype=torch.float16):
                     _ = self.model.generate(**kwargs)
 
             for new_text in threaded_streaming_generator(generate=wrapper, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
