@@ -199,7 +199,7 @@ async def url_to_file(img_url: str) -> str:
     }
     if img_url.startswith('data:'):
         dui = DataURI(img_url)
-        ext = mime_map.get(dui.mimetype, '.mp4' if 'video/' in mime_type else '.png')
+        ext = mime_map.get(dui.mimetype, '.mp4' if 'video/' in dui.mimetype else '.png')
         of, filename = tempfile.mkstemp(suffix=ext)
         os.write(of, dui.data)
         return filename
