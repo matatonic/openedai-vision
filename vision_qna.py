@@ -768,6 +768,9 @@ def guess_backend(model_name: str) -> str:
     if 'omnilmm-12b' in model_id:
         return 'omnilmm12b'
 
+    if 'xcomposer2d5' in model_id:
+        return 'xcomposer2d5'
+
     if 'xcomposer2-4khd' in model_id:
         return 'xcomposer2-4khd'
         

@@ -9,6 +9,7 @@ logging.set_verbosity_error()
 warnings.filterwarnings('ignore')
 
 # cognitivecomputations/dolphin-vision-72b
+# cognitivecomputations/dolphin-vision-7b
 
 class VisionQnA(VisionQnABase):
     model_name: str = "dolphin-vision"
