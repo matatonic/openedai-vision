@@ -1,4 +1,7 @@
 [
+  ["internlm/internlm-xcomposer2d5-7b", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],
+  ["internlm/internlm-xcomposer2d5-7b", "--use-flash-attn", "--device-map", "cuda:0"],
+
   ["BAAI/Bunny-Llama-3-8B-V", "--load-in-4bit"],
   ["BAAI/Bunny-Llama-3-8B-V"],
   ["BAAI/Bunny-v1_0-2B-zh", "--load-in-4bit"],
