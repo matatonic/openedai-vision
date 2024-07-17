@@ -40,9 +40,6 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         prompt, history, files, meta_instruction = await prompt_history_images_system_from_messages(request.messages, img_tok='<ImageHere>', url_handler=url_to_file)
 
-        if not files:
-            files = None
-
         inputs, im_mask, _ = self.model.interleav_wrap_chat(prompt, files, history=history, meta_instruction=meta_instruction, hd_num=self.max_tiles)
 
         inputs = {
