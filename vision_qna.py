@@ -1,6 +1,6 @@
 import io
-import uuid
 import requests
+import tempfile
 import queue
 from threading import Thread
 from datauri import DataURI
@@ -181,18 +181,34 @@ async def url_to_image(img_url: str) -> Image.Image:
     return Image.open(io.BytesIO(img_data)).convert("RGB")
 
 async def url_to_file(img_url: str) -> str:
+    mime_map = {
+        'image/png': '.png',
+        'image/x-png': '.png',
+        'image/jpg': '.jpg',
+        'image/jpeg': '.jpeg',
+        'image/gif': '.gif',
+        'image/webp': '.webp',
+        'video/avi': '.avi',
+        'video/mp4': '.mp4',
+        'video/mpeg': '.mpeg',
+        'video/mov': '.mov',
+        'video/mkv': '.mkv',
+        'video/wmv': '.wmv',
+        'video/webm': '.webm',
+    }
     if img_url.startswith('data:'):
-        # secure temp filename
-        filename = f"/tmp/{uuid.uuid4()}"
-        with open(filename, 'wb') as f:
-            f.write(DataURI(img_url).data)
-            return filename
+        dui = DataURI(img_url)
+        ext = mime_map.get(dui.mimetype, '.mp4' if 'video/' in mime_type else '.png')
+        of, filename = tempfile.mkstemp(suffix=ext)
+        of.write(dui.data)
+        return filename
     else:
         response = requests.get(img_url)
-        filename = f"/tmp/{uuid.uuid4()}"
-        with open(filename, 'wb') as f:
-            f.write(response.content)
-            return filename
+        mime_type = response.headers.get('Content-Type', 'image/png')
+        ext = mime_map.get(mime_type, '.mp4' if 'video/' in mime_type else '.png')
+        of, filename = tempfile.mkstemp(suffix=ext)
+        of.write(response.content)
+        return filename
 
 async def images_hfmessages_from_messages(messages: list[Message], url_handler = url_to_image):
     hfmessages = []
