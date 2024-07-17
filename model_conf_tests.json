@@ -70,6 +70,8 @@
   ["adept/fuyu-8b", "--device-map", "cuda:0", "--load-in-4bit"],
   ["adept/fuyu-8b", "--device-map", "cuda:0"],
   ["cognitivecomputations/dolphin-vision-72b", "--use-flash-attn", "--load-in-4bit"],
+  ["cognitivecomputations/dolphin-vision-7b", "--use-flash-attn", "--load-in-4bit"],
+  ["cognitivecomputations/dolphin-vision-7b", "--use-flash-attn"],
   ["echo840/Monkey", "--load-in-4bit"],
   ["echo840/Monkey"],
   ["echo840/Monkey-Chat", "--load-in-4bit"],

@@ -42,6 +42,9 @@ optimum
 tiktoken
 transformers_stream_generator
 
+# video
+decord
+
 # 360vl
 logger
 
