@@ -1,4 +1,5 @@
 import io
+import os
 import requests
 import tempfile
 import queue
@@ -200,14 +201,14 @@ async def url_to_file(img_url: str) -> str:
         dui = DataURI(img_url)
         ext = mime_map.get(dui.mimetype, '.mp4' if 'video/' in mime_type else '.png')
         of, filename = tempfile.mkstemp(suffix=ext)
-        of.write(dui.data)
+        os.write(of, dui.data)
         return filename
     else:
         response = requests.get(img_url)
         mime_type = response.headers.get('Content-Type', 'image/png')
         ext = mime_map.get(mime_type, '.mp4' if 'video/' in mime_type else '.png')
-        of, filename = tempfile.mkstemp(suffix=ext)
-        of.write(response.content)
+        fd, filename = tempfile.mkstemp(suffix=ext)
+        os.write(fd, response.content)
         return filename
 
 async def images_hfmessages_from_messages(messages: list[Message], url_handler = url_to_image):
