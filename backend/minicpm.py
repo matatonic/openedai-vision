@@ -3,7 +3,7 @@ from transformers import AutoTokenizer, AutoModel
 from vision_qna import *
 
 # openbmb/MiniCPM-Llama3-V-2_5
-# openbmb/MiniCPM-V-2
+# openbmb/MiniCPM-V-2  - maybe broken after revision: str = "187851962daa9b63072d40ec802f597b71bff532"
 # openbmb/MiniCPM-V aka OmniLMM-3B
 
 class VisionQnA(VisionQnABase):
