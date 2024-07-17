@@ -29,6 +29,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)
 - - [X] [glm-4v-9b](https://huggingface.co/THUDM/glm-4v-9b) (wont gpu split)
 - [X] [InternLM](https://huggingface.co/internlm/)
+- - [X] [XComposer2-2d5-7b](https://huggingface.co/internlm/internlm-xcomposer2d5-7b) (wont gpu split)
 - - [X] [XComposer2-4KHD-7b](https://huggingface.co/internlm/internlm-xcomposer2-4khd-7b) (wont gpu split)
 - - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (wont gpu split)
 - - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended)
@@ -100,7 +101,9 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [MGM-13B-HD](https://huggingface.co/YanweiLi/MGM-13B-HD) (alternate docker only)
 - - [X] [MGM-34B-HD](https://huggingface.co/YanweiLi/MGM-34B-HD) (alternate docker only)
 - - [X] [MGM-8x7B-HD](https://huggingface.co/YanweiLi/MGM-8x7B-HD) (alternate docker only)
-- [X] [cognitivecomputations/dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b)
+- [X] [cognitivecomputations]
+- - [X] [dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b)
+- - [X] [dolphin-vision-7b](https://huggingface.co/cognitivecomputations/dolphin-vision-7b)
 - [X] [qnguyen3]
 - - [X] [nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (wont gpu split)
 - - [X] [nanoLLaVA-1.5](https://huggingface.co/qnguyen3/nanoLLaVA-1.5) (wont gpu split)
@@ -115,6 +118,11 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.28.0
+
+- new model support: internlm-xcomposer2d5-7b
+- new model support: dolphin-vision-7b
 
 Version 0.27.1
 
