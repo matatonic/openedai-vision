@@ -119,6 +119,11 @@ See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_le
 
 ## Recent updates
 
+Version 0.28.1
+
+- Update moondream2 support to 2024-07-23
+- Pin openbmb/MiniCPM-Llama3-V-2_5 revision
+
 Version 0.28.0
 
 - new model support: internlm-xcomposer2d5-7b
