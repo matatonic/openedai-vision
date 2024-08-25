@@ -779,6 +779,9 @@ def guess_backend(model_name: str) -> str:
     if 'deepseek' in model_id:
         return 'deepseek-vl'
 
+    if 'minicpm-v-2_6' in model_id:
+        return 'minicpm-v-2_6'
+
     if 'minicpm' in model_id:
         return 'minicpm'
 
@@ -854,3 +857,6 @@ def guess_backend(model_name: str) -> str:
     
     if 'dolphin-vision' in model_id:
         return 'dv-qwen'
+    
+    if 'fancyfeast/joy-caption-pre-alpha' in model_id:
+        return 'joy-caption-pre-alpha'

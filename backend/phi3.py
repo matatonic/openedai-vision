@@ -3,6 +3,7 @@ from transformers import AutoProcessor, AutoModelForCausalLM
 from vision_qna import *
 
 # microsoft/Phi-3-vision-128k-instruct
+# microsoft/Phi-3.5-vision-instruct 
 # failspy/Phi-3-vision-128k-instruct-abliterated-alpha
 
 class VisionQnA(VisionQnABase):

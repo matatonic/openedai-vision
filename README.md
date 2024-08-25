@@ -42,6 +42,7 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [idefics2-8b-chatty](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty) (wont gpu split)
 - - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (wont gpu split)
 - [X] [Microsoft](https://huggingface.co/microsoft/)
+- - [X] [Phi-3.5-vision-instruct](https://huggingface.co/microsoft/Phi-3.5-vision-instruct)
 - - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct)
 - - [X] [Florence-2-large-ft](https://huggingface.co/microsoft/Florence-2-large-ft)  (wont gpu split)
 - - [X] [Florence-2-base-ft](https://huggingface.co/microsoft/Florence-2-base-ft)  (wont gpu split)
@@ -81,12 +82,14 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [Llama-3-8B-Dragonfly-Med-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-Med-v1) 
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [falcon-11B-vlm](https://huggingface.co/tiiuae/falcon-11B-vlm)
+- [X] [fancyfeast/joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
 - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
 - [X] [Monkey](https://huggingface.co/echo840/Monkey)
 - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
 - [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2)
 - [X] [Moondream1](https://huggingface.co/vikhyatk/moondream1) (alternate docker only)
 - [X] [openbmb](https://huggingface.co/openbmb)
+- - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
 - - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
 - - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2)
 - - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V)
@@ -118,6 +121,13 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
 ## Recent updates
+
+Version 0.29.0
+
+- new model support: fancyfeast/joy-caption-pre-alpha (caption only, depends on meta-Llama-3.1-8b [authorization required], --load-in-4bit avoids this dependency)
+- new model support: MiniCPM-V-2_6 (video not supported yet)
+- new model support: microsoft/Phi-3.5-vision-instruct (worked without any changes)
+- Note: Broken in this release: idefics2
 
 Version 0.28.1
 
