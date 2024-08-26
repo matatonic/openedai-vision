@@ -7,7 +7,7 @@ from vision_qna import *
 
 class VisionQnA(VisionQnABase):
     model_name: str = "moondream2"
-    revision: str = '2024-07-23' # 'main'
+    revision: str = '2024-08-26' # 'main'
     format: str = 'phi15'
     vision_layers: List[str] = ["vision_encoder"]
 

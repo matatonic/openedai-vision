@@ -127,6 +127,10 @@ If you can't find your favorite model, you can [open a new issue](https://github
 
 ## Recent updates
 
+Version 0.30.0
+
+- Update moondream2 to version 2024-08-26
+
 Version 0.29.0
 
 - new model support: fancyfeast/joy-caption-pre-alpha (caption only, depends on Meta-Llama-3.1-8b [authorization required], --load-in-4bit avoids this dependency)
