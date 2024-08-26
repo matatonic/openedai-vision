@@ -47,12 +47,3 @@ decord
 
 # 360vl
 logger
-
-# alt
-#transformers==4.36.2
-
-# latest
-#transformers>=4.39.0
-# idefics2
-#autoawq
-
