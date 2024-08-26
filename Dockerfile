@@ -5,19 +5,14 @@ RUN apt-get update && apt-get install -y git gcc \
 RUN --mount=type=cache,target=/root/.cache/pip pip install --upgrade pip
 
 WORKDIR /app
-RUN git clone https://github.com/01-ai/Yi --single-branch /app/Yi
-RUN git clone https://github.com/dvlab-research/MGM.git --single-branch /app/MGM
 RUN git clone https://github.com/TIGER-AI-Lab/Mantis.git --single-branch /app/Mantis
 RUN git clone https://github.com/togethercomputer/Dragonfly --single-branch /app/Dragonfly
 
 COPY requirements.txt .
 ARG VERSION=latest
-RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.36.2" >> requirements.txt; else echo "transformers==4.43.1\nautoawq>=0.2.5" >> requirements.txt ; fi
+RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "transformers>=4.44.2\nautoawq>=0.2.5" >> requirements.txt ; fi
 # TODO: nvidia apex wheel
 RUN --mount=type=cache,target=/root/.cache/pip pip install -U -r requirements.txt
-
-WORKDIR /app/MGM
-RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps -e .
 
 WORKDIR /app/Mantis
 RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps -e .

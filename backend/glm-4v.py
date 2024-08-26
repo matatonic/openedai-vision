@@ -6,7 +6,6 @@ from vision_qna import *
 # THUDM/glm-4v-9b
 
 class VisionQnA(VisionQnABase):
-    revision: str = "ade85af5ed77b437edf3cf4d941116026159a618" # until transformers 4.42 support
     model_name: str = "glm-4v"
     format: str = 'glm-4v'
     vision_layers: List[str] = ['vision']

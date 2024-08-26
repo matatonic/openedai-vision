@@ -3,6 +3,9 @@ from transformers import AutoModelForVision2Seq, AutoTokenizer, AutoImageProcess
 from vision_qna import *
 
 # Salesforce/xgen-mm-phi3-mini-instruct-r-v1
+# xgen-mm-phi3-mini-instruct-interleave-r-v1.5
+# xgen-mm-phi3-mini-instruct-singleimg-r-v1.5
+# xgen-mm-phi3-mini-instruct-dpo-r-v1.5
 
 class VisionQnA(VisionQnABase):
     model_name: str = "generic"
@@ -38,13 +41,24 @@ class VisionQnA(VisionQnABase):
         default_system = ("A chat between a curious user and an artificial intelligence assistant. "
             "The assistant gives helpful, detailed, and polite answers to the user's questions.")
 
-        language_inputs = self.tokenizer([prompt], return_tensors="pt")
+        inputs = self.tokenizer([prompt], return_tensors="pt").to(device=self.model.device)
+        image_sizes = []
+
         if images:
-            inputs = self.image_processor(images, return_tensors="pt", image_aspect_ratio='anyres').to(dtype=self.model.dtype)
-            inputs.update(language_inputs)
-            inputs = {name: tensor.to(device=self.model.device) for name, tensor in inputs.items()}
+            image_sizes = [img.size for img in images]
+
+            if 'r-v1.5' in self._model_id:
+                image_sizes = [image_sizes]
+
+                image_list = []
+                for img in images:
+                    image_list.append(self.image_processor([img], return_tensors="pt", image_aspect_ratio='anyres')['pixel_values'].to(dtype=self.model.dtype))
+
+                inputs['pixel_values'] = [image_list]
+            else:
+                inputs['pixel_values'] = self.image_processor(images, return_tensors="pt", image_aspect_ratio='anyres')['pixel_values'].to(dtype=self.model.dtype)
+                
         else:
-            inputs = language_inputs.to(device=self.model.device)
             inputs['pixel_values'] = None
 
         default_params = {
@@ -54,7 +68,7 @@ class VisionQnA(VisionQnABase):
             'max_new_tokens': 768,
             'top_p': None,
             'num_beams': 1,
-            'image_size': [img.size for img in images],
+            'image_size': image_sizes,
         }
 
         params = self.get_generation_params(request, default_params=default_params)

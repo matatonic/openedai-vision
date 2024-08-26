@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModel
 
 from vision_qna import *
 
-# openbmb/MiniCPM-Llama3-V-2_5 # broken after 45387f99a455e11801b78a0b24811856688e0c8b
+# openbmb/MiniCPM-Llama3-V-2_5
 # openbmb/MiniCPM-V-2  - 4bit broken
 # openbmb/MiniCPM-V aka OmniLMM-3B
 
@@ -13,10 +13,6 @@ class VisionQnA(VisionQnABase):
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
-
-        # I wish there was a better way to do this... 
-        if model_id == 'openbmb/MiniCPM-Llama3-V-2_5':
-            self.revision = '45387f99a455e11801b78a0b24811856688e0c8b'
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModel.from_pretrained(**self.params).eval()

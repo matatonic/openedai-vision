@@ -9,6 +9,8 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 
 ## Model support
 
+Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
+
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
 - - [X] [InternVL2-Llama3-76B](https://huggingface.co/OpenGVLab/InternVL2-Llama3-76B)
 - - [X] [InternVL2-40B](https://huggingface.co/OpenGVLab/InternVL2-40B)
@@ -16,17 +18,17 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [InternVL2-8B](https://huggingface.co/OpenGVLab/InternVL2-8B)
 - - [X] [InternVL2-4B](https://huggingface.co/OpenGVLab/InternVL2-4B) (alternate docker only)
 - - [X] [InternVL2-2B](https://huggingface.co/OpenGVLab/InternVL2-2B)
-- - [X] [InternVL2-2B-AWQ](https://huggingface.co/OpenGVLab/InternVL2-2B-AWQ) (currently errors)
+- - [ ] [InternVL2-2B-AWQ](https://huggingface.co/OpenGVLab/InternVL2-2B-AWQ) (currently errors)
 - - [X] [InternVL2-1B](https://huggingface.co/OpenGVLab/InternVL2-1B)
 - - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5) (wont gpu split yet)
 - - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8) (wont gpu split yet)
-- - [X] [Mini-InternVL-Chat-4B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-4B-V1-5)
+- - [X] [Mini-InternVL-Chat-4B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-4B-V1-5) (alternate docker only)
 - - [X] [Mini-InternVL-Chat-2B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-2B-V1-5)
 - [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM)
-- - [X] [cogvlm2-llama3-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B)
-- - [X] [cogvlm2-llama3-chinese-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B)
-- - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf)
-- - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf)
+- - [X] [cogvlm2-llama3-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B) (alternate docker only)
+- - [X] [cogvlm2-llama3-chinese-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B) (alternate docker only)
+- - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf) (alternate docker only)
+- - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf) (alternate docker only)
 - - [X] [glm-4v-9b](https://huggingface.co/THUDM/glm-4v-9b) (wont gpu split)
 - [X] [InternLM](https://huggingface.co/internlm/)
 - - [X] [XComposer2-2d5-7b](https://huggingface.co/internlm/internlm-xcomposer2d5-7b) (wont gpu split)
@@ -36,6 +38,12 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] (wont gpu split)
 - - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit)
 - - [X] [XComposer2-VL-1.8b](https://huggingface.co/internlm/internlm-xcomposer2-vl-1_8b)
+- [X] [openbmb](https://huggingface.co/openbmb)
+- - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
+- - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
+- - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2) (alternate docker only)
+- - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V) (alternate docker only)
+- - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
 - [X] [HuggingFaceM4/idefics2](https://huggingface.co/HuggingFaceM4) 
 - - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (wont gpu split)
 - - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (wont gpu split)
@@ -48,18 +56,11 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [Florence-2-base-ft](https://huggingface.co/microsoft/Florence-2-base-ft)  (wont gpu split)
 - [X] [failspy](https://huggingface.co/failspy)
 - - [X] [Phi-3-vision-128k-instruct-abliterated-alpha](https://huggingface.co/failspy/Phi-3-vision-128k-instruct-abliterated-alpha)
+- [X] [fancyfeast/joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
+- [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [qihoo360](https://huggingface.co/qihoo360)
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
 - - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
-- [X] [LlavaNext](https://huggingface.co/llava-hf)
-- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
-- - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
-- - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf)
-- - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf)
-- [X] [Llava](https://huggingface.co/llava-hf)
-- - [X] [llava-v1.5-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-7b-hf)
-- - [X] [llava-v1.5-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-13b-hf)
-- - [ ] [llava-v1.5-bakLlava-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-bakLlava-7b-hf) (currently errors)
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (wont gpu split)
 - [X] [BAAI](https://huggingface.co/BAAI/)
@@ -71,7 +72,21 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - - [X] [BAAI/Bunny-v1_1-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-v1_1-Llama-3-8B-V)
 - - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V)
 - - [X] [Emu2-Chat](https://huggingface.co/BAAI/Emu2-Chat) (may need the --max-memory option to GPU split, slow to load)
+- [X] [LlavaNext](https://huggingface.co/llava-hf)
+- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
+- - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
+- - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf)
+- - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf) (alternate docker only)
+- [X] [Llava](https://huggingface.co/llava-hf)
+- - [X] [llava-v1.5-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-7b-hf)
+- - [X] [llava-v1.5-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-13b-hf)
+- - [ ] [llava-v1.5-bakLlava-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-bakLlava-7b-hf) (currently errors)
+- [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
+- [X] [Monkey](https://huggingface.co/echo840/Monkey)
 - [X] [Salesforce](https://huggingface.co/Salesforce)
+- - [X] [xgen-mm-phi3-mini-instruct-singleimage-r-v1.5](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-singleimage-r-v1.5)
+- - [X] [xgen-mm-phi3-mini-instruct-interleave-r-v1](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-interleave-r-v1.5)
+- - [X] [xgen-mm-phi3-mini-instruct-dpo-r-v1.5](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-dpo-r-v1.5)
 - - [X] [xgen-mm-phi3-mini-instruct-r-v1](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-r-v1) (wont gpu split)
 - [X] [TIGER-Lab](https://huggingface.co/TIGER-Lab)
 - - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (wont gpu split)
@@ -80,36 +95,26 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [X] [Together.ai](https://huggingface.co/togethercomputer)
 - - [X] [Llama-3-8B-Dragonfly-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-v1)
 - - [X] [Llama-3-8B-Dragonfly-Med-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-Med-v1) 
-- [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
-- [X] [falcon-11B-vlm](https://huggingface.co/tiiuae/falcon-11B-vlm)
-- [X] [fancyfeast/joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
-- [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
-- [X] [Monkey](https://huggingface.co/echo840/Monkey)
 - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
-- [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2)
-- [X] [Moondream1](https://huggingface.co/vikhyatk/moondream1) (alternate docker only)
-- [X] [openbmb](https://huggingface.co/openbmb)
-- - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
-- - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
-- - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2)
-- - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V)
-- - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
-- [X] [YanweiLi/MGM](https://huggingface.co/collections/YanweiLi/) (aka Mini-Gemini, more complex setup, see: `prepare_minigemini.sh`)
-- - [X] [MGM-2B](https://huggingface.co/YanweiLi/MGM-2B)
-- - [X] [MGM-7B](https://huggingface.co/YanweiLi/MGM-7B) (alternate docker only)
-- - [X] [MGM-13B](https://huggingface.co/YanweiLi/MGM-13B) (alternate docker only)
-- - [X] [MGM-34B](https://huggingface.co/YanweiLi/MGM-34B) (alternate docker only)
-- - [X] [MGM-8x7B](https://huggingface.co/YanweiLi/MGM-8x7B) (alternate docker only)
-- - [X] [MGM-7B-HD](https://huggingface.co/YanweiLi/MGM-7B-HD) (alternate docker only)
-- - [X] [MGM-13B-HD](https://huggingface.co/YanweiLi/MGM-13B-HD) (alternate docker only)
-- - [X] [MGM-34B-HD](https://huggingface.co/YanweiLi/MGM-34B-HD) (alternate docker only)
-- - [X] [MGM-8x7B-HD](https://huggingface.co/YanweiLi/MGM-8x7B-HD) (alternate docker only)
+- [X] [falcon-11B-vlm](https://huggingface.co/tiiuae/falcon-11B-vlm) (alternate docker only)
 - [X] [cognitivecomputations]
-- - [X] [dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b)
-- - [X] [dolphin-vision-7b](https://huggingface.co/cognitivecomputations/dolphin-vision-7b)
+- - [X] [dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b) (alternate docker only)
+- - [X] [dolphin-vision-7b](https://huggingface.co/cognitivecomputations/dolphin-vision-7b) (alternate docker only)
 - [X] [qnguyen3]
 - - [X] [nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (wont gpu split)
 - - [X] [nanoLLaVA-1.5](https://huggingface.co/qnguyen3/nanoLLaVA-1.5) (wont gpu split)
+- [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2)
+- [X] [Moondream1](https://huggingface.co/vikhyatk/moondream1) (0.28.1-alt only)
+- [X] [YanweiLi/MGM](https://huggingface.co/collections/YanweiLi/) (0.28.1-alt only)
+- - [X] [MGM-2B](https://huggingface.co/YanweiLi/MGM-2B) (0.28.1-alt only)
+- - [X] [MGM-7B](https://huggingface.co/YanweiLi/MGM-7B) (0.28.1-alt only)
+- - [X] [MGM-13B](https://huggingface.co/YanweiLi/MGM-13B) (0.28.1-alt only)
+- - [X] [MGM-34B](https://huggingface.co/YanweiLi/MGM-34B) (0.28.1-alt only)
+- - [X] [MGM-8x7B](https://huggingface.co/YanweiLi/MGM-8x7B) (0.28.1-alt only)
+- - [X] [MGM-7B-HD](https://huggingface.co/YanweiLi/MGM-7B-HD) (0.28.1-alt only)
+- - [X] [MGM-13B-HD](https://huggingface.co/YanweiLi/MGM-13B-HD) (0.28.1-alt only)
+- - [X] [MGM-34B-HD](https://huggingface.co/YanweiLi/MGM-34B-HD) (0.28.1-alt only)
+- - [X] [MGM-8x7B-HD](https://huggingface.co/YanweiLi/MGM-8x7B-HD) (0.28.1-alt only)
 - [ ] [01-ai/Yi-VL](https://huggingface.co/01-ai)
 - - [ ] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B) (currently errors)
 - - [ ] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B) (currently errors)
@@ -118,16 +123,19 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 - [ ] [NousResearch/Obsidian-3B-V0.5](https://huggingface.co/NousResearch/Obsidian-3B-V0.5)
 - [ ] ...
 
-See: [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
-
 ## Recent updates
 
 Version 0.29.0
 
-- new model support: fancyfeast/joy-caption-pre-alpha (caption only, depends on meta-Llama-3.1-8b [authorization required], --load-in-4bit avoids this dependency)
+- new model support: fancyfeast/joy-caption-pre-alpha (caption only, depends on Meta-Llama-3.1-8b [authorization required], --load-in-4bit avoids this dependency)
 - new model support: MiniCPM-V-2_6 (video not supported yet)
 - new model support: microsoft/Phi-3.5-vision-instruct (worked without any changes)
-- Note: Broken in this release: idefics2
+- new model support: Salesforce/xgen-mm-phi3-mini-instruct-r-v1.5 family of models: singleimage, dpo, interleave
+- Transformers >=4.44.2 version changes: New `-alt` docker image support (transformers==4.41.2, was 4.36.2)
+- !!! ⚠️ WARNING ⚠️ !!! Broken in this release: MiniCPM-V, MiniCPM-V-2, llava-v1.6-mistral-7b-hf, internlm-xcomposer2* (all 4bit), dolphin-vision* (all), THUDM/cog* (all), InternVL2-4B,Mini-InternVL-Chat-4B-V1-5, falcon-11B-vlm !!! ⚠️ WARNING ⚠️ !!!
+- - Use version `:0.28.1` or the `-alt` docker image for continued support of these models.
+- ⚠️ DEPRECATED MODELS: YanweiLi/MGM*, Moondream1 (use the `-alt:0.28.1` image for support of these models)
+- unpin MiniCPM-Llama3-V-2_5, glm-v-9B revisions
 
 Version 0.28.1
 
@@ -295,14 +303,13 @@ docker compose -f docker-compose.alt.yml pull
 
 ```shell
 # install the python dependencies
-pip install -U -r requirements.txt "transformers==4.41.2" "autoawq>=0.2.5"
+pip install -U -r requirements.txt "transformers>=4.44.2" "autoawq>=0.2.5"
 # OR install the python dependencies for the alt version
-pip install -U -r requirements.txt "transformers==4.36.2"
+pip install -U -r requirements.txt "transformers==4.41.2"
 # run the server with your chosen model
 python vision.py --model vikhyatk/moondream2
 ```
 
-For MiniGemini support the docker image is recommended. See `prepare_minigemini.sh` for manual installation instructions, models for mini_gemini must be downloaded to local directories, not just run from cache.
 
 ## Usage
 
@@ -317,7 +324,7 @@ options:
   -m MODEL, --model MODEL
                         The model to use, Ex. llava-hf/llava-v1.6-mistral-7b-hf (default: None)
   -b BACKEND, --backend BACKEND
-                        Force the backend to use (moondream1, moondream2, llavanext, llava, qwen-vl) (default: None)
+                        Force the backend to use (phi3, moondream2, llavanext, llava, qwen-vl) (default: None)
   -f FORMAT, --format FORMAT
                         Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15, gemma) (doesn't work with all models) (default: None)
   -d DEVICE, --device DEVICE
