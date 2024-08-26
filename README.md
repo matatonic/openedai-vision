@@ -11,6 +11,62 @@ An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview`
 
 Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/spaces/opencompass/open_vlm_leaderboard)
 
+<details>
+<summary>Full list of supported models</summary>
+
+- [X] [BAAI](https://huggingface.co/BAAI/)
+- - [X] [BAAI/Bunny-v1_0-2B-zh](https://huggingface.co/BAAI/Bunny-v1_0-2B-zh)
+- - [X] [BAAI/Bunny-v1_0-3B-zh](https://huggingface.co/BAAI/Bunny-v1_0-3B-zh)
+- - [X] [BAAI/Bunny-v1_0-3B](https://huggingface.co/BAAI/Bunny-v1_0-3B)
+- - [X] [BAAI/Bunny-v1_0-4B](https://huggingface.co/BAAI/Bunny-v1_0-4B)
+- - [X] [BAAI/Bunny-v1_1-4B](https://huggingface.co/BAAI/Bunny-v1_1-4B)
+- - [X] [BAAI/Bunny-v1_1-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-v1_1-Llama-3-8B-V)
+- - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V)
+- - [X] [Emu2-Chat](https://huggingface.co/BAAI/Emu2-Chat) (may need the --max-memory option to GPU split, slow to load)
+- [X] [cognitivecomputations](https://huggingface.co/cognitivecomputations)
+- - [X] [dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b) (alternate docker only)
+- - [X] [dolphin-vision-7b](https://huggingface.co/cognitivecomputations/dolphin-vision-7b) (alternate docker only)
+- [X] [echo840](https://huggingface.co/echo840)
+- - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
+- - [X] [Monkey](https://huggingface.co/echo840/Monkey)
+- [X] [failspy](https://huggingface.co/failspy)
+- - [X] [Phi-3-vision-128k-instruct-abliterated-alpha](https://huggingface.co/failspy/Phi-3-vision-128k-instruct-abliterated-alpha)
+- [X] [falcon-11B-vlm](https://huggingface.co/tiiuae/falcon-11B-vlm) (alternate docker only)
+- [X] [fancyfeast/joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
+- [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
+- [X] [HuggingFaceM4/idefics2](https://huggingface.co/HuggingFaceM4) 
+- - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (wont gpu split)
+- - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (wont gpu split)
+- - [X] [idefics2-8b-chatty](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty) (wont gpu split)
+- - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (wont gpu split)
+- [X] [InternLM](https://huggingface.co/internlm/)
+- - [X] [XComposer2-2d5-7b](https://huggingface.co/internlm/internlm-xcomposer2d5-7b) (wont gpu split)
+- - [X] [XComposer2-4KHD-7b](https://huggingface.co/internlm/internlm-xcomposer2-4khd-7b) (wont gpu split)
+- - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (wont gpu split)
+- - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended)
+- - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] (wont gpu split)
+- - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit)
+- - [X] [XComposer2-VL-1.8b](https://huggingface.co/internlm/internlm-xcomposer2-vl-1_8b)
+- [X] [LlavaNext](https://huggingface.co/llava-hf)
+- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
+- - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
+- - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf)
+- - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf) (alternate docker only)
+- [X] [Llava](https://huggingface.co/llava-hf)
+- - [X] [llava-v1.5-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-7b-hf)
+- - [X] [llava-v1.5-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-13b-hf)
+- - [ ] [llava-v1.5-bakLlava-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-bakLlava-7b-hf) (currently errors)
+- [X] [Microsoft](https://huggingface.co/microsoft/)
+- - [X] [Phi-3.5-vision-instruct](https://huggingface.co/microsoft/Phi-3.5-vision-instruct)
+- - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct)
+- - [X] [Florence-2-large-ft](https://huggingface.co/microsoft/Florence-2-large-ft)  (wont gpu split)
+- - [X] [Florence-2-base-ft](https://huggingface.co/microsoft/Florence-2-base-ft)  (wont gpu split)
+- [X] [openbmb](https://huggingface.co/openbmb)
+- - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
+- - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
+- - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2) (alternate docker only)
+- - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V) (alternate docker only)
+- - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
 - - [X] [InternVL2-Llama3-76B](https://huggingface.co/OpenGVLab/InternVL2-Llama3-76B)
 - - [X] [InternVL2-40B](https://huggingface.co/OpenGVLab/InternVL2-40B)
@@ -24,70 +80,17 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8) (wont gpu split yet)
 - - [X] [Mini-InternVL-Chat-4B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-4B-V1-5) (alternate docker only)
 - - [X] [Mini-InternVL-Chat-2B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-2B-V1-5)
+- [X] [Salesforce](https://huggingface.co/Salesforce)
+- - [X] [xgen-mm-phi3-mini-instruct-singleimage-r-v1.5](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-singleimage-r-v1.5)
+- - [X] [xgen-mm-phi3-mini-instruct-interleave-r-v1](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-interleave-r-v1.5)
+- - [X] [xgen-mm-phi3-mini-instruct-dpo-r-v1.5](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-dpo-r-v1.5)
+- - [X] [xgen-mm-phi3-mini-instruct-r-v1](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-r-v1) (wont gpu split)
 - [X] [THUDM/CogVLM](https://github.com/THUDM/CogVLM)
 - - [X] [cogvlm2-llama3-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B) (alternate docker only)
 - - [X] [cogvlm2-llama3-chinese-chat-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chinese-chat-19B) (alternate docker only)
 - - [X] [cogvlm-chat-hf](https://huggingface.co/THUDM/cogvlm-chat-hf) (alternate docker only)
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf) (alternate docker only)
 - - [X] [glm-4v-9b](https://huggingface.co/THUDM/glm-4v-9b) (wont gpu split)
-- [X] [InternLM](https://huggingface.co/internlm/)
-- - [X] [XComposer2-2d5-7b](https://huggingface.co/internlm/internlm-xcomposer2d5-7b) (wont gpu split)
-- - [X] [XComposer2-4KHD-7b](https://huggingface.co/internlm/internlm-xcomposer2-4khd-7b) (wont gpu split)
-- - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (wont gpu split)
-- - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended)
-- - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] (wont gpu split)
-- - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit)
-- - [X] [XComposer2-VL-1.8b](https://huggingface.co/internlm/internlm-xcomposer2-vl-1_8b)
-- [X] [openbmb](https://huggingface.co/openbmb)
-- - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
-- - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
-- - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2) (alternate docker only)
-- - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V) (alternate docker only)
-- - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
-- [X] [HuggingFaceM4/idefics2](https://huggingface.co/HuggingFaceM4) 
-- - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (wont gpu split)
-- - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (wont gpu split)
-- - [X] [idefics2-8b-chatty](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty) (wont gpu split)
-- - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (wont gpu split)
-- [X] [Microsoft](https://huggingface.co/microsoft/)
-- - [X] [Phi-3.5-vision-instruct](https://huggingface.co/microsoft/Phi-3.5-vision-instruct)
-- - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct)
-- - [X] [Florence-2-large-ft](https://huggingface.co/microsoft/Florence-2-large-ft)  (wont gpu split)
-- - [X] [Florence-2-base-ft](https://huggingface.co/microsoft/Florence-2-base-ft)  (wont gpu split)
-- [X] [failspy](https://huggingface.co/failspy)
-- - [X] [Phi-3-vision-128k-instruct-abliterated-alpha](https://huggingface.co/failspy/Phi-3-vision-128k-instruct-abliterated-alpha)
-- [X] [fancyfeast/joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
-- [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
-- [X] [qihoo360](https://huggingface.co/qihoo360)
-- - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
-- - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
-- [X] [qresearch](https://huggingface.co/qresearch/)
-- - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (wont gpu split)
-- [X] [BAAI](https://huggingface.co/BAAI/)
-- - [X] [BAAI/Bunny-v1_0-2B-zh](https://huggingface.co/BAAI/Bunny-v1_0-2B-zh)
-- - [X] [BAAI/Bunny-v1_0-3B-zh](https://huggingface.co/BAAI/Bunny-v1_0-3B-zh)
-- - [X] [BAAI/Bunny-v1_0-3B](https://huggingface.co/BAAI/Bunny-v1_0-3B)
-- - [X] [BAAI/Bunny-v1_0-4B](https://huggingface.co/BAAI/Bunny-v1_0-4B)
-- - [X] [BAAI/Bunny-v1_1-4B](https://huggingface.co/BAAI/Bunny-v1_1-4B)
-- - [X] [BAAI/Bunny-v1_1-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-v1_1-Llama-3-8B-V)
-- - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V)
-- - [X] [Emu2-Chat](https://huggingface.co/BAAI/Emu2-Chat) (may need the --max-memory option to GPU split, slow to load)
-- [X] [LlavaNext](https://huggingface.co/llava-hf)
-- - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
-- - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
-- - [X] [llava-v1.6-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-7b-hf)
-- - [X] [llava-v1.6-mistral-7b-hf](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf) (alternate docker only)
-- [X] [Llava](https://huggingface.co/llava-hf)
-- - [X] [llava-v1.5-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-7b-hf)
-- - [X] [llava-v1.5-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-13b-hf)
-- - [ ] [llava-v1.5-bakLlava-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-bakLlava-7b-hf) (currently errors)
-- [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
-- [X] [Monkey](https://huggingface.co/echo840/Monkey)
-- [X] [Salesforce](https://huggingface.co/Salesforce)
-- - [X] [xgen-mm-phi3-mini-instruct-singleimage-r-v1.5](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-singleimage-r-v1.5)
-- - [X] [xgen-mm-phi3-mini-instruct-interleave-r-v1](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-interleave-r-v1.5)
-- - [X] [xgen-mm-phi3-mini-instruct-dpo-r-v1.5](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-dpo-r-v1.5)
-- - [X] [xgen-mm-phi3-mini-instruct-r-v1](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-r-v1) (wont gpu split)
 - [X] [TIGER-Lab](https://huggingface.co/TIGER-Lab)
 - - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (wont gpu split)
 - - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (wont gpu split)
@@ -95,16 +98,18 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - [X] [Together.ai](https://huggingface.co/togethercomputer)
 - - [X] [Llama-3-8B-Dragonfly-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-v1)
 - - [X] [Llama-3-8B-Dragonfly-Med-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-Med-v1) 
-- [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
-- [X] [falcon-11B-vlm](https://huggingface.co/tiiuae/falcon-11B-vlm) (alternate docker only)
-- [X] [cognitivecomputations]
-- - [X] [dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b) (alternate docker only)
-- - [X] [dolphin-vision-7b](https://huggingface.co/cognitivecomputations/dolphin-vision-7b) (alternate docker only)
-- [X] [qnguyen3]
+- [X] [qihoo360](https://huggingface.co/qihoo360)
+- - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
+- - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
+- [X] [qnguyen3](https://huggingface.co/qnguyen3)
 - - [X] [nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (wont gpu split)
 - - [X] [nanoLLaVA-1.5](https://huggingface.co/qnguyen3/nanoLLaVA-1.5) (wont gpu split)
-- [X] [Moondream2](https://huggingface.co/vikhyatk/moondream2)
-- [X] [Moondream1](https://huggingface.co/vikhyatk/moondream1) (0.28.1-alt only)
+- [X] [qresearch](https://huggingface.co/qresearch/)
+- - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (wont gpu split)
+- [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
+- [X] [vikhyatk](https://huggingface.co/vikhyatk)
+- - [X] [moondream2](https://huggingface.co/vikhyatk/moondream2)
+- - [X] [moondream1](https://huggingface.co/vikhyatk/moondream1) (0.28.1-alt only)
 - [X] [YanweiLi/MGM](https://huggingface.co/collections/YanweiLi/) (0.28.1-alt only)
 - - [X] [MGM-2B](https://huggingface.co/YanweiLi/MGM-2B) (0.28.1-alt only)
 - - [X] [MGM-7B](https://huggingface.co/YanweiLi/MGM-7B) (0.28.1-alt only)
@@ -115,13 +120,10 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [MGM-13B-HD](https://huggingface.co/YanweiLi/MGM-13B-HD) (0.28.1-alt only)
 - - [X] [MGM-34B-HD](https://huggingface.co/YanweiLi/MGM-34B-HD) (0.28.1-alt only)
 - - [X] [MGM-8x7B-HD](https://huggingface.co/YanweiLi/MGM-8x7B-HD) (0.28.1-alt only)
-- [ ] [01-ai/Yi-VL](https://huggingface.co/01-ai)
-- - [ ] [Yi-VL-6B](https://huggingface.co/01-ai/Yi-VL-6B) (currently errors)
-- - [ ] [Yi-VL-34B](https://huggingface.co/01-ai/Yi-VL-34B) (currently errors)
-- [ ] [Deepseek-VL-7b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-7b-chat)
-- [ ] [Deepseek-VL-1.3b-chat](https://huggingface.co/deepseek-ai/deepseek-vl-1.3b-chat)
-- [ ] [NousResearch/Obsidian-3B-V0.5](https://huggingface.co/NousResearch/Obsidian-3B-V0.5)
-- [ ] ...
+
+</details>
+
+If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
 
@@ -131,11 +133,17 @@ Version 0.29.0
 - new model support: MiniCPM-V-2_6 (video not supported yet)
 - new model support: microsoft/Phi-3.5-vision-instruct (worked without any changes)
 - new model support: Salesforce/xgen-mm-phi3-mini-instruct-r-v1.5 family of models: singleimage, dpo, interleave
-- Transformers >=4.44.2 version changes: New `-alt` docker image support (transformers==4.41.2, was 4.36.2)
+- library updates: torch 2.4, transformers >=4.44.2
+- New `-alt` docker image support (transformers==4.41.2, was 4.36.2)
 - !!! ⚠️ WARNING ⚠️ !!! Broken in this release: MiniCPM-V, MiniCPM-V-2, llava-v1.6-mistral-7b-hf, internlm-xcomposer2* (all 4bit), dolphin-vision* (all), THUDM/cog* (all), InternVL2-4B,Mini-InternVL-Chat-4B-V1-5, falcon-11B-vlm !!! ⚠️ WARNING ⚠️ !!!
 - - Use version `:0.28.1` or the `-alt` docker image for continued support of these models.
+- Performance regression: idefics2-8b-AWQ, idefics2-8b-chatty-AWQ
 - ⚠️ DEPRECATED MODELS: YanweiLi/MGM*, Moondream1 (use the `-alt:0.28.1` image for support of these models)
 - unpin MiniCPM-Llama3-V-2_5, glm-v-9B revisions
+
+
+<details>
+<summary>Older version notes</summary>
 
 Version 0.28.1
 
@@ -264,14 +272,14 @@ Version: 0.11.0
 
 - new model support: OpenGVLab/InternVL-Chat-V1-5, up to 4k resolution, top opensource model
 - MiniGemini renamed MGM upstream
-
+</details>
 
 ## API Documentation
 
 * [OpenAI Vision guide](https://platform.openai.com/docs/guides/vision)
 
 
-## Docker support
+## Docker support (tested, recommended)
 
 1) Edit the `vision.env` or `vision-alt.env` file to suit your needs. See: `vision.sample.env` for an example.
 
@@ -285,23 +293,26 @@ cp vision-alt.sample.env vision-alt.env
 ```shell
 # for OpenedAI Vision Server
 docker compose up
-# for OpenedAI Vision Server (alternate, for Mini-Gemini > 2B, uses transformers==4.36.2)
+# for OpenedAI Vision Server (alternate)
 docker compose -f docker-compose.alt.yml up
 ```
 
-Add the `-d` flag to daemonize. To install as a service, add `--restart unless-stopped`.
+Add the `-d` flag to daemonize and run in the background as a service.
 
 3) To update your setup (or download the image before running the server), you can pull the latest version of the image with the following command:
 ```shell
 # for OpenedAI Vision Server
 docker compose pull
-# for OpenedAI Vision Server (alternate, for Mini-Gemini > 2B, nanollava, moondream1) which uses transformers==4.36.2
+# for OpenedAI Vision Server (alternate)
 docker compose -f docker-compose.alt.yml pull
 ```
 
 ## Manual Installation instructions
 
 ```shell
+# Create & activate a new virtual environment (optional but recommended)
+python -m venv .venv
+source .venv/bin/activate
 # install the python dependencies
 pip install -U -r requirements.txt "transformers>=4.44.2" "autoawq>=0.2.5"
 # OR install the python dependencies for the alt version
@@ -310,6 +321,7 @@ pip install -U -r requirements.txt "transformers==4.41.2"
 python vision.py --model vikhyatk/moondream2
 ```
 
+Additional steps may be required for some models, see the Dockerfile for the latest installation instructions.
 
 ## Usage
 
@@ -410,12 +422,27 @@ Try to specify a single cuda device with `CUDA_VISIBLE_DEVICES=1` (or # of your 
 
 2. 4bit/8bit quantization and flash attention 2 don't work for all the models. No workaround, see: `sample.env` for known working configurations.
 
-3. Yi-VL is currently not working.
-
-4. The default `--device-map auto` doesn't always work well with these models. If you have issues with multiple GPU's, try using `sequential` and selecting the order of your CUDA devices, like so:
+3. The default `--device-map auto` doesn't always work well with these models. If you have issues with multiple GPU's, try using `sequential` and selecting the order of your CUDA devices, like so:
 
 ```shell
 # Example for reversing the order of 2 devices.
 CUDA_VISIBLE_DEVICES=1,0 python vision.py -m llava-hf/llava-v1.6-34b-hf --device-map sequential
 ```
 
+You can also use the environment variable: `OPENEDAI_DEVICE_MAP="sequential"` to specify the `--device-map` argument.
+
+4. "My Nvidia GPU isn't detected when using docker."
+- On Linux, you may need to specify the default runtime for your container environment (and perhaps install the nvidia-container-runtime), like so:
+In /etc/docker/daemon.json:
+```json
+{
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    },
+    "default-runtime": "nvidia"
+}
+```
+- In Windows, be sure you have WSL2 installed and docker is configured to use it. Also make sure your nvidia drivers are up to date.
