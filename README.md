@@ -47,6 +47,10 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] (wont gpu split)
 - - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit)
 - - [X] [XComposer2-VL-1.8b](https://huggingface.co/internlm/internlm-xcomposer2-vl-1_8b)
+- [X] [LMMs-Lab](https://huggingface.co/lmms-lab)
+- - [X] [llava-onevision-qwen2-0.5b-ov](https://huggingface.co/lmms-lab/llava-onevision-qwen2-0.5b-ov)
+- - [X] [llava-onevision-qwen2-7b-ov](https://huggingface.co/lmms-lab/llava-onevision-qwen2-7b-ov)
+- - [X] [llava-onevision-qwen2-72b-ov](https://huggingface.co/lmms-lab/llava-onevision-qwen2-72b-ov)
 - [X] [LlavaNext](https://huggingface.co/llava-hf)
 - - [X] [llava-v1.6-34b-hf](https://huggingface.co/llava-hf/llava-v1.6-34b-hf)
 - - [X] [llava-v1.6-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.6-vicuna-13b-hf)
@@ -130,6 +134,7 @@ If you can't find your favorite model, you can [open a new issue](https://github
 Version 0.30.0
 
 - Update moondream2 to version 2024-08-26
+- new model support: LMMs-Lab's llava-onevision-qwen2, 0.5b, 7b and 72b (72b untested, 4bit support doesn't seem to work properly yet)
 
 Version 0.29.0
 

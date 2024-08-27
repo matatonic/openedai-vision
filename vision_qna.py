@@ -725,7 +725,7 @@ def guess_model_format(model_name: str) -> str:
     model_id = model_name.lower()
 
     model_format_match_map = {
-        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b', 'internvl2-'],
+        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b', 'internvl2-', 'llava-onevision'],
         'falcon': ['falcon'],
         'florence': ['florence'],
         'fuyu': ['fuyu'],
@@ -759,6 +759,8 @@ def guess_backend(model_name: str) -> str:
     if 'llava' in model_id:
         if 'v1.6' in model_id:
             return 'llavanext'
+        elif 'onevision' in model_id:
+            return 'llavanextgit'
         return 'llava'
 
     if 'qwen' in model_id:

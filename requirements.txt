@@ -47,3 +47,6 @@ decord
 
 # 360vl
 logger
+
+# llava-onevision
+git+https://github.com/LLaVA-VL/LLaVA-NeXT.git

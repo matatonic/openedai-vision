@@ -86,6 +86,8 @@
   ["llava-hf/llava-v1.6-vicuna-13b-hf", "--use-flash-attn"],
   ["llava-hf/llava-v1.6-vicuna-7b-hf", "--use-flash-attn", "--load-in-4bit"],
   ["llava-hf/llava-v1.6-vicuna-7b-hf", "--use-flash-attn"],
+  ["lmms-lab/llava-onevision-qwen2-0.5b-ov", "--use-flash-attn"],
+  ["lmms-lab/llava-onevision-qwen2-7b-ov", "--use-flash-attn"],
   ["microsoft/Florence-2-base-ft", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],
   ["microsoft/Florence-2-base-ft", "--use-flash-attn", "--device-map", "cuda:0"],
   ["microsoft/Florence-2-large-ft", "--use-flash-attn", "--device-map", "cuda:0", "--load-in-4bit"],
