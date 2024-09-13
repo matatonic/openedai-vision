@@ -11,6 +11,8 @@ from typing import Optional, List, Literal, AsyncGenerator, Union
 from pydantic import BaseModel
 from transformers import BitsAndBytesConfig, TextIteratorStreamer
 from loguru import logger
+from mistral_common.protocol.instruct.messages import UserMessage, TextChunk, ImageURLChunk, SystemMessage, AssistantMessage, ToolMessage
+from mistral_common.protocol.instruct.request import ChatCompletionRequest
 
 # When models require an image but no image given
 black_pixel_url = 'data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAADElEQVQI12NgGB4AAADIAAF8Y2l9AAAAAElFTkSuQmCC'
@@ -60,7 +62,7 @@ class VisionQnABase:
             load_in_4bit_params = {
                 'quantization_config': BitsAndBytesConfig(
                     load_in_4bit=True,
-#                    bnb_4bit_quant_type='nf4',
+                    bnb_4bit_quant_type='nf4',
 #                    bnb_4bit_use_double_quant=True, # XXX gone for now, make this an option
                     bnb_4bit_compute_dtype=self.dtype,
                     llm_int8_skip_modules=self.vision_layers,
@@ -75,12 +77,6 @@ class VisionQnABase:
                 )
             }
             self.params.update(load_in_8bit_params)
-
-        if extra_params.get('use_flash_attn', False):
-            flash_attn_params = {
-                "attn_implementation": "flash_attention_2",
-            }
-            self.params.update(flash_attn_params)
 
         if extra_params.get('trust_remote_code', False):
             self.params.update({"trust_remote_code": True })
@@ -697,6 +693,35 @@ async def florence_prompt_from_messages(messages: list[Message], url_handler = u
 
     return images, prompt
 
+async def pixtral_messages(messages: list[Message]):
+    pix_messages = []
+
+ #   generation_msg = ''
+
+#    if messages and messages[-1].role == 'assistant':
+#        generation_msg += messages[-1].content[0].text
+#        messages.pop(-1)
+
+    for m in messages:
+        content = []
+        text = ''
+        for c in m.content:
+            if c.type == 'text' and c.text:
+                text = c.text
+                content.extend([TextChunk(text=c.text)])
+            if c.type == 'image_url':
+                content.extend([ ImageURLChunk(image_url=c.image_url.url) ])
+
+        if m.role == 'user':
+            pix_messages.extend([UserMessage(content=content)])
+        elif m.role == 'assistant':
+            pix_messages.extend([AssistantMessage(content=text)])
+        elif m.role == 'system':
+            pix_messages.extend([SystemMessage(content=text)])
+#        elif m.role == 'tool':
+#            pix_messages.extend([ToolMessage(content=text, tool_call_id=])
+
+    return ChatCompletionRequest(messages=pix_messages, model="pixtral")
 
 async def prompt_from_messages(messages: list[Message], format: str) -> str:
     known_formats = {
@@ -862,3 +887,6 @@ def guess_backend(model_name: str) -> str:
     
     if 'fancyfeast/joy-caption-pre-alpha' in model_id:
         return 'joy-caption-pre-alpha'
+    
+    if 'pixtral' in model_id:
+        return 'pixtral'

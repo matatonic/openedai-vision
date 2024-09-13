@@ -1,15 +1,16 @@
 #!/usr/bin/env python
+try:
+    import dotenv
+    dotenv.load_dotenv(override=True)
+except:
+    pass
+
 import os
 import requests
 import argparse
 from datauri import DataURI
 from openai import OpenAI
 
-try:
-    import dotenv
-    dotenv.load_dotenv(override=True)
-except:
-    pass
 
 def url_for_api(img_url: str = None, filename: str = None, always_data=False) -> str:
     if img_url.startswith('http'):
@@ -29,6 +30,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Test vision using OpenAI',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-s', '--system-prompt', type=str, default=None)
+    parser.add_argument('--openai-model', type=str, default="gpt-4-vision-preview")
     parser.add_argument('-S', '--start-with', type=str, default=None, help="Start reply with, ex. 'Sure, ' (doesn't work with all models)")
     parser.add_argument('-m', '--max-tokens', type=int, default=None)
     parser.add_argument('-t', '--temperature', type=float, default=None)
@@ -40,7 +42,8 @@ if __name__ == '__main__':
     parser.add_argument('questions', type=str, nargs='*', help='The question to ask the image')
     args = parser.parse_args()
 
-    client = OpenAI(base_url=os.environ.get('OPENAI_BASE_URL', 'http://localhost:5006/v1'), api_key='skip')
+    client = OpenAI(base_url=os.environ.get('OPENAI_BASE_URL', 'http://localhost:5006/v1'),
+                    api_key=os.environ.get('OPENAI_API_KEY', 'sk-ip'))
 
     params = {}
     if args.max_tokens is not None:
@@ -67,7 +70,7 @@ if __name__ == '__main__':
         if args.start_with:
             messages.extend([{ "role": "assistant", "content": [{ "type": "text", "text": args.start_with }] }])
         
-        response = client.chat.completions.create(model="gpt-4-vision-preview", messages=messages, **params)
+        response = client.chat.completions.create(model=args.openai_model, messages=messages, **params)
 
         if not args.single:
             print(f"Answer: ", end='', flush=True)

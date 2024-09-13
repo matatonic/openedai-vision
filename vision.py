@@ -121,17 +121,20 @@ def parse_args(argv=None):
     parser.add_argument('-b', '--backend', action='store', default=None, help="Force the backend to use (phi3, idefics2, llavanext, llava, etc.)")
     parser.add_argument('-f', '--format', action='store', default=None, help="Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15, etc.) (doesn't work with all models)")
     parser.add_argument('-d', '--device', action='store', default="auto", help="Set the torch device for the model. Ex. cpu, cuda:1")
+    #parser.add_argument('-t', '--dtype', action='store', default="auto", help="Set the torch dtype, ex. 'float16'")
     parser.add_argument('--device-map', action='store', default=os.environ.get('OPENEDAI_DEVICE_MAP', "auto"), help="Set the default device map policy for the model. (auto, balanced, sequential, balanced_low_0, cuda:1, etc.)")
     parser.add_argument('--max-memory', action='store', default=None, help="(emu2 only) Set the per cuda device_map max_memory. Ex. 0:22GiB,1:22GiB,cpu:128GiB")
     parser.add_argument('--no-trust-remote-code', action='store_true', help="Don't trust remote code (required for many models)")
     parser.add_argument('-4', '--load-in-4bit', action='store_true', help="load in 4bit (doesn't work with all models)")
     parser.add_argument('-8', '--load-in-8bit', action='store_true', help="load in 8bit (doesn't work with all models)")
-    parser.add_argument('-F', '--use-flash-attn', action='store_true', help="Use Flash Attention 2 (doesn't work with all models or GPU)")
+    parser.add_argument('-F', '--use-flash-attn', action='store_true', help="DEPRECATED: use --attn_implementation flash_attention_2 or -A flash_attention_2")
+    parser.add_argument('-A', '--attn_implementation', default='sdpa', type=str, help="Set the attn_implementation", choices=['sdpa', 'eager', 'flash_attention_2'])
     parser.add_argument('-T', '--max-tiles', action='store', default=None, type=int, help="Change the maximum number of tiles. [1-55+] (uses more VRAM for higher resolution, doesn't work with all models)")
-    parser.add_argument('-L', '--log-level', default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], help="Set the log level")
-    parser.add_argument('-P', '--port', action='store', default=5006, type=int, help="Server tcp port")
-    parser.add_argument('-H', '--host', action='store', default='0.0.0.0', help="Host to listen on, Ex. localhost")
     parser.add_argument('--preload', action='store_true', help="Preload model and exit.")
+    
+    parser.add_argument('-L', '--log-level', default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"], help="Set the log level")
+    parser.add_argument('-H', '--host', action='store', default='0.0.0.0', help="Host to listen on, Ex. localhost")
+    parser.add_argument('-P', '--port', action='store', default=5006, type=int, help="Server tcp port")
     return parser.parse_args()
 
 if __name__ == "__main__":
@@ -143,13 +146,18 @@ if __name__ == "__main__":
     logger.info(f"Loading VisionQnA[{args.backend}] with {args.model}")
     backend = importlib.import_module(f'backend.{args.backend}')
 
-    extra_params = {}
+    if args.use_flash_attn:
+        #logger.warning("The -F/--use-flash-attn option is deprecated and will be removed in a future release. Please use -A/--attn_implementation flash_attention_2 instead.")
+        args.attn_implementation = "flash_attention_2"
+
+    extra_params = dict(
+        attn_implementation = args.attn_implementation
+    )
+
     if args.load_in_4bit:
         extra_params['load_in_4bit'] = True
     if args.load_in_8bit:
         extra_params['load_in_8bit'] = True
-    if args.use_flash_attn:
-        extra_params['use_flash_attn'] = True
     if args.max_tiles:
         extra_params['max_tiles'] = args.max_tiles
     

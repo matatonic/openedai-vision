@@ -50,3 +50,7 @@ logger
 
 # llava-onevision
 git+https://github.com/LLaVA-VL/LLaVA-NeXT.git
+
+# mistral
+mistral_inference>=1.4.0
+mistral_common>=1.4.0

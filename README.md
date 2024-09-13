@@ -65,6 +65,8 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct)
 - - [X] [Florence-2-large-ft](https://huggingface.co/microsoft/Florence-2-large-ft)  (wont gpu split)
 - - [X] [Florence-2-base-ft](https://huggingface.co/microsoft/Florence-2-base-ft)  (wont gpu split)
+- [X] [Mistral AI](https://huggingface.co/mistralai)
+- - [X] [Pixtral-12B](https://huggingface.co/mistralai/Pixtral-12B-2409)
 - [X] [openbmb](https://huggingface.co/openbmb)
 - - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
 - - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
@@ -131,10 +133,13 @@ If you can't find your favorite model, you can [open a new issue](https://github
 
 ## Recent updates
 
+
 Version 0.30.0
 
-- Update moondream2 to version 2024-08-26
+- new model support: mistralai/Pixtral-12B-2409 (no streaming yet, no quants yet)
 - new model support: LMMs-Lab's llava-onevision-qwen2, 0.5b, 7b and 72b (72b untested, 4bit support doesn't seem to work properly yet)
+- Update moondream2 to version 2024-08-26
+- Performance fixed: idefics2-8b-AWQ, idefics2-8b-chatty-AWQ
 
 Version 0.29.0
 
