@@ -83,7 +83,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [ ] [InternVL2-2B-AWQ](https://huggingface.co/OpenGVLab/InternVL2-2B-AWQ) (currently errors)
 - - [X] [InternVL2-1B](https://huggingface.co/OpenGVLab/InternVL2-1B)
 - - [X] [InternVL-Chat-V1-5](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5) (wont gpu split yet)
-- - [X] [InternVL-Chat-V1-5-Int8](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-Int8) (wont gpu split yet)
+- - [ ] [InternVL-Chat-V1-5-AWQ](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-AWQ) (wont gpu split yet)
 - - [X] [Mini-InternVL-Chat-4B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-4B-V1-5) (alternate docker only)
 - - [X] [Mini-InternVL-Chat-2B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-2B-V1-5)
 - [X] [Salesforce](https://huggingface.co/Salesforce)
@@ -133,6 +133,11 @@ If you can't find your favorite model, you can [open a new issue](https://github
 
 ## Recent updates
 
+Version 0.31.0
+
+- new model support: Qwen/Qwen2-VL family of models (video untested, GPTQ not working yet, but AWQ and BF16 are fine)
+- transformers from git
+- Regression: THUD/glm-4v-9b  broken in this release
 
 Version 0.30.0
 

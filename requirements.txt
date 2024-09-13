@@ -41,6 +41,7 @@ matplotlib
 optimum
 tiktoken
 transformers_stream_generator
+qwen-vl-utils
 
 # video
 decord

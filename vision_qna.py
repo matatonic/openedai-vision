@@ -788,6 +788,9 @@ def guess_backend(model_name: str) -> str:
             return 'llavanextgit'
         return 'llava'
 
+    if 'qwen2' in model_id:
+        return 'qwen2-vl'
+
     if 'qwen' in model_id:
         return 'qwen-vl'
     
