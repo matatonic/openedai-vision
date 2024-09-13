@@ -112,7 +112,12 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [nanoLLaVA-1.5](https://huggingface.co/qnguyen3/nanoLLaVA-1.5) (wont gpu split)
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (wont gpu split)
-- [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
+- [X] [Qwen](https://huggingface.co/Qwen/)
+- - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
+- - [X] [wen2-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct)
+- - [X] [Qwen2-VL-7B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct-AWQ)
+- - [X] [Qwen2-VL-2B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-2B-Instruct)
+- - [X] [Qwen2-VL-2B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-2B-Instruct-AWQ)
 - [X] [vikhyatk](https://huggingface.co/vikhyatk)
 - - [X] [moondream2](https://huggingface.co/vikhyatk/moondream2)
 - - [X] [moondream1](https://huggingface.co/vikhyatk/moondream1) (0.28.1-alt only)
@@ -137,7 +142,7 @@ Version 0.31.0
 
 - new model support: Qwen/Qwen2-VL family of models (video untested, GPTQ not working yet, but AWQ and BF16 are fine)
 - transformers from git
-- Regression: THUD/glm-4v-9b  broken in this release
+- Regression: THUD/glm-4v-9b broken in this release (re: transformers)
 
 Version 0.30.0
 
@@ -333,7 +338,7 @@ docker compose -f docker-compose.alt.yml pull
 python -m venv .venv
 source .venv/bin/activate
 # install the python dependencies
-pip install -U -r requirements.txt "transformers>=4.44.2" "autoawq>=0.2.5"
+pip install -U -r requirements.txt "git+https://github.com/huggingface/transformers" "autoawq>=0.2.5"
 # OR install the python dependencies for the alt version
 pip install -U -r requirements.txt "transformers==4.41.2"
 # run the server with your chosen model
