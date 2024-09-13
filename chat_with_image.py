@@ -29,12 +29,12 @@ if __name__ == '__main__':
     # Initialize argparse
     parser = argparse.ArgumentParser(description='Test vision using OpenAI',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-s', '--system-prompt', type=str, default=None)
-    parser.add_argument('--openai-model', type=str, default="gpt-4-vision-preview")
+    parser.add_argument('-s', '--system-prompt', type=str, default=None, help="Set a system prompt.")
+    parser.add_argument('--openai-model', type=str, default="gpt-4-vision-preview", help="OpenAI model to use.")
     parser.add_argument('-S', '--start-with', type=str, default=None, help="Start reply with, ex. 'Sure, ' (doesn't work with all models)")
-    parser.add_argument('-m', '--max-tokens', type=int, default=None)
-    parser.add_argument('-t', '--temperature', type=float, default=None)
-    parser.add_argument('-p', '--top_p', type=float, default=None)
+    parser.add_argument('-m', '--max-tokens', type=int, default=None, help="Max tokens to generate.")
+    parser.add_argument('-t', '--temperature', type=float, default=None, help="Temperature.")
+    parser.add_argument('-p', '--top_p', type=float, default=None, help="top_p")
     parser.add_argument('-u', '--keep-remote-urls', action='store_true', help="Normally, http urls are converted to data: urls for better latency.")
     parser.add_argument('-1', '--single', action='store_true', help='Single turn Q&A, output is only the model response.')
     parser.add_argument('--no-stream', action='store_true', help='Disable streaming response.')

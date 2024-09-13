@@ -340,8 +340,8 @@ Additional steps may be required for some models, see the Dockerfile for the lat
 ## Usage
 
 ```
-usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4]
-                 [-8] [-F] [-T MAX_TILES] [-L {DEBUG,INFO,WARNING,ERROR,CRITICAL}] [-P PORT] [-H HOST] [--preload]
+usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4] [-8] [-F] [-A {sdpa,eager,flash_attention_2}] [-T MAX_TILES] [--preload]
+                 [-L {DEBUG,INFO,WARNING,ERROR,CRITICAL}] [-H HOST] [-P PORT]
 
 OpenedAI Vision API Server
 
@@ -350,9 +350,9 @@ options:
   -m MODEL, --model MODEL
                         The model to use, Ex. llava-hf/llava-v1.6-mistral-7b-hf (default: None)
   -b BACKEND, --backend BACKEND
-                        Force the backend to use (phi3, moondream2, llavanext, llava, qwen-vl) (default: None)
+                        Force the backend to use (phi3, idefics2, llavanext, llava, etc.) (default: None)
   -f FORMAT, --format FORMAT
-                        Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15, gemma) (doesn't work with all models) (default: None)
+                        Force a specific chat format. (vicuna, mistral, chatml, llama2, phi15, etc.) (doesn't work with all models) (default: None)
   -d DEVICE, --device DEVICE
                         Set the torch device for the model. Ex. cpu, cuda:1 (default: auto)
   --device-map DEVICE_MAP
@@ -363,14 +363,16 @@ options:
                         Don't trust remote code (required for many models) (default: False)
   -4, --load-in-4bit    load in 4bit (doesn't work with all models) (default: False)
   -8, --load-in-8bit    load in 8bit (doesn't work with all models) (default: False)
-  -F, --use-flash-attn  Use Flash Attention 2 (doesn't work with all models or GPU) (default: False)
+  -F, --use-flash-attn  DEPRECATED: use --attn_implementation flash_attention_2 or -A flash_attention_2 (default: False)
+  -A {sdpa,eager,flash_attention_2}, --attn_implementation {sdpa,eager,flash_attention_2}
+                        Set the attn_implementation (default: sdpa)
   -T MAX_TILES, --max-tiles MAX_TILES
                         Change the maximum number of tiles. [1-55+] (uses more VRAM for higher resolution, doesn't work with all models) (default: None)
+  --preload             Preload model and exit. (default: False)
   -L {DEBUG,INFO,WARNING,ERROR,CRITICAL}, --log-level {DEBUG,INFO,WARNING,ERROR,CRITICAL}
                         Set the log level (default: INFO)
-  -P PORT, --port PORT  Server tcp port (default: 5006)
   -H HOST, --host HOST  Host to listen on, Ex. localhost (default: 0.0.0.0)
-  --preload             Preload model and exit. (default: False)
+  -P PORT, --port PORT  Server tcp port (default: 5006)
 
 ```
 
@@ -380,7 +382,7 @@ options:
 
 Usage
 ```
-usage: chat_with_image.py [-h] [-s SYSTEM_PROMPT] [-S START_WITH] [-m MAX_TOKENS] [-t TEMPERATURE] [-p TOP_P] [-u] [-1] [--no-stream] image_url [questions ...]
+usage: chat_with_image.py [-h] [-s SYSTEM_PROMPT] [--openai-model OPENAI_MODEL] [-S START_WITH] [-m MAX_TOKENS] [-t TEMPERATURE] [-p TOP_P] [-u] [-1] [--no-stream] image_url [questions ...]
 
 Test vision using OpenAI
 
@@ -391,11 +393,17 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -s SYSTEM_PROMPT, --system-prompt SYSTEM_PROMPT
+                        Set a system prompt. (default: None)
+  --openai-model OPENAI_MODEL
+                        OpenAI model to use. (default: gpt-4-vision-preview)
   -S START_WITH, --start-with START_WITH
                         Start reply with, ex. 'Sure, ' (doesn't work with all models) (default: None)
   -m MAX_TOKENS, --max-tokens MAX_TOKENS
+                        Max tokens to generate. (default: None)
   -t TEMPERATURE, --temperature TEMPERATURE
+                        Temperature. (default: None)
   -p TOP_P, --top_p TOP_P
+                        top_p (default: None)
   -u, --keep-remote-urls
                         Normally, http urls are converted to data: urls for better latency. (default: False)
   -1, --single          Single turn Q&A, output is only the model response. (default: False)
