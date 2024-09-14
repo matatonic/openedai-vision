@@ -69,6 +69,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [Pixtral-12B](https://huggingface.co/mistralai/Pixtral-12B-2409)
 - [X] [openbmb](https://huggingface.co/openbmb)
 - - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
+- - [X] [MiniCPM-V-2_6-int4](https://huggingface.co/openbmb/MiniCPM-V-2_6-int4)
 - - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
 - - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2) (alternate docker only)
 - - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V) (alternate docker only)
@@ -137,6 +138,10 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.31.1
+
+- Fix support for openbmb/MiniCPM-V-2_6-int4
 
 Version 0.31.0
 

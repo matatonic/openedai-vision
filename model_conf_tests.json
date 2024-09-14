@@ -94,6 +94,7 @@
   ["microsoft/Phi-3.5-vision-instruct", "-A", "flash_attention_2", "--load-in-4bit"],
   ["microsoft/Phi-3.5-vision-instruct", "-A", "flash_attention_2"],
   ["mistralai/Pixtral-12B-2409"],
+  ["openbmb/MiniCPM-V-2_6-int4", "-A", "flash_attention_2", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V-2_6", "-A", "flash_attention_2", "--device-map", "cuda:0", "--load-in-4bit"],
   ["openbmb/MiniCPM-V-2_6", "-A", "flash_attention_2", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-Llama3-V-2_5", "-A", "flash_attention_2", "--device-map", "cuda:0", "--load-in-4bit"],

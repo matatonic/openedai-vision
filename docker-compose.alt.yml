@@ -1,17 +1,14 @@
 services:
-  server:
+  openedai-vision-alt:
     build:
       args:
         - VERSION=alt
       dockerfile: Dockerfile
-    tty: true
+    container_name: openedai-vision-alt
     image: ghcr.io/matatonic/openedai-vision-alt
     env_file: vision-alt.env # your settings go here
     volumes:
       - ./hf_home:/app/hf_home  # for Hugginface model cache
-    # be sure to review and run prepare_minigemini.sh before starting a mini-gemini model
-      - ./model_zoo:/app/model_zoo # for MiniGemini
-      - ./YanweiLi:/app/YanweiLi # for MiniGemini
       - ./model_conf_tests.alt.json:/app/model_conf_tests.json
     ports:
       - 5006:5006

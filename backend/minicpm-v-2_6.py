@@ -5,6 +5,7 @@ from PIL import Image
 from decord import VideoReader, cpu
 
 # openbmb/MiniCPM-V-2_6
+# openbmb/MiniCPM-V-2_6-int4
 
 MAX_NUM_FRAMES=64 # if cuda OOM set a smaller number
 
@@ -36,8 +37,9 @@ class VisionQnA(VisionQnABase):
         self.model = AutoModel.from_pretrained(**self.params).eval()
 
         # bitsandbytes already moves the model to the device, so we don't need to do it again.
-        if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
-            self.model = self.model.to(dtype=self.params['torch_dtype'], device=self.device)
+        if '-int4' not in model_id:
+            if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
+                self.model = self.model.to(dtype=self.params['torch_dtype'], device=self.device)
     
         self.loaded_banner()
     
