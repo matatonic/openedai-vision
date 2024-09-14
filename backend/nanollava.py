@@ -11,14 +11,6 @@ warnings.filterwarnings('ignore')
 # qnguyen3/nanoLLaVA
 # qnguyen3/nanoLLaVA-1.5
 
-def join_int_lists(int_lists, separator):
-    result = []
-    for i, lst in enumerate(int_lists):
-        result.extend(lst)
-        if i < len(int_lists) - 1:
-            result.append(separator)
-    return result
-
 class VisionQnA(VisionQnABase):
     model_name: str = "nanollava"
     format: str = "chatml"

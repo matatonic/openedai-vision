@@ -166,6 +166,13 @@ def threaded_streaming_generator(generate, tokenizer, generation_kwargs):
     if not exq.empty():
         raise exq.get_nowait()
 
+def join_int_lists(int_lists, separator):
+    result = []
+    for i, lst in enumerate(int_lists):
+        result.extend(lst)
+        if i < len(int_lists) - 1:
+            result.extend([separator])
+    return result
 
 async def url_to_image(img_url: str) -> Image.Image:
     if img_url.startswith('http'):
@@ -757,7 +764,7 @@ def guess_model_format(model_name: str) -> str:
         'gemma': ['gemma', '-2b'],
         'glm4v': ['glm-4v'],
         'llama2': ['bakllava', '8x7b', 'mistral', 'mixtral'],
-        'llama3': ['llama-3-vision', '360vl'],
+        'llama3': ['llama-3-vision', '360vl', 'llama3'],
         'phi15': ['moondream1', 'moondream2', 'monkey'],
         'phi3': ['phi3', 'phi-3'],
         'phintern': ['internvl-chat-4b', 'opengvlab/internvl2-4b'],
@@ -805,6 +812,9 @@ def guess_backend(model_name: str) -> str:
     
     if 'mgm-' in model_id or 'minigemini' in model_id or 'mini-gemini' in model_id:
         return 'minigemini'
+
+    if 'ovis' in model_id:
+        return 'ovis'
 
     if 'deepseek' in model_id:
         return 'deepseek-vl'
@@ -893,3 +903,6 @@ def guess_backend(model_name: str) -> str:
     
     if 'pixtral' in model_id:
         return 'pixtral'
+    
+    if 'omchat' in model_id:
+        return 'omchat'
