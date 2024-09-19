@@ -118,11 +118,12 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (wont gpu split)
 - [X] [Qwen](https://huggingface.co/Qwen/)
-- - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
-- - [X] [wen2-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct)
+- - [X] [Qwen2-VL-72B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct-AWQ)
+- - [X] [Qwen2-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct)
 - - [X] [Qwen2-VL-7B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct-AWQ)
 - - [X] [Qwen2-VL-2B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-2B-Instruct)
 - - [X] [Qwen2-VL-2B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-2B-Instruct-AWQ)
+- - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
 - [X] [vikhyatk](https://huggingface.co/vikhyatk)
 - - [X] [moondream2](https://huggingface.co/vikhyatk/moondream2)
 - - [X] [moondream1](https://huggingface.co/vikhyatk/moondream1) (0.28.1-alt only)
@@ -142,7 +143,6 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
-
 
 Version 0.32.0
 
@@ -493,3 +493,4 @@ In /etc/docker/daemon.json:
 }
 ```
 - In Windows, be sure you have WSL2 installed and docker is configured to use it. Also make sure your nvidia drivers are up to date.
+

@@ -36,7 +36,6 @@ class VisionQnA(VisionQnABase):
         inputs = self.processor(prompt, images=images, return_tensors="pt").to(self.model.device)
 
         default_params = dict(
-            max_new_tokens=256,
             do_sample=False,
             eos_token_id=self.eos_token_id,
             pad_token_id=self.processor.tokenizer.pad_token_id,

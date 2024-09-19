@@ -47,6 +47,7 @@
   ["Qwen/Qwen2-VL-2B-Instruct", "-A", "flash_attention_2"],
   ["Qwen/Qwen2-VL-7B-Instruct-AWQ", "-A", "flash_attention_2"],
   ["Qwen/Qwen2-VL-7B-Instruct", "-A", "flash_attention_2"],
+  ["Qwen/Qwen2-VL-72B-Instruct-AWQ", "-A", "flash_attention_2"],
   ["Salesforce/xgen-mm-phi3-mini-instruct-dpo-r-v1.5"],
   ["Salesforce/xgen-mm-phi3-mini-instruct-interleave-r-v1.5"],
   ["Salesforce/xgen-mm-phi3-mini-instruct-singleimg-r-v1.5"],
