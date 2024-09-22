@@ -8,6 +8,7 @@ from vision_qna import *
 # Qwen/Qwen2-VL-2B-Instruct
 # Qwen/Qwen2-VL-7B-Instruct-AWQ
 # Qwen/Qwen2-VL-7B-Instruct
+# Qwen/Qwen2-VL-72B-Instruct-AWQ
 # X Qwen/Qwen2-VL-2B-Instruct-GPTQ-Int4
 # X Qwen/Qwen2-VL-2B-Instruct-GPTQ-Int8
 # X Qwen/Qwen2-VL-7B-Instruct-GPTQ-Int4
@@ -50,8 +51,8 @@ class VisionQnA(VisionQnABase):
                     elif c.type == 'video': # not likely to work.
                         msg['content'].extend([{'type': c.type, 'video': c.image_url.url}])
             else:
-                #msg = { 'role': m.role, 'content': [{ 'type': 'text', 'text': c.text }] }
-                msg = { 'role': m.role, 'content': c.text }
+                ctext = "".join([c.text for c in m.content]) # fix for multiple system prompt contents #19
+                msg = { 'role': m.role, 'content': [{ 'type': 'text', 'text': ctext }] }
 
             messages.extend([msg])
 

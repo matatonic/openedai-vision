@@ -97,6 +97,8 @@
   ["microsoft/Phi-3.5-vision-instruct", "-A", "flash_attention_2", "--load-in-4bit"],
   ["microsoft/Phi-3.5-vision-instruct", "-A", "flash_attention_2"],
   ["mistralai/Pixtral-12B-2409"],
+  ["mx262/MiniMonkey", "-A", "flash_attention_2", "--load-in-4bit"],
+  ["mx262/MiniMonkey", "-A", "flash_attention_2"],
   ["omlab/omchat-v2.0-13B-single-beta_hf", "-A", "flash_attention_2"],
   ["openbmb/MiniCPM-V-2_6-int4", "-A", "flash_attention_2", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V-2_6", "-A", "flash_attention_2", "--device-map", "cuda:0", "--load-in-4bit"],

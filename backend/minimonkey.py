@@ -1,10 +1,17 @@
-
-import numpy as np
-import torch
 import torchvision.transforms as T
-from PIL import Image
+import transformers
 from torchvision.transforms.functional import InterpolationMode
 from transformers import AutoModel, AutoTokenizer
+
+transformers.logging.set_verbosity_error()
+
+from vision_qna import *
+
+# mx262/MiniMonkey
+
+IMG_START_TOKEN='<img>'
+IMG_END_TOKEN='</img>'
+IMG_CONTEXT_TOKEN='<IMG_CONTEXT>'
 
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
@@ -131,17 +138,10 @@ def load_image2(image, input_size=448, min_num=1, max_num=12, target_aspect_rati
     pixel_values = torch.stack(pixel_values)
     return pixel_values
 
-
-from vision_qna import *
-
-# mx262/MiniMonkey
-import transformers
-transformers.logging.set_verbosity_error()
-
 class VisionQnA(VisionQnABase):
     model_name: str = "minimonkey"
-    format: str = '' # phi15-ish
-    #vision_layers: List[str] = ["vision", "vision_tower", "resampler", "visual", "in_proj","out_proj","c_fc","c_proj"]
+    format: str = 'chatml'
+    vision_layers: List[str] = ["vision_model"]
 
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
@@ -149,26 +149,56 @@ class VisionQnA(VisionQnABase):
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModel.from_pretrained(**self.params).eval()
 
+        self.model.img_context_token_id = self.tokenizer.convert_tokens_to_ids(IMG_CONTEXT_TOKEN)
+        self.eos_token = '<|im_end|>'
+        self.eos_token_id = self.tokenizer.convert_tokens_to_ids(self.eos_token)
+
+        # bitsandbytes already moves the model to the device, so we don't need to do it again.
+        if not (extra_params.get('load_in_4bit', False) or extra_params.get('load_in_8bit', False)):
+            self.model = self.model.to(self.device)
+
         self.loaded_banner()
 
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
-        query, history, images, system_message = await prompt_history_images_system_from_messages(
-            request.messages, img_tok='', url_handler=url_to_image)
+        images, prompt = await prompt_from_messages(request.messages, self.format)
 
-        # set the max number of tiles in `max_num`
-        pixel_values, target_aspect_ratio = load_image(images[0], min_num=4, max_num=12)
-        pixel_values = pixel_values.to(torch.bfloat16).to(self.model.device)
-        pixel_values2 = load_image2(images[0], min_num=3, max_num=7, target_aspect_ratio=target_aspect_ratio)
-        pixel_values2 = pixel_values2.to(torch.bfloat16).to(self.model.device)
-        pixel_values = torch.cat([pixel_values2[:-1], pixel_values[:-1], pixel_values2[-1:]], 0)
+        if len(images) > 0:
+            # set the max number of tiles in `max_num`, XXX make an option
+            pixel_values, target_aspect_ratio = load_image(images[-1], min_num=4, max_num=12)
+            pixel_values2 = load_image2(images[-1], min_num=3, max_num=7, target_aspect_ratio=target_aspect_ratio)
+            pixel_values = torch.cat([pixel_values2[:-1], pixel_values[:-1], pixel_values2[-1:]], 0).to(dtype=self.dtype, device=self.model.device)
 
-        generation_config = dict(do_sample=False, max_new_tokens=512)
+            for num_patches in [pixel_values.shape[0]]:
+                image_tokens = IMG_START_TOKEN + IMG_CONTEXT_TOKEN * self.model.num_image_token * num_patches + IMG_END_TOKEN
+                prompt = prompt.replace('<image>', image_tokens, 1)
 
-        answer, history = self.model.chat(self.tokenizer, pixel_values, target_aspect_ratio, query, generation_config, history=None, return_history=True)
+        else:
+            pixel_values = None
+            target_aspect_ratio = None
 
-        if isinstance(answer, str):
-            answer = [answer]
+        model_inputs = self.tokenizer(prompt, return_tensors='pt')
+        input_ids = model_inputs['input_ids'].to(self.device)
+        attention_mask = model_inputs['attention_mask'].to(self.device)
 
-        for new_text in answer:
-            if isinstance(new_text, str):
-                yield new_text
+        inputs = dict(
+            input_ids=input_ids,
+            pixel_values=pixel_values,
+            attention_mask=attention_mask,
+            target_aspect_ratio=target_aspect_ratio,
+        )
+
+        default_params = dict(
+            do_sample=False,
+            eos_token_id=[self.eos_token_id, self.tokenizer.eos_token_id]
+        )
+        params = self.get_generation_params(request, default_params=default_params)
+
+        del params['use_cache']
+
+        generation_kwargs = dict(
+            **inputs,
+            **params,
+        )
+
+        for new_text in threaded_streaming_generator(generate=self.model.generate, tokenizer=self.tokenizer, generation_kwargs=generation_kwargs):
+            yield new_text

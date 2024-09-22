@@ -70,6 +70,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [Florence-2-base-ft](https://huggingface.co/microsoft/Florence-2-base-ft)  (wont gpu split)
 - [X] [Mistral AI](https://huggingface.co/mistralai)
 - - [X] [Pixtral-12B](https://huggingface.co/mistralai/Pixtral-12B-2409)
+- [X] [mx262/MiniMonkey](https://huggingface.co/mx262/MiniMonkey)
 - [X] [omlab/omchat-v2.0-13B-single-beta_hf](https://huggingface.co/omlab/omchat-v2.0-13B-single-beta_hf)
 - [X] [openbmb](https://huggingface.co/openbmb)
 - - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
@@ -143,6 +144,11 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.33.0
+
+- new model support: mx262/MiniMonkey, thanks [@white2018](https://github.com/white2018)
+- Fix qwen2-vl when used with qwen-agent and multiple system prompts (tools), thanks [@cedonley](https://github.com/cedonley)
 
 Version 0.32.0
 
