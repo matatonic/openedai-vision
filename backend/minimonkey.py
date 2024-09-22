@@ -134,7 +134,7 @@ def load_image2(image, input_size=448, min_num=1, max_num=12, target_aspect_rati
 
 from vision_qna import *
 
-# mx262/MiniMonkey
+# mx262/MiniMokney
 import transformers
 transformers.logging.set_verbosity_error()
 
