@@ -45,7 +45,7 @@ class VisionQnABase:
     format: str = None
     revision: str = 'main'
     vision_layers: List[str] = [] # "vision_model", "resampler", "vision", "vision_tower"]
-    
+
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         self._model_id = model_id
 
@@ -127,7 +127,7 @@ class VisionQnABase:
 
         if request.max_tokens:
             params["max_new_tokens"] = request.max_tokens
-        
+
         if request.temperature is not None:
             if request.temperature > 0:
                 params["do_sample"] = True
@@ -286,7 +286,7 @@ async def vicuna0_prompt_from_messages(messages: list[Message], img_tok = "<imag
                     has_image = True
                 if c.type == 'text':
                     text = c.text
-            
+
             img_tag = img_tok if has_image else ''
             prompt += f"### Human: {img_tag}{text}\n"
         elif m.role == 'assistant':
@@ -323,7 +323,7 @@ async def vicuna_prompt_from_messages(messages: list[Message], img_tok = "<image
                     has_image = True
                 if c.type == 'text':
                     text = c.text
-            
+
             img_tag = img_tok if has_image else ''
             prompt += f"USER: {img_tag}{text}\n"
         elif m.role == 'assistant':
@@ -379,18 +379,18 @@ async def llama3_prompt_from_messages(messages: list[Message], img_tok = "<image
 
     for m in messages:
         has_image = False
-        
+
         for c in m.content:
             if c.type == 'image_url':
                 images.extend([ await url_to_image(c.image_url.url) ])
                 has_image = True
-        
+
         img_tag = img_tok if has_image else ''
 
         for c in m.content:
             if c.type == 'text':
                 prompt += f"<|start_header_id|>{m.role}<|end_header_id|>\n\n{img_tag}{c.text.strip()}<|eot_id|>"
-    
+
     prompt += generation_msg
 
     return images, prompt
@@ -515,7 +515,7 @@ async def emu_images_prompt_system_from_messages(messages: list[Message], img_to
                     has_image = True
                 if c.type == 'text':
                     text = c.text
-            
+
             img_tag = img_tok if has_image else ''
             prompt += f" [USER]: {img_tag}{text}"
         elif m.role == 'assistant':
@@ -544,17 +544,17 @@ async def phi3_prompt_from_messages(messages: list[Message], img_tok = "<image>\
 
     for m in messages:
         img_tag = ''
-        
+
         for c in m.content:
             if c.type == 'image_url':
                 images.extend([ await url_to_image(c.image_url.url) ])
                 img_tag += img_tok.format(n)
                 n += 1
-        
+
         for c in m.content:
             if c.type == 'text':
                 prompt += f"<|{m.role}|>\n{img_tag}{c.text}<|end|>\n"
-    
+
     prompt += generation_msg
 
     return images, prompt
@@ -611,7 +611,7 @@ async def falcon_prompt_from_messages(messages: list[Message], img_tok = "<image
                     has_image = True
                 if c.type == 'text':
                     text = c.text
-            
+
             img_tag = img_tok if has_image else ''
             prompt += f"User:{img_tag}{text} "
         elif m.role == 'assistant':
@@ -671,16 +671,16 @@ async def glm4v_prompt_from_messages(messages: list[Message], img_tok = "<|begin
         metadata = '' # not used
 
         # TODO: handle tool role and build system prompt?
-        
+
         for c in m.content:
             if c.type == 'image_url':
                 images.extend([ await url_handler(c.image_url.url) ])
                 img_tag += img_tok
-        
+
         for c in m.content:
             if c.type == 'text':
                 prompt += f"<|{m.role}|>{metadata}\n{img_tag}{c.text}"
-    
+
     prompt += generation_msg
 
     return images, prompt
@@ -750,7 +750,7 @@ async def prompt_from_messages(messages: list[Message], format: str) -> str:
 
     if format not in known_formats:
         raise ValueError(f"Unknown format: {format}")
-    
+
     return await known_formats[format](messages)
 
 def guess_model_format(model_name: str) -> str:
@@ -800,16 +800,19 @@ def guess_backend(model_name: str) -> str:
 
     if 'qwen' in model_id:
         return 'qwen-vl'
-    
+
     if 'moondream1' in model_id:
         return 'moondream1'
-    
+
     if 'moondream2' in model_id:
         return 'moondream2'
 
+    if 'minimonkey' in model_id:
+        return 'minimonkey'
+
     if 'monkey' in model_id:
         return 'monkey'
-    
+
     if 'mgm-' in model_id or 'minigemini' in model_id or 'mini-gemini' in model_id:
         return 'minigemini'
 
@@ -833,10 +836,10 @@ def guess_backend(model_name: str) -> str:
 
     if 'xcomposer2-4khd' in model_id:
         return 'xcomposer2-4khd'
-        
+
     if 'xcomposer2-vl' in model_id:
         return 'xcomposer2-vl'
-    
+
     if 'xcomposer2' in model_id:
         return 'xcomposer2'
 
@@ -848,61 +851,61 @@ def guess_backend(model_name: str) -> str:
 
     if 'cogagent-' in model_id or 'cogvlm-' in model_id:
         return 'cogvlm'
-    
+
     if 'glm-4v' in model_id:
         return 'glm-4v'
 
     if 'fuyu' in model_id:
         return 'fuyu'
-    
+
     if 'florence' in model_id:
         return 'florence'
-    
+
     if 'internvl-chat' in model_id and '-v1-5' in model_id:
         return 'internvl-chat-v1-5'
-    
+
     if 'internvl2-' in model_id:
         return 'internvl-chat-v1-5'
 
     if 'idefics2' in model_id:
         return 'idefics2'
-    
+
     if 'llama-3-vision-alpha' in model_id:
         return 'llama3vision'
-    
+
     if 'bunny' in model_id:
         return 'bunny'
-    
+
     if 'mantis' in model_id:
         return 'mantis'
-    
+
     if 'emu' in model_id:
         return 'emu'
-    
+
     if '360vl' in model_id:
         return '360vl'
-    
+
     # before phi3
     if 'xgen-mm' in model_id:
         return 'xgen-mm'
 
     if "phi-3" in model_id:
         return 'phi3'
-    
+
     if 'falcon' in model_id:
         return 'llavanext'
-    
+
     if 'dragonfly' in model_id:
         return 'dragonfly'
-    
+
     if 'dolphin-vision' in model_id:
         return 'dv-qwen'
-    
+
     if 'fancyfeast/joy-caption-pre-alpha' in model_id:
         return 'joy-caption-pre-alpha'
-    
+
     if 'pixtral' in model_id:
         return 'pixtral'
-    
+
     if 'omchat' in model_id:
         return 'omchat'
