@@ -1,4 +1,10 @@
 [
+  ["HuggingFaceM4/idefics2-8b", "-A", "flash_attention_2", "--device-map", "cuda:0", "--load-in-4bit"],
+  ["HuggingFaceM4/idefics2-8b", "-A", "flash_attention_2", "--device-map", "cuda:0"],
+  ["HuggingFaceM4/idefics2-8b-AWQ", "-A", "flash_attention_2", "--device-map", "cuda:0"],
+  ["HuggingFaceM4/idefics2-8b-chatty", "-A", "flash_attention_2", "--device-map", "cuda:0", "--load-in-4bit"],
+  ["HuggingFaceM4/idefics2-8b-chatty", "-A", "flash_attention_2", "--device-map", "cuda:0"],
+  ["HuggingFaceM4/idefics2-8b-chatty-AWQ", "-A", "flash_attention_2", "--device-map", "cuda:0"],
   ["OpenGVLab/InternVL2-4B", "--device-map", "cuda:0", "--load-in-4bit"],
   ["OpenGVLab/InternVL2-4B", "--device-map", "cuda:0"],
   ["OpenGVLab/Mini-InternVL-Chat-4B-V1-5", "--max-tiles", "40", "--load-in-4bit"],

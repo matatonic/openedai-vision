@@ -1,5 +1,6 @@
 accelerate
 auto_gptq
+autoawq
 bitsandbytes
 fastapi
 # See: https://github.com/bdashore3/flash-attention/releases for other windows flash_attn releases
@@ -54,4 +55,4 @@ git+https://github.com/LLaVA-VL/LLaVA-NeXT.git
 
 # mistral
 mistral_inference>=1.4.0
-mistral_common>=1.4.0
+mistral_common[opencv]>=1.4.3

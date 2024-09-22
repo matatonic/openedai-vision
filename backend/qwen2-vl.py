@@ -25,6 +25,10 @@ class VisionQnA(VisionQnABase):
         self.processor = AutoProcessor.from_pretrained(model_id)
         
         del self.params['trust_remote_code']
+
+        if model_id == 'Qwen/Qwen2-VL-7B-Instruct-AWQ':
+            self.params['revision'] = '9d72ae62396aaa1817b006e07ddbbd121024f50d' # re: https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct-AWQ/discussions/4
+
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(**self.params).eval()
 
         self.loaded_banner()

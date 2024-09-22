@@ -38,10 +38,10 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - [X] [fancyfeast/joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [HuggingFaceM4/idefics2](https://huggingface.co/HuggingFaceM4) 
-- - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (wont gpu split)
-- - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (wont gpu split)
-- - [X] [idefics2-8b-chatty](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty) (wont gpu split)
-- - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (wont gpu split)
+- - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (wont gpu split, alternate docker only)
+- - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (wont gpu split, alternate docker only)
+- - [X] [idefics2-8b-chatty](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty) (wont gpu split, alternate docker only)
+- - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (wont gpu split, alternate docker only)
 - [X] [InternLM](https://huggingface.co/internlm/)
 - - [X] [XComposer2-2d5-7b](https://huggingface.co/internlm/internlm-xcomposer2d5-7b) (wont gpu split)
 - - [X] [XComposer2-4KHD-7b](https://huggingface.co/internlm/internlm-xcomposer2-4khd-7b) (wont gpu split)
@@ -148,7 +148,9 @@ If you can't find your favorite model, you can [open a new issue](https://github
 Version 0.33.0
 
 - new model support: mx262/MiniMonkey, thanks [@white2018](https://github.com/white2018)
-- Fix qwen2-vl when used with qwen-agent and multiple system prompts (tools), thanks [@cedonley](https://github.com/cedonley)
+- Fix Qwen2-VL when used with Qwen-Agent and multiple system prompts (tools), thanks [@cedonley](https://github.com/cedonley)
+- idefics2-8b support moved to alt image
+- pin Qwen2-VL-7B-Instruct-AWQ revision, [see note for info](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct-AWQ/discussions/4)
 
 Version 0.32.0
 
@@ -359,7 +361,7 @@ docker compose -f docker-compose.alt.yml pull
 python -m venv .venv
 source .venv/bin/activate
 # install the python dependencies
-pip install -U -r requirements.txt "git+https://github.com/huggingface/transformers" "autoawq>=0.2.5"
+pip install -U -r requirements.txt "git+https://github.com/huggingface/transformers"
 # OR install the python dependencies for the alt version
 pip install -U -r requirements.txt "transformers==4.41.2"
 # run the server with your chosen model
@@ -484,19 +486,6 @@ CUDA_VISIBLE_DEVICES=1,0 python vision.py -m llava-hf/llava-v1.6-34b-hf --device
 
 You can also use the environment variable: `OPENEDAI_DEVICE_MAP="sequential"` to specify the `--device-map` argument.
 
-4. "My Nvidia GPU isn't detected when using docker."
-- On Linux, you may need to specify the default runtime for your container environment (and perhaps install the nvidia-container-runtime), like so:
-In /etc/docker/daemon.json:
-```json
-{
-    "runtimes": {
-        "nvidia": {
-            "path": "nvidia-container-runtime",
-            "runtimeArgs": []
-        }
-    },
-    "default-runtime": "nvidia"
-}
-```
-- In Windows, be sure you have WSL2 installed and docker is configured to use it. Also make sure your nvidia drivers are up to date.
-
+4. "My Nvidia GPU isn't detected when using docker.", using Nvidia CUDA with docker.
+- Linux: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+- Windows: Use WSL2 with docker and nvidia drivers: https://docs.nvidia.com/cuda/wsl-user-guide/index.html

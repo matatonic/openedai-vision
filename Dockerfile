@@ -10,7 +10,7 @@ RUN git clone https://github.com/togethercomputer/Dragonfly --single-branch /app
 
 COPY requirements.txt .
 ARG VERSION=latest
-RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "git+https://github.com/huggingface/transformers\nautoawq>=0.2.5" >> requirements.txt ; fi
+RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "git+https://github.com/huggingface/transformers" >> requirements.txt ; fi
 # TODO: nvidia apex wheel
 RUN --mount=type=cache,target=/root/.cache/pip pip install -U -r requirements.txt
 
