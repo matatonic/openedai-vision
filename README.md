@@ -14,9 +14,14 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 <details>
 <summary>Full list of supported models</summary>
 
-- [X] [AIDC-AI]()
+- [X] [AIDC-AI](https://huggingface.co/AIDC-AI)
 - - [X] [Ovis1.5-Gemma2-9B](https://huggingface.co/AIDC-AI/Ovis1.5-Gemma2-9B)
 - - [X] [Ovis1.5-Llama3-8B](https://huggingface.co/AIDC-AI/Ovis1.5-Llama3-8B)
+- [X] [Ai2](https://huggingface.co/allenai)
+- - [X] [Molmo-72B-0924](https://huggingface.co/allenai/Molmo-72B-0924)
+- - [X] [Molmo-7B-O-0924](https://huggingface.co/allenai/Molmo-7B-O-0924)
+- - [X] [Molmo-7B-D-0924](https://huggingface.co/allenai/Molmo-7B-D-0924)
+- - [X] [MolmoE-1B-0924](https://huggingface.co/allenai/MolmoE-1B-0924)
 - [X] [BAAI](https://huggingface.co/BAAI/)
 - - [X] [BAAI/Bunny-v1_0-2B-zh](https://huggingface.co/BAAI/Bunny-v1_0-2B-zh)
 - - [X] [BAAI/Bunny-v1_0-3B-zh](https://huggingface.co/BAAI/Bunny-v1_0-3B-zh)
@@ -63,6 +68,9 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [llava-v1.5-vicuna-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-7b-hf)
 - - [X] [llava-v1.5-vicuna-13b-hf](https://huggingface.co/llava-hf/llava-v1.5-vicuna-13b-hf)
 - - [ ] [llava-v1.5-bakLlava-7b-hf](https://huggingface.co/llava-hf/llava-v1.5-bakLlava-7b-hf) (currently errors)
+- [X] [Meta Llama](https://huggingface.co/meta-llama)
+- - [X] [Llama-3.2-90B-Vision-Instruct](https://huggingface.co/meta-llama/Llama-3.2-90B-Vision-Instruct)
+- - [X] [Llama-3.2-11B-Vision-Instruct](https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct)
 - [X] [Microsoft](https://huggingface.co/microsoft/)
 - - [X] [Phi-3.5-vision-instruct](https://huggingface.co/microsoft/Phi-3.5-vision-instruct)
 - - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct)
@@ -125,6 +133,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [Qwen2-VL-2B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-2B-Instruct)
 - - [X] [Qwen2-VL-2B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-2B-Instruct-AWQ)
 - - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
+- [X] [stepfun-ai/GOT-OCR2_0](https://huggingface.co/stepfun-ai/GOT-OCR2_0) (ocr only model)
 - [X] [vikhyatk](https://huggingface.co/vikhyatk)
 - - [X] [moondream2](https://huggingface.co/vikhyatk/moondream2)
 - - [X] [moondream1](https://huggingface.co/vikhyatk/moondream1) (0.28.1-alt only)
@@ -144,6 +153,13 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.34.0
+
+- new model support: Meta-llama: Llama-3.2-11B-Vision-Instruct, Llama-3.2-90B-Vision-Instruct
+- new model support: Ai2/allenai Molmo family of models (requires additional `pip install tensorflow-cpu` for now, [see note](https://huggingface.co/allenai/Molmo-7B-D-0924/blob/main/image_preprocessing_molmo.py#L88-L90))
+- new model support: stepfun-ai/GOT-OCR2_0, this is an OCR only model, all chat is ignored.
+- Support moved to alt image: Bunny-Llama-3-8B-V, Bunny-v1_1-Llama-3-8B-V, Mantis-8B-clip-llama3, Mantis-8B-siglip-llama3, omchat-v2.0-13B-single-beta_hf, qihoo360/360VL-8B
 
 Version 0.33.0
 
@@ -361,7 +377,7 @@ docker compose -f docker-compose.alt.yml pull
 python -m venv .venv
 source .venv/bin/activate
 # install the python dependencies
-pip install -U -r requirements.txt "git+https://github.com/huggingface/transformers"
+pip install -U -r requirements.txt "transformers>=4.45.0"
 # OR install the python dependencies for the alt version
 pip install -U -r requirements.txt "transformers==4.41.2"
 # run the server with your chosen model

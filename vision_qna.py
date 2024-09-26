@@ -700,6 +700,58 @@ async def florence_prompt_from_messages(messages: list[Message], url_handler = u
 
     return images, prompt
 
+async def pixtral_prompt_from_messages(messages: list[Message], img_tok = "[IMG]", url_handler = url_to_image):
+    prompt = '<s>'
+    images = []
+
+    system_prompt = None
+    generation_msg = ''
+    last_message = ''
+
+    if messages and messages[-1].role == 'assistant':
+        generation_msg += messages[-1].content[0].text
+        messages.pop(-1)
+
+    if messages and messages[-1].role == 'user':
+        last_message = messages[-1].content[0].text
+        messages.pop(-1)
+
+    for m in messages:
+        if m.role == 'user':
+            text = ''
+            has_image = False
+
+            for c in m.content:
+                if c.type == 'image_url':
+                    images.extend([ await url_to_image(c.image_url.url) ])
+                    has_image = True
+                if c.type == 'text':
+                    text = c.text
+
+            img_tag = img_tok if has_image else ''
+            prompt += f"[INST] {text}{img_tag} [/INST]"
+        elif m.role == 'assistant':
+            for c in m.content:
+                if c.type == 'text':
+                    prompt += f" {c.text}"
+        elif m.role == 'system':
+            for c in m.content:
+                if c.type == 'text':
+                    system_prompt += c.text
+#        elif m.role == 'tool':
+#            ...
+
+    if system_prompt:
+        last_message = system_prompt + '\n\n' + last_message
+
+    last_message = "[INST] " + last_message + " [/INST]"
+    if generation_msg:
+        last_message += generation_msg
+
+    prompt += generation_msg
+
+    return images, prompt
+
 async def pixtral_messages(messages: list[Message]):
     pix_messages = []
 
@@ -744,6 +796,7 @@ async def prompt_from_messages(messages: list[Message], format: str) -> str:
         'phi15': phi15_prompt_from_messages,
         'phi3': phi3_prompt_from_messages,
         'phintern': phintern_prompt_from_messages,
+        'pixtral': pixtral_prompt_from_messages,
         'vicuna': vicuna_prompt_from_messages,
         'vicuna0': vicuna0_prompt_from_messages,
     }
@@ -768,6 +821,7 @@ def guess_model_format(model_name: str) -> str:
         'phi15': ['moondream1', 'moondream2', 'monkey'],
         'phi3': ['phi3', 'phi-3'],
         'phintern': ['internvl-chat-4b', 'opengvlab/internvl2-4b'],
+        'pixtral': ['pixtral'],
         'vicuna': ['vicuna', '13b'],
         'vicuna0': ['yi-vl'],
     }
@@ -785,6 +839,9 @@ def guess_model_format(model_name: str) -> str:
 def guess_backend(model_name: str) -> str:
     model_id = model_name.lower()
 
+    if 'llama-3.2' in model_id: # and vision 
+        return 'mllama'
+
     if 'nanollava' in model_id:
         return 'nanollava'
 
@@ -800,6 +857,9 @@ def guess_backend(model_name: str) -> str:
 
     if 'qwen' in model_id:
         return 'qwen-vl'
+
+    if 'molmo' in model_id:
+        return 'molmo'
 
     if 'moondream1' in model_id:
         return 'moondream1'
@@ -904,8 +964,14 @@ def guess_backend(model_name: str) -> str:
     if 'fancyfeast/joy-caption-pre-alpha' in model_id:
         return 'joy-caption-pre-alpha'
 
+    if 'hf-internal-testing/pixtral-12b' in model_id:
+        return 'llava'
+
     if 'pixtral' in model_id:
         return 'pixtral'
 
     if 'omchat' in model_id:
         return 'omchat'
+
+    if 'got-ocr2' in model_id:
+        return 'got_ocr2'

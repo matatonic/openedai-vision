@@ -1,4 +1,4 @@
-from transformers import LlavaProcessor, LlavaForConditionalGeneration
+from transformers import AutoProcessor, LlavaForConditionalGeneration # was LlavaProcessor
 from vision_qna import *
 
 #
@@ -6,11 +6,12 @@ from vision_qna import *
 # llava-hf/llava-1.5-7b-hf # vicuna
 # llava-hf/llava-1.5-13b-hf # vicuna
 # Doesn't support execution without images
+# "hf-internal-testing/pixtral-12b" soon?
 
 class VisionQnA(VisionQnABase):
     model_name: str = "llava"
     format: str = 'vicuna'
-    vision_layers: List[str] = ["vision_model", "vision_tower", "multi_modal_projector"]
+    vision_layers: List[str] = ["vision_model", "vision_tower", "multi_modal_projector", "vision_encoder", "vision_language_adapter"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
@@ -20,7 +21,7 @@ class VisionQnA(VisionQnABase):
 
         del self.params['trust_remote_code']
         
-        self.processor = LlavaProcessor.from_pretrained(model_id)
+        self.processor = AutoProcessor.from_pretrained(model_id)
         self.model = LlavaForConditionalGeneration.from_pretrained(**self.params)
 
         self.loaded_banner()
@@ -31,9 +32,12 @@ class VisionQnA(VisionQnABase):
 
         if len(images) < 1:
             images = [ await url_to_image(black_pixel_url) ]
-            prompt = "<image>\n" + prompt
+            if self.format == 'pixtral':
+                prompt = "[IMG]\n" + prompt
+            else:
+                prompt = "<image>\n" + prompt
 
-        inputs = self.processor(prompt, images, return_tensors="pt").to(self.device)
+        inputs = self.processor(images=images, text=prompt, return_tensors="pt").to(self.device)
 
         params = self.get_generation_params(request)
 

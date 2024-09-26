@@ -10,8 +10,7 @@ RUN git clone https://github.com/togethercomputer/Dragonfly --single-branch /app
 
 COPY requirements.txt .
 ARG VERSION=latest
-RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "git+https://github.com/huggingface/transformers" >> requirements.txt ; fi
-# TODO: nvidia apex wheel
+RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "transformers>=4.45.0" >> requirements.txt ; fi
 RUN --mount=type=cache,target=/root/.cache/pip pip install -U -r requirements.txt
 
 WORKDIR /app/Mantis
