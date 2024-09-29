@@ -315,7 +315,9 @@ if __name__ == '__main__':
 HF_HOME=hf_home
 HF_HUB_ENABLE_HF_TRANSFER=1
 #HF_TOKEN=hf-...
-#CUDA_VISIBLE_DEVICES=1,0""", file=results_file)
+#CUDA_VISIBLE_DEVICES=1,0
+#OPENEDAI_DEVICE_MAP="sequential"
+""", file=results_file)
 
         for r in all_results:
             cmdl = ' '.join(r['args'])

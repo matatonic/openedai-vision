@@ -6,19 +6,8 @@ from vision_qna import *
 # allenai/Molmo-7B-D-0924
 # allenai/Molmo-7B-O-0924
 # allenai/Molmo-72B-0924
-
-# XXX To use, pip install tensorflow-cpu
-# https://huggingface.co/allenai/Molmo-7B-D-0924/blob/main/image_preprocessing_molmo.py#L88-L90
-
-"""
-  ["allenai/MolmoE-1B-0924", "-A", "flash_attention_2", "--load-in-4bit"],
-  ["allenai/MolmoE-1B-0924", "-A", "flash_attention_2"],
-  ["allenai/Molmo-7B-D-0924", "-A", "flash_attention_2", "--load-in-4bit"],
-  ["allenai/Molmo-7B-D-0924", "-A", "flash_attention_2"],
-  ["allenai/Molmo-7B-O-0924", "-A", "flash_attention_2", "--load-in-4bit"],
-  ["allenai/Molmo-7B-O-0924", "-A", "flash_attention_2"],
-  ["allenai/Molmo-72B-0924", "--load-in-4bit"],
-"""
+# cyan2k/molmo-7B-D-bnb-4bit XXX needs tensorflow-cpu
+# cyan2k/molmo-7B-O-bnb-4bit XXX needs tensorflow-cpu
 
 class VisionQnA(VisionQnABase):
     model_name: str = "molmo"
@@ -28,7 +17,7 @@ class VisionQnA(VisionQnABase):
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
 
-        self.dtype = self.params['torch_dtype'] = 'auto' # torch.float32
+        #self.dtype = self.params['torch_dtype'] = 'auto' # torch.float32
 
         self.processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
@@ -68,7 +57,11 @@ class VisionQnA(VisionQnABase):
             generation_config=GenerationConfig(**params)
         )
 
-        for new_text in threaded_streaming_generator(generate=self.model.generate_from_batch, tokenizer=self.processor.tokenizer, generation_kwargs=generation_kwargs):
+        def wrapper(**kwargs):
+            with torch.amp.autocast('cuda', dtype=self.dtype):
+                _ = self.model.generate_from_batch(**kwargs)
+
+        for new_text in threaded_streaming_generator(generate=wrapper, tokenizer=self.processor.tokenizer, generation_kwargs=generation_kwargs):
             end = new_text.find(self.processor.tokenizer.eos_token)
             if end == -1:
                 yield new_text

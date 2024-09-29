@@ -1,17 +1,23 @@
-from transformers import AutoProcessor, AutoModel
+from transformers import AutoTokenizer, AutoModel, AutoImageProcessor, AutoModelForCausalLM
+from transformers.generation.configuration_utils import GenerationConfig
 
 from vision_qna import *
 
+# WIP
+
+# BAAI/Emu3-Gen
+# BAAI/Emu3-Chat
+
+VQ_HUB = "BAAI/Emu3-VisionTokenizer"
+
 class VisionQnA(VisionQnABase):
-    model_name: str = "generic"
-    format: str = "generic"
+    model_name: str = "emu3"
+    format: str = "emu3"
     visual_layers: List[str] = []
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
 
-        if not format:
-            self.format = guess_model_format(model_id)
         
         self.processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModel.from_pretrained(**self.params).eval()

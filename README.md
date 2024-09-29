@@ -154,6 +154,13 @@ If you can't find your favorite model, you can [open a new issue](https://github
 
 ## Recent updates
 
+Version 0.35.0
+
+- Update Molmo (tensorflow-cpu no longer required), and add autocast to faster, smaller types than float32.
+- Add `completion_tokens` counts for streamed results, other compatibility improvements
+- New option: `--use-double-quant` to enable double quantization with `--load-in-4bit`, a little slower for a little less VRAM.
+- Molmo 72B will now run in under 48GB of vram using `--load-in-4bit --use-double-quant`.
+
 Version 0.34.0
 
 - new model support: Meta-llama: Llama-3.2-11B-Vision-Instruct, Llama-3.2-90B-Vision-Instruct
@@ -377,7 +384,7 @@ docker compose -f docker-compose.alt.yml pull
 python -m venv .venv
 source .venv/bin/activate
 # install the python dependencies
-pip install -U -r requirements.txt "transformers>=4.45.0"
+pip install -U -r requirements.txt "transformers>=4.45.1"
 # OR install the python dependencies for the alt version
 pip install -U -r requirements.txt "transformers==4.41.2"
 # run the server with your chosen model

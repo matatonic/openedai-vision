@@ -41,9 +41,11 @@ async def vision_chat_completions(request: ImageChatRequest):
                 "object": "chat.completions.chunk",
                 "created": t_id,
                 "model": vision_qna.model_name,
+                #"system_fingerprint": "sk-ip",
                 "choices": [{
                     "index": 0,
                     "finish_reason": None,
+                    #"logprobs": None,
                     "delta": {'role': 'assistant', 'content': content},
                 }],
             }
@@ -53,10 +55,12 @@ async def vision_chat_completions(request: ImageChatRequest):
             yield {"data": json.dumps(chat_streaming_chunk(''))}
             logger.debug(f"sse_chunk: ['']")
 
-            # TODO: count tokens
+            completion_tokens = 0
+            prompt_tokens = 0 # XXX ignored.
             skip_first_space = True
             dat = ''
             async for resp in vision_qna.stream_chat_with_images(request):
+                completion_tokens += 1 # XXX wrong if fake streaming
                 if skip_first_space:
                     skip_first_space = False
                     if resp[:1] == ' ':
@@ -73,9 +77,12 @@ async def vision_chat_completions(request: ImageChatRequest):
             chunk = chat_streaming_chunk(dat)
             chunk['choices'][0]['finish_reason'] = "stop" # XXX
             chunk['usage'] = {
-                "prompt_tokens": 1, # XXX
-                "completion_tokens": 1, # XXX
-                "total_tokens": 1,  # XXX
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": completion_tokens + prompt_tokens,
+                "completion_tokens_details": {
+                    "reasoning_tokens": 0
+                }
             }
 
             yield {"data": json.dumps(chunk)}
@@ -126,6 +133,7 @@ def parse_args(argv=None):
     parser.add_argument('--max-memory', action='store', default=None, help="(emu2 only) Set the per cuda device_map max_memory. Ex. 0:22GiB,1:22GiB,cpu:128GiB")
     parser.add_argument('--no-trust-remote-code', action='store_true', help="Don't trust remote code (required for many models)")
     parser.add_argument('-4', '--load-in-4bit', action='store_true', help="load in 4bit (doesn't work with all models)")
+    parser.add_argument('--use-double-quant', action='store_true', help="Used with --load-in-4bit for an extra memory savings, a bit slower")
     parser.add_argument('-8', '--load-in-8bit', action='store_true', help="load in 8bit (doesn't work with all models)")
     parser.add_argument('-F', '--use-flash-attn', action='store_true', help="DEPRECATED: use --attn_implementation flash_attention_2 or -A flash_attention_2")
     parser.add_argument('-A', '--attn_implementation', default='sdpa', type=str, help="Set the attn_implementation", choices=['sdpa', 'eager', 'flash_attention_2'])
@@ -156,6 +164,8 @@ if __name__ == "__main__":
 
     if args.load_in_4bit:
         extra_params['load_in_4bit'] = True
+    if args.use_double_quant:
+        extra_params['4bit_use_double_quant'] = True
     if args.load_in_8bit:
         extra_params['load_in_8bit'] = True
     if args.max_tiles:

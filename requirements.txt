@@ -54,12 +54,8 @@ logger
 git+https://github.com/LLaVA-VL/LLaVA-NeXT.git
 
 # mistral
-mistral_inference>=1.4.0
-mistral_common[opencv]>=1.4.3
+mistral_inference
+mistral_common[opencv]
 
 # got-ocr2
 verovio
-
-# molmo... 1GB of dependencies? wait till it's removed.
-# https://huggingface.co/allenai/Molmo-7B-D-0924/blob/main/image_preprocessing_molmo.py#L88-L90
-#tensorflow-cpu

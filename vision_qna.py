@@ -7,7 +7,7 @@ from threading import Thread
 from datauri import DataURI
 from PIL import Image
 import torch
-from typing import Optional, List, Literal, AsyncGenerator, Union
+from typing import Optional, List, Literal, AsyncGenerator, Union, Any
 from pydantic import BaseModel
 from transformers import BitsAndBytesConfig, TextIteratorStreamer
 from loguru import logger
@@ -33,12 +33,30 @@ class Message(BaseModel):
     name: str = None
 
 class ImageChatRequest(BaseModel):
-    model: str # = "gpt-4-vision-preview"
     messages: List[Message]
-    max_tokens: int = 512
-    temperature: float = None
-    top_p: float = None
+    model: str # = "gpt-4-vision-preview"
+    frequency_penalty: float = 0.0
+    logit_bias: dict = None
+    logprobs: bool = False
+    top_logprobs: int = None
+    max_tokens: int = 512 # Deprecated
+    max_completion_tokens: int = 1024
+    n: int = 1
+    presence_penalty: float = 0.0
+    response_format: str = None
+    seed: int = None
+    service_tier: str = None
+    stop: Union[str,List[str]] = None
     stream: bool = False
+    stream_options: dict = None
+    temperature: float = None # 1.0
+    top_p: float = None # 1.0
+    tools: List[dict] = None
+    tool_choice: Union[str,dict] = None
+    parallel_tool_calls: bool = True
+    user: str = None
+    function_call: Union[str,dict] = None # deprecated
+    functions: List[dict] = None # deprecated
 
 class VisionQnABase:
     model_name: str = None
@@ -63,11 +81,13 @@ class VisionQnABase:
                 'quantization_config': BitsAndBytesConfig(
                     load_in_4bit=True,
                     bnb_4bit_quant_type='nf4',
-#                    bnb_4bit_use_double_quant=True, # XXX gone for now, make this an option
                     bnb_4bit_compute_dtype=self.dtype,
                     llm_int8_skip_modules=self.vision_layers,
                 )
             }
+            if extra_params.get('4bit_use_double_quant', False):
+                load_in_4bit_params['quantization_config'].bnb_4bit_use_double_quant = True
+
             self.params.update(load_in_4bit_params)
         elif extra_params.get('load_in_8bit', False):
             load_in_8bit_params = {
