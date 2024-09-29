@@ -55,12 +55,13 @@ async def vision_chat_completions(request: ImageChatRequest):
             yield {"data": json.dumps(chat_streaming_chunk(''))}
             logger.debug(f"sse_chunk: ['']")
 
+            tps_start = time.time()
             completion_tokens = 0
             prompt_tokens = 0 # XXX ignored.
             skip_first_space = True
             dat = ''
             async for resp in vision_qna.stream_chat_with_images(request):
-                completion_tokens += 1 # XXX wrong if fake streaming
+                completion_tokens += 1
                 if skip_first_space:
                     skip_first_space = False
                     if resp[:1] == ' ':
@@ -84,6 +85,8 @@ async def vision_chat_completions(request: ImageChatRequest):
                     "reasoning_tokens": 0
                 }
             }
+
+            logger.info(f"Generated {completion_tokens} tokens at {completion_tokens / (time.time() - tps_start):0.2f} T/s")
 
             yield {"data": json.dumps(chunk)}
             logger.debug(f"sse_chunk: {[dat]} + ['DONE']")

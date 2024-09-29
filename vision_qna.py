@@ -1,5 +1,6 @@
 import io
 import os
+import time
 import requests
 import tempfile
 import queue
@@ -131,7 +132,10 @@ class VisionQnABase:
 
     # implement one or both of the stream/chat_with_images functions
     async def chat_with_images(self, request: ImageChatRequest) -> str:
-        return ''.join([r async for r in self.stream_chat_with_images(request)])
+        tps_start = time.time()
+        resp = [r async for r in self.stream_chat_with_images(request)]
+        logger.info(f"Generated {len(resp)} tokens at {len(resp) / (time.time() - tps_start):0.2f} T/s")
+        return ''.join(resp)
 
     # implement one or both of the stream/chat_with_images functions
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:

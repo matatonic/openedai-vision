@@ -43,6 +43,8 @@ class VisionQnA(VisionQnABase):
             temperature= 0.35 if request.temperature is None else request.temperature,
         )
 
+        tps_start = time.time()
         out_tokens, _ = generate([tokenized.tokens], self.model, images=[tokenized.images], **generation_kwargs)
+        logger.info(f"Generated {len(out_tokens[0])} tokens at {len(out_tokens[0]) / (time.time() - tps_start):0.2f} T/s")
 
         return self.tokenizer.decode(out_tokens[0])

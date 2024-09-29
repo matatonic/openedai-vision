@@ -61,8 +61,12 @@ class VisionQnA(VisionQnABase):
 
         params = self.get_generation_params(request, default_params=default_params)
 
+
+        tps_start = time.time()
         output = self.model.generate(**inputs, **params)
-        response = self.processor.tokenizer.decode(output[0][inputs.input_ids.size(1):].cpu(), skip_special_tokens=True)
+        out_tokens = output[0][inputs.input_ids.size(1):].cpu()
+        logger.info(f"Generated {len(out_tokens)} tokens at {len(out_tokens) / (time.time() - tps_start):0.2f} T/s")
+        response = self.processor.tokenizer.decode(out_tokens, skip_special_tokens=True)
 
         return response
 

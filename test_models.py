@@ -114,12 +114,13 @@ def test(cmd_args: list[str]) -> int:
     t = time.time()
 
     try:
-        results = single_round()
+        results, timing = single_round()
     except Exception as e:
         traceback.print_exc()
         note = f'Test failed with Exception: {e}'
         print(f"{note}")
         results = [False]
+        timing = []
 
     t = time.time() - t
 
@@ -127,10 +128,17 @@ def test(cmd_args: list[str]) -> int:
 
     result = all(results)
     if not note:
-        note = f'{results.count(True)}/{len(results)} tests passed.'
+        note = f'{results.count(True)}/{len(results)} tests passed'
+        if timing:
+            tok_total, tim_total = 0, 0.0
+            for tok, tim in timing:
+                if tok > 1 and tim > 0:
+                    tok_total += tok
+                    tim_total += tim
+            if tim_total > 0.0:
+                note += f', {tok_total/tim_total:0.1f} T/s ({tok_total}/{tim_total:0.1f}s)'
 
     print(f"\n\n###\n\nTest complete.\nResult: {green_pass if result else red_fail}, time: {t:.1f}s")
-    
 
     record_result(cmd_args, results, t, mem, note)
 
@@ -176,7 +184,6 @@ if __name__ == '__main__':
         params['top_p'] = args.top_p
 
     def generate_response(image_url, prompt):
-
         messages = [{ "role": "system", "content": [{ 'type': 'text', 'text': args.system_prompt }] }] if args.system_prompt else []
         messages.extend([
             { "role": "user", "content": [
@@ -186,10 +193,10 @@ if __name__ == '__main__':
 
         response = client.chat.completions.create(model="gpt-4-vision-preview", messages=messages, **params)
         answer = response.choices[0].message.content
-        return answer
+        tok = response.usage.completion_tokens
+        return answer, tok
 
     def generate_stream_response(image_url, prompt):
-
         messages = [{ "role": "system", "content": [{ 'type': 'text', 'text': args.system_prompt }] }] if args.system_prompt else []
         messages.extend([
             { "role": "user", "content": [
@@ -199,50 +206,44 @@ if __name__ == '__main__':
 
         response = client.chat.completions.create(model="gpt-4-vision-preview", messages=messages, **params, stream=True)
         answer = ''
+        completion_tokens = 0
         for chunk in response:
             if chunk.choices[0].delta.content:
                 answer += chunk.choices[0].delta.content
+            if chunk.usage:
+                completion_tokens = chunk.usage.completion_tokens
             
-        return answer
+        return answer, completion_tokens
 
     def single_round():
         # XXX TODO: timeout
         results = []
         ### Single round
+        timing = []
+
+        def single_test(url, question, label, generator=generate_response):
+            tps_time = time.time()
+            answer, tok = generator(url, question)
+            tps_time = time.time() - tps_time
+            correct = name in answer.lower()
+            results.extend([correct])
+            if not correct:
+                print(f"{name}[{label}]: fail, got: {answer}")
+                #if args.abort_on_fail:
+                #    break
+            else:
+                print(f"{name}[{label}]: pass{', got: ' + answer if args.verbose else ''}")
+            if tok > 1:
+                timing.extend([(tok, tps_time)])
+
 
         # url tests
         for name, url in urls.items():
-            answer = generate_response(url, "What is the subject of the image?")
-            correct = name in answer.lower()
-            results.extend([correct])
-            if not correct:
-                print(f"{name}[url]: fail, got: {answer}")
-                if args.abort_on_fail:
-                    break
-            else:
-                print(f"{name}[url]: pass{', got: ' + answer if args.verbose else ''}")
+            single_test(url, "What is the subject of the image?", "url", generate_response)
 
             data_url = data_url_from_url(url)
-            answer = generate_response(data_url, "What is the subject of the image?")
-            correct = name in answer.lower()
-            results.extend([correct])
-            if not correct:
-                print(f"{name}[data]: fail, got: {answer}")
-                if args.abort_on_fail:
-                    break
-            else:
-                print(f"{name}[data]: pass{', got: ' + answer if args.verbose else ''}")
-
-            answer = generate_stream_response(data_url, "What is the subject of the image?")
-            correct = name in answer.lower()
-            results.extend([correct])
-            if not correct:
-                print(f"{name}[data_stream]: fail, got: {answer}")
-                if args.abort_on_fail:
-                    break
-            else:
-                print(f"{name}[data_stream]: pass{', got: ' + answer if args.verbose else ''}")
-
+            single_test(data_url, "What is the subject of the image?", "data", generate_response)
+            single_test(data_url, "What is the subject of the image?", "data_stream", generate_stream_response)
 
         """
         ## OCR tests
@@ -252,15 +253,7 @@ if __name__ == '__main__':
         }
         for name, question in quality_urls.items():
             prompt, data_url = question
-            answer = generate_stream_response(data_url, prompt)
-            correct = name in answer.lower() or 'wal-mart' in answer.lower()
-            results.extend([correct])
-            if not correct:
-                print(f"{name}[quality]: fail, got: {answer}")
-                if args.abort_on_fail:
-                    break
-            else:
-                print(f"{name}[quality]: pass{', got: ' + answer if args.verbose else ''}")
+            single_test(data_url, prompt, "quality", generate_stream_response)
         """
 
         # No image tests
@@ -287,7 +280,7 @@ if __name__ == '__main__':
             else:
                 print(f"{name}[no_img]: pass{', got: ' + answer if args.verbose else ''}")
 
-        return results
+        return results, timing
 
     with open('model_conf_tests.json') as f:
         model_tests = json.load(f)

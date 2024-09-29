@@ -19,7 +19,7 @@ class VisionQnA(VisionQnABase):
 
         #self.dtype = self.params['torch_dtype'] = 'auto' # torch.float32
 
-        self.processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
+        self.processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False), torch_dtype=self.params['torch_dtype'], device_map=self.params['device_map'])
         self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
 
         # bitsandbytes already moves the model to the device, so we don't need to do it again.

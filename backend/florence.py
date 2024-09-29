@@ -57,7 +57,10 @@ class VisionQnA(VisionQnABase):
             **params,
         )
 
+        tps_start = time.time()
         generated_ids = self.model.generate(**generation_kwargs)
+        logger.info(f"Generated {len(generated_ids[0])} tokens at {len(generated_ids[0]) / (time.time() - tps_start):0.2f} T/s")
+
         generated_text = self.processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
         parsed_answer = self.processor.post_process_generation(generated_text, task=select_task(prompt), image_size=(images[0].width, images[0].height))
 

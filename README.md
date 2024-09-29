@@ -156,10 +156,11 @@ If you can't find your favorite model, you can [open a new issue](https://github
 
 Version 0.35.0
 
-- Update Molmo (tensorflow-cpu no longer required), and add autocast to faster, smaller types than float32.
-- Add `completion_tokens` counts for streamed results, other compatibility improvements
+- Update Molmo (tensorflow-cpu no longer required), and add autocast for faster, smaller types than float32.
 - New option: `--use-double-quant` to enable double quantization with `--load-in-4bit`, a little slower for a little less VRAM.
 - Molmo 72B will now run in under 48GB of vram using `--load-in-4bit --use-double-quant`.
+- Add `completion_tokens` counts and logged T/s for streamed results, other compatibility improvements
+- Include sample tokens/s data (A100) in `vision.sample.env`
 
 Version 0.34.0
 
@@ -396,8 +397,9 @@ Additional steps may be required for some models, see the Dockerfile for the lat
 ## Usage
 
 ```
-usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4] [-8] [-F] [-A {sdpa,eager,flash_attention_2}] [-T MAX_TILES] [--preload]
-                 [-L {DEBUG,INFO,WARNING,ERROR,CRITICAL}] [-H HOST] [-P PORT]
+usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4]
+                 [--use-double-quant] [-8] [-F] [-A {sdpa,eager,flash_attention_2}] [-T MAX_TILES] [--preload] [-L {DEBUG,INFO,WARNING,ERROR,CRITICAL}] [-H HOST]
+                 [-P PORT]
 
 OpenedAI Vision API Server
 
@@ -418,6 +420,7 @@ options:
   --no-trust-remote-code
                         Don't trust remote code (required for many models) (default: False)
   -4, --load-in-4bit    load in 4bit (doesn't work with all models) (default: False)
+  --use-double-quant    Used with --load-in-4bit for an extra memory savings, a bit slower (default: False)
   -8, --load-in-8bit    load in 8bit (doesn't work with all models) (default: False)
   -F, --use-flash-attn  DEPRECATED: use --attn_implementation flash_attention_2 or -A flash_attention_2 (default: False)
   -A {sdpa,eager,flash_attention_2}, --attn_implementation {sdpa,eager,flash_attention_2}
