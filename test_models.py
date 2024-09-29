@@ -136,7 +136,7 @@ def test(cmd_args: list[str]) -> int:
                     tok_total += tok
                     tim_total += tim
             if tim_total > 0.0:
-                note += f', {tok_total/tim_total:0.1f} T/s ({tok_total}/{tim_total:0.1f}s)'
+                note += f', ({tok_total}/{tim_total:0.1f}s) {tok_total/tim_total:0.1f} T/s'
 
     print(f"\n\n###\n\nTest complete.\nResult: {green_pass if result else red_fail}, time: {t:.1f}s")
 
