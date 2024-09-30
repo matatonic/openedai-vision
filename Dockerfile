@@ -7,7 +7,7 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install --upgrade pip
 WORKDIR /app
 RUN git clone https://github.com/TIGER-AI-Lab/Mantis.git --single-branch /app/Mantis
 RUN git clone https://github.com/togethercomputer/Dragonfly --single-branch /app/Dragonfly
-RUN git clone https://github.com/baaivision/Emu3 --single-branch /app/emu3
+RUN git clone https://github.com/baaivision/Emu3 --single-branch /app/Emu3
 
 COPY requirements.txt .
 ARG VERSION=latest

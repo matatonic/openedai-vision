@@ -2,10 +2,11 @@ from transformers import AutoProcessor, AutoModelForCausalLM, GenerationConfig
 
 from vision_qna import *
 
-# allenai/MolmoE-1B-0924
-# allenai/Molmo-7B-D-0924
+# allenai/MolmoE-1B-0924 XXX problems with performance and RAM usage
+# allenai/Molmo-7B-D-0924 # faster
 # allenai/Molmo-7B-O-0924
 # allenai/Molmo-72B-0924
+# SeanScripts/Molmo-72B-0924-nf4
 # cyan2k/molmo-7B-D-bnb-4bit XXX needs tensorflow-cpu
 # cyan2k/molmo-7B-O-bnb-4bit XXX needs tensorflow-cpu
 

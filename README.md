@@ -31,6 +31,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [BAAI/Bunny-v1_1-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-v1_1-Llama-3-8B-V)
 - - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V)
 - - [X] [Emu2-Chat](https://huggingface.co/BAAI/Emu2-Chat) (may need the --max-memory option to GPU split, slow to load)
+- - [X] [Emu3-Chat](https://huggingface.co/BAAI/Emu3-Chat)
 - [X] [cognitivecomputations](https://huggingface.co/cognitivecomputations)
 - - [X] [dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b) (alternate docker only)
 - - [X] [dolphin-vision-7b](https://huggingface.co/cognitivecomputations/dolphin-vision-7b) (alternate docker only)
@@ -40,7 +41,9 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - [X] [failspy](https://huggingface.co/failspy)
 - - [X] [Phi-3-vision-128k-instruct-abliterated-alpha](https://huggingface.co/failspy/Phi-3-vision-128k-instruct-abliterated-alpha)
 - [X] [falcon-11B-vlm](https://huggingface.co/tiiuae/falcon-11B-vlm) (alternate docker only)
-- [X] [fancyfeast/joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
+- [X] [fancyfeast](https://huggingface.co/fancyfeast)
+- - [X] [joy-caption-alpha-two](https://huggingface.co/spaces/fancyfeast/joy-caption-alpha-two) (with experimental multi-image support)
+- - [X] [joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [HuggingFaceM4/idefics2](https://huggingface.co/HuggingFaceM4) 
 - - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (wont gpu split, alternate docker only)
@@ -153,6 +156,11 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.36.0
+
+- new model support: BAAI/Emu3-Chat
+- Experimental support for fancyfeast/joy-caption-alpha-two with multiple images (see: [backend](backend/joy-caption-latest.py) for more details)
 
 Version 0.35.0
 

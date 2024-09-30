@@ -103,7 +103,7 @@ class VisionQnABase:
             self.params.update({"trust_remote_code": True })
 
         if format:
-            self.format =  format
+            self.format = format
 
         torch.set_grad_enabled(False)
 
@@ -164,7 +164,7 @@ class VisionQnABase:
         return params
 
 def threaded_streaming_generator(generate, tokenizer, generation_kwargs):
-    streamer = TextIteratorStreamer(tokenizer, skip_special_tokens=True, skip_prompt=True, timeout=60)
+    streamer = TextIteratorStreamer(tokenizer, skip_special_tokens=True, skip_prompt=True, timeout=600)
 
     generation_kwargs['streamer'] = streamer
 
@@ -963,6 +963,9 @@ def guess_backend(model_name: str) -> str:
     if 'mantis' in model_id:
         return 'mantis'
 
+    if 'emu3' in model_id:
+        return 'emu3'
+
     if 'emu' in model_id:
         return 'emu'
 
@@ -985,7 +988,10 @@ def guess_backend(model_name: str) -> str:
     if 'dolphin-vision' in model_id:
         return 'dv-qwen'
 
-    if 'fancyfeast/joy-caption-pre-alpha' in model_id:
+    if 'joy-caption-alpha-two' in model_id:
+        return 'joy-caption-latest'
+    
+    if 'joy-caption-pre-alpha' in model_id:
         return 'joy-caption-pre-alpha'
 
     if 'hf-internal-testing/pixtral-12b' in model_id:
