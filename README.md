@@ -82,6 +82,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - [X] [Mistral AI](https://huggingface.co/mistralai)
 - - [X] [Pixtral-12B](https://huggingface.co/mistralai/Pixtral-12B-2409)
 - [X] [mx262/MiniMonkey](https://huggingface.co/mx262/MiniMonkey)
+- [X] [nvidia/NVLM-D-72B](https://huggingface.co/nvidia/NVLM-D-72B)
 - [X] [omlab/omchat-v2.0-13B-single-beta_hf](https://huggingface.co/omlab/omchat-v2.0-13B-single-beta_hf) (alt docker)
 - [X] [openbmb](https://huggingface.co/openbmb)
 - - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
@@ -156,6 +157,10 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.37.0
+
+- new model support: nvidia/NVLM-D-72B
 
 Version 0.36.0
 

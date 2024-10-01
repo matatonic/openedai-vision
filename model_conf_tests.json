@@ -101,6 +101,7 @@
   ["mistralai/Pixtral-12B-2409"],
   ["mx262/MiniMonkey", "-A", "flash_attention_2", "--load-in-4bit"],
   ["mx262/MiniMonkey", "-A", "flash_attention_2"],
+  ["nvidia/NVLM-D-72B", "-A", "flash_attention_2", "--load-in-4bit"],
   ["openbmb/MiniCPM-V-2_6-int4", "-A", "flash_attention_2", "--device-map", "cuda:0"],
   ["openbmb/MiniCPM-V-2_6", "-A", "flash_attention_2", "--device-map", "cuda:0", "--load-in-4bit"],
   ["openbmb/MiniCPM-V-2_6", "-A", "flash_attention_2", "--device-map", "cuda:0"],

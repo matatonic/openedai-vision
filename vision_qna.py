@@ -945,6 +945,9 @@ def guess_backend(model_name: str) -> str:
     if 'florence' in model_id:
         return 'florence'
 
+    if 'nvlm' in model_id:
+        return 'nvlm'
+
     if 'internvl-chat' in model_id and '-v1-5' in model_id:
         return 'internvl-chat-v1-5'
 
