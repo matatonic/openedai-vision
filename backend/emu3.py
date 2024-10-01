@@ -39,6 +39,8 @@ class VisionQnA(VisionQnABase):
                         image = await url_to_image(c.image_url.url)
                         break
 
+        if image is None:
+            image = await url_to_image(black_pixel_url)
         text = "".join([t.text for t in request.messages[-1].content if t.text])
 
         inputs = self.processor(text=text, image=image, mode='U', padding_side="left", padding="longest", return_tensors="pt")

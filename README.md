@@ -28,8 +28,8 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [BAAI/Bunny-v1_0-3B](https://huggingface.co/BAAI/Bunny-v1_0-3B)
 - - [X] [BAAI/Bunny-v1_0-4B](https://huggingface.co/BAAI/Bunny-v1_0-4B)
 - - [X] [BAAI/Bunny-v1_1-4B](https://huggingface.co/BAAI/Bunny-v1_1-4B)
-- - [X] [BAAI/Bunny-v1_1-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-v1_1-Llama-3-8B-V)
-- - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V)
+- - [X] [BAAI/Bunny-v1_1-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-v1_1-Llama-3-8B-V) (alt docker)
+- - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V) (alt docker)
 - - [X] [Emu2-Chat](https://huggingface.co/BAAI/Emu2-Chat) (may need the --max-memory option to GPU split, slow to load)
 - - [X] [Emu3-Chat](https://huggingface.co/BAAI/Emu3-Chat)
 - [X] [cognitivecomputations](https://huggingface.co/cognitivecomputations)
@@ -82,7 +82,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - [X] [Mistral AI](https://huggingface.co/mistralai)
 - - [X] [Pixtral-12B](https://huggingface.co/mistralai/Pixtral-12B-2409)
 - [X] [mx262/MiniMonkey](https://huggingface.co/mx262/MiniMonkey)
-- [X] [omlab/omchat-v2.0-13B-single-beta_hf](https://huggingface.co/omlab/omchat-v2.0-13B-single-beta_hf)
+- [X] [omlab/omchat-v2.0-13B-single-beta_hf](https://huggingface.co/omlab/omchat-v2.0-13B-single-beta_hf) (alt docker)
 - [X] [openbmb](https://huggingface.co/openbmb)
 - - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
 - - [X] [MiniCPM-V-2_6-int4](https://huggingface.co/openbmb/MiniCPM-V-2_6-int4)
@@ -115,14 +115,14 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf) (alternate docker only)
 - - [X] [glm-4v-9b](https://huggingface.co/THUDM/glm-4v-9b) (wont gpu split)
 - [X] [TIGER-Lab](https://huggingface.co/TIGER-Lab)
-- - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (wont gpu split)
-- - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (wont gpu split)
+- - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (wont gpu split, alt docker)
+- - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (wont gpu split, alt docker)
 - - [X] [Mantis-8B-Fuyu](https://huggingface.co/TIGER-Lab/Mantis-8B-Fuyu) (wont gpu split)
 - [X] [Together.ai](https://huggingface.co/togethercomputer)
 - - [X] [Llama-3-8B-Dragonfly-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-v1)
 - - [X] [Llama-3-8B-Dragonfly-Med-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-Med-v1) 
 - [X] [qihoo360](https://huggingface.co/qihoo360)
-- - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B)
+- - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B) (alt docker)
 - - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
 - [X] [qnguyen3](https://huggingface.co/qnguyen3)
 - - [X] [nanoLLaVA](https://huggingface.co/qnguyen3/nanoLLaVA) (wont gpu split)
@@ -164,7 +164,7 @@ Version 0.36.0
 
 Version 0.35.0
 
-- Update Molmo (tensorflow-cpu no longer required), and add autocast for faster, smaller types than float32.
+- Update Molmo (tensorflow-cpu no longer required), and added autocast for faster, smaller types than float32.
 - New option: `--use-double-quant` to enable double quantization with `--load-in-4bit`, a little slower for a little less VRAM.
 - Molmo 72B will now run in under 48GB of vram using `--load-in-4bit --use-double-quant`.
 - Add `completion_tokens` counts and logged T/s for streamed results, other compatibility improvements
@@ -173,7 +173,7 @@ Version 0.35.0
 Version 0.34.0
 
 - new model support: Meta-llama: Llama-3.2-11B-Vision-Instruct, Llama-3.2-90B-Vision-Instruct
-- new model support: Ai2/allenai Molmo family of models (requires additional `pip install tensorflow-cpu` for now, [see note](https://huggingface.co/allenai/Molmo-7B-D-0924/blob/main/image_preprocessing_molmo.py#L88-L90))
+- new model support: Ai2/allenai Molmo family of models
 - new model support: stepfun-ai/GOT-OCR2_0, this is an OCR only model, all chat is ignored.
 - Support moved to alt image: Bunny-Llama-3-8B-V, Bunny-v1_1-Llama-3-8B-V, Mantis-8B-clip-llama3, Mantis-8B-siglip-llama3, omchat-v2.0-13B-single-beta_hf, qihoo360/360VL-8B
 
