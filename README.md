@@ -15,6 +15,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 <summary>Full list of supported models</summary>
 
 - [X] [AIDC-AI](https://huggingface.co/AIDC-AI)
+- - [X] [Ovis1.6-Gemma2-9B](https://huggingface.co/AIDC-AI/Ovis1.6-Gemma2-9B)
 - - [X] [Ovis1.5-Gemma2-9B](https://huggingface.co/AIDC-AI/Ovis1.5-Gemma2-9B)
 - - [X] [Ovis1.5-Llama3-8B](https://huggingface.co/AIDC-AI/Ovis1.5-Llama3-8B)
 - [X] [Ai2](https://huggingface.co/allenai)
@@ -157,6 +158,10 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.38.0
+
+- new model support: AIDC-AI/Ovis1.6-Gemma2-9B
 
 Version 0.37.0
 

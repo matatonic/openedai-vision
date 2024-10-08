@@ -901,6 +901,8 @@ def guess_backend(model_name: str) -> str:
         return 'minigemini'
 
     if 'ovis' in model_id:
+        if '1.6' in model_id:
+            return 'ovis16'
         return 'ovis'
 
     if 'deepseek' in model_id:

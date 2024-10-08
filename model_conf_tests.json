@@ -1,4 +1,5 @@
 [
+  ["AIDC-AI/Ovis1.6-Gemma2-9B", "-A", "flash_attention_2"],
   ["AIDC-AI/Ovis1.5-Gemma2-9B", "-A", "flash_attention_2"],
   ["AIDC-AI/Ovis1.5-Llama3-8B", "-A", "flash_attention_2"],
   ["BAAI/Bunny-v1_0-2B-zh", "--load-in-4bit"],
