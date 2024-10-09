@@ -23,6 +23,7 @@ sentencepiece
 sse_starlette
 torch==2.4.*
 uvicorn
+wandb
 xformers
 
 # moondream

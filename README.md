@@ -159,6 +159,10 @@ If you can't find your favorite model, you can [open a new issue](https://github
 
 ## Recent updates
 
+Version 0.38.1
+
+- Fix: add wandb to requirements.txt so wandb is upgraded on manual install
+
 Version 0.38.0
 
 - new model support: AIDC-AI/Ovis1.6-Gemma2-9B
@@ -186,6 +190,9 @@ Version 0.34.0
 - new model support: Ai2/allenai Molmo family of models
 - new model support: stepfun-ai/GOT-OCR2_0, this is an OCR only model, all chat is ignored.
 - Support moved to alt image: Bunny-Llama-3-8B-V, Bunny-v1_1-Llama-3-8B-V, Mantis-8B-clip-llama3, Mantis-8B-siglip-llama3, omchat-v2.0-13B-single-beta_hf, qihoo360/360VL-8B
+
+<details>
+<summary>Older version notes</summary>
 
 Version 0.33.0
 
@@ -229,10 +236,6 @@ Version 0.29.0
 - Performance regression: idefics2-8b-AWQ, idefics2-8b-chatty-AWQ
 - ⚠️ DEPRECATED MODELS: YanweiLi/MGM*, Moondream1 (use the `-alt:0.28.1` image for support of these models)
 - unpin MiniCPM-Llama3-V-2_5, glm-v-9B revisions
-
-
-<details>
-<summary>Older version notes</summary>
 
 Version 0.28.1
 
