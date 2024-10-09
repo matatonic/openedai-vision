@@ -30,13 +30,14 @@ class VisionQnA(VisionQnABase):
     async def stream_chat_with_images(self, request: ImageChatRequest) -> AsyncGenerator[str, None]:
         conversation = []
         images = []
+
         for m in request.messages:
             content = ''
             for c in m.content:
                 if c.type == 'image_url':
                     image = await url_to_image(c.image_url.url)
                     images.extend([image])
-                    content = IMAGE_TOKEN + '\n' + content
+                    content += IMAGE_TOKEN + '\n'
                 elif c.type == 'text':
                     content += c.text
 
