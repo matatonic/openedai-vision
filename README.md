@@ -159,6 +159,10 @@ If you can't find your favorite model, you can [open a new issue](https://github
 
 ## Recent updates
 
+Version 0.38.2
+
+- Fix: multi-image for ovis 1.6
+
 Version 0.38.1
 
 - Fix: add wandb to requirements.txt so wandb is upgraded on manual install
