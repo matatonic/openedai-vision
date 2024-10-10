@@ -26,10 +26,12 @@ COPY *.py .
 COPY backend /app/backend
 COPY model_conf_tests.json .
 
-ARG USER_ID
-ARG GROUP_ID
-RUN groupadd -g $GROUP_ID openedai && \
-    useradd -r -u $USER_ID -g $GROUP_ID -M -d /app openedai
+ARG USER_ID=1000
+ENV USER_ID=${USER_ID}
+ARG GROUP_ID=1000
+ENV GROUP_ID=${GROUP_ID}
+RUN groupadd -g ${GROUP_ID} openedai && \
+    useradd -r -u ${USER_ID} -g ${GROUP_ID} -M -d /app openedai
 
 USER openedai
 ENV CLI_COMMAND="python vision.py"
