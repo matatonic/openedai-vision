@@ -160,6 +160,10 @@ If you can't find your favorite model, you can [open a new issue](https://github
 
 ## Recent updates
 
+Version 0.39.1
+
+- fix: the github docker package build seems to have been broken a while
+
 Version 0.39.0
 
 - new model support: rhymes-ai/Aria
