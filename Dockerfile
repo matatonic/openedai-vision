@@ -5,9 +5,9 @@ RUN apt-get update && apt-get install -y git gcc \
 RUN --mount=type=cache,target=/root/.cache/pip pip install --upgrade pip
 
 WORKDIR /app
-RUN git clone https://github.com/TIGER-AI-Lab/Mantis.git --single-branch /app/Mantis
-RUN git clone https://github.com/togethercomputer/Dragonfly --single-branch /app/Dragonfly
-RUN git clone https://github.com/baaivision/Emu3 --single-branch /app/Emu3
+RUN git clone https://github.com/TIGER-AI-Lab/Mantis.git --single-branch /app/Mantis && \
+    git clone https://github.com/togethercomputer/Dragonfly --single-branch /app/Dragonfly && \
+    git clone https://github.com/baaivision/Emu3 --single-branch /app/Emu3
 
 COPY requirements.txt .
 ARG VERSION=latest
@@ -26,5 +26,11 @@ COPY *.py .
 COPY backend /app/backend
 COPY model_conf_tests.json .
 
+ARG USER_ID
+ARG GROUP_ID
+RUN groupadd -g $GROUP_ID openedai && \
+    useradd -r -u $USER_ID -g $GROUP_ID -M -d /app openedai
+
+USER openedai
 ENV CLI_COMMAND="python vision.py"
 CMD $CLI_COMMAND

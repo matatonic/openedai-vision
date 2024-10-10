@@ -105,6 +105,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [ ] [InternVL-Chat-V1-5-AWQ](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-AWQ) (wont gpu split yet)
 - - [X] [Mini-InternVL-Chat-4B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-4B-V1-5) (alternate docker only)
 - - [X] [Mini-InternVL-Chat-2B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-2B-V1-5)
+- [X] [rhymes-ai/Aria](https://huggingface.co/rhymes-ai/Aria)
 - [X] [Salesforce](https://huggingface.co/Salesforce)
 - - [X] [xgen-mm-phi3-mini-instruct-singleimage-r-v1.5](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-singleimage-r-v1.5)
 - - [X] [xgen-mm-phi3-mini-instruct-interleave-r-v1](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-interleave-r-v1.5)
@@ -158,6 +159,13 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.39.0
+
+- new model support: rhymes-ai/Aria
+- improved support for multi-image in various models.
+- docker package: The latest release will now be tagged with `:latest`, rather than latest commit.
+- ⚠️ docker: docker will now run as a user instead of root. Your `hf_home` volume may need the ownership fixed, you can use this command: `sudo chown $(id -u):$(id -g) -R hf_home`
 
 Version 0.38.2
 

@@ -89,13 +89,16 @@ if __name__ == '__main__':
         params['top_p'] = args.top_p
 
     def generate_response(image_url, prompt):
-
         messages = [{ "role": "system", "content": [{ 'type': 'text', 'text': args.system_prompt }] }] if args.system_prompt else []
-        messages.extend([
-            { "role": "user", "content": [
-                { "type": "image_url", "image_url": { "url": image_url } },
-                { "type": "text", "text": prompt },
-            ]}])
+
+        if isinstance(image_url, str):
+            image_url = [image_url]
+
+        content = []
+        for url in image_url:
+            content.extend([{ "type": "image_url", "image_url": { "url": url } }])
+        content.extend([{ "type": "text", "text": prompt }])
+        messages.extend([{ "role": "user", "content": content }])
 
         response = client.chat.completions.create(model=args.openai_model, messages=messages, **params)
         completion_tokens = 0
@@ -106,11 +109,15 @@ if __name__ == '__main__':
 
     def generate_stream_response(image_url, prompt):
         messages = [{ "role": "system", "content": [{ 'type': 'text', 'text': args.system_prompt }] }] if args.system_prompt else []
-        messages.extend([
-            { "role": "user", "content": [
-                { "type": "image_url", "image_url": { "url": image_url } },
-                { "type": "text", "text": prompt },
-            ]}])
+
+        if isinstance(image_url, str):
+            image_url = [image_url]
+
+        content = []
+        for url in image_url:
+            content.extend([{ "type": "image_url", "image_url": { "url": url } }])
+        content.extend([{ "type": "text", "text": prompt }])
+        messages.extend([{ "role": "user", "content": content }])
 
         response = client.chat.completions.create(model=args.openai_model, messages=messages, **params, stream=True)
         answer = ''
@@ -129,18 +136,18 @@ if __name__ == '__main__':
         ### Single round
         timing = []
 
-        def single_test(url, question, label, generator=generate_response):
+        def single_test(url, question, right_answer, label, generator=generate_response):
             tps_time = time.time()
             answer, tok = generator(url, question)
             tps_time = time.time() - tps_time
-            correct = name in answer.lower()
+            correct = right_answer in answer.lower()
             results.extend([correct])
             if not correct:
-                print(f"{name}[{label}]: fail, got: {answer}")
+                print(f"{right_answer}[{label}]: {red_fail}, got: {answer}")
                 #if args.abort_on_fail:
                 #    break
             else:
-                print(f"{name}[{label}]: pass{', got: ' + answer if args.verbose else ''}")
+                print(f"{right_answer}[{label}]: {green_pass}{', got: ' + answer if args.verbose else ''}")
             if tok > 1:
                 timing.extend([(tok, tps_time)])
 
@@ -148,11 +155,11 @@ if __name__ == '__main__':
 
         # url tests
         for name, url in urls.items():
-            single_test(url, "What is the subject of the image?", "url", generate_response)
+            single_test(url, "What is the subject of the image?", name, "url", generate_response)
 
             data_url = data_url_from_url(url)
-            single_test(data_url, "What is the subject of the image?", "data", generate_response)
-            single_test(data_url, "What is the subject of the image?", "data_stream", generate_stream_response)
+            single_test(data_url, "What is the subject of the image?", name, "data", generate_response)
+            single_test(data_url, "What is the subject of the image?", name, "data_stream", generate_stream_response)
 
 
         ## OCR tests
@@ -162,31 +169,26 @@ if __name__ == '__main__':
         }
         for name, question in quality_urls.items():
             prompt, data_url = question
-            single_test(data_url, prompt, "quality", generate_stream_response)
+            single_test(data_url, prompt, name, "quality", generate_stream_response)
 
         # No image tests
         no_image = { 
-            '5': 'In the sequence of numbers: 1, 2, 3, 4, ... What number comes next after 4?'
+            '5': 'In the sequence of numbers: 1, 2, 3, 4, ... What number comes next after 4? Answer only the number.'
         }
 
-        def no_image_response(prompt):
-            messages = [{ "role": "system", "content": [{ 'type': 'text', 'text': args.system_prompt }] }] if args.system_prompt else []
-            messages.extend([{ "role": "user", "content": prompt }])
-
-            response = client.chat.completions.create(model=args.openai_model, messages=messages, **params, max_tokens=5)
-            answer = response.choices[0].message.content
-            return answer
-
         for name, prompt in no_image.items():
-            answer = no_image_response(prompt)
-            correct = True #name in answer.lower() # - no exceptions is enough.
-            results.extend([correct])
-            if not correct:
-                print(f"{name}[no_img]: fail, got: {answer}")
-                if args.abort_on_fail:
-                    break
-            else:
-                print(f"{name}[no_img]: pass{', got: ' + answer if args.verbose else ''}")
+            single_test([], prompt, name, 'no_img', generate_response)
+
+        # Multi-image test
+        multi_image = {
+            "water": ("What natural element is common in both images?", 
+            [ 'https://images.freeimages.com/images/large-previews/e59/autumn-tree-1408307.jpg',
+            'https://images.freeimages.com/images/large-previews/242/waterfall-1537490.jpg'])
+        }
+
+        for name, question in multi_image.items():
+            prompt, data_url = question
+            single_test(data_url, prompt, name, "multi-image", generate_stream_response)
 
         test_time = time.time() - test_time
 

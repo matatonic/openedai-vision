@@ -114,6 +114,7 @@
   ["qnguyen3/nanoLLaVA-1.5", "-A", "flash_attention_2", "--device-map", "cuda:0"],
   ["qresearch/llama-3-vision-alpha-hf", "--device", "cuda:0", "--load-in-4bit"],
   ["qresearch/llama-3-vision-alpha-hf", "--device", "cuda:0"],
+  ["rhymes-ai/Aria", "-A", "flash_attention_2"],
   ["togethercomputer/Llama-3-8B-Dragonfly-Med-v1", "--load-in-4bit"],
   ["togethercomputer/Llama-3-8B-Dragonfly-Med-v1"],
   ["togethercomputer/Llama-3-8B-Dragonfly-v1", "--load-in-4bit"],

@@ -60,3 +60,7 @@ mistral_common[opencv]
 
 # got-ocr2
 verovio
+
+# Aria. needs to build a bunch and doesn't work without many extra packages
+# BYOB, use it if you need it
+#grouped_gemm

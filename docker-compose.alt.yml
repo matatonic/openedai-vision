@@ -3,7 +3,10 @@ services:
     build:
       args:
         - VERSION=alt
+        - USER_ID=${UID:-1000}
+        - GROUP_ID=${GID:-1000}
       dockerfile: Dockerfile
+    user: ${UID:-1000}:${GID:-1000}
     container_name: openedai-vision-alt
     image: ghcr.io/matatonic/openedai-vision-alt
     env_file: vision-alt.env # your settings go here

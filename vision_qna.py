@@ -302,16 +302,15 @@ async def vicuna0_prompt_from_messages(messages: list[Message], img_tok = "<imag
     for m in messages:
         if m.role == 'user':
             text = ''
-            has_image = False
+            img_tag = ''
 
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    has_image = True
+                    img_tag += img_tok
                 if c.type == 'text':
                     text = c.text
 
-            img_tag = img_tok if has_image else ''
             prompt += f"### Human: {img_tag}{text}\n"
         elif m.role == 'assistant':
             for c in m.content:
@@ -339,16 +338,15 @@ async def vicuna_prompt_from_messages(messages: list[Message], img_tok = "<image
     for m in messages:
         if m.role == 'user':
             text = ''
-            has_image = False
+            img_tag = ''
 
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    has_image = True
+                    img_tag += img_tok
                 if c.type == 'text':
                     text = c.text
 
-            img_tag = img_tok if has_image else ''
             prompt += f"USER: {img_tag}{text}\n"
         elif m.role == 'assistant':
             for c in m.content:
@@ -370,16 +368,15 @@ async def llama2_prompt_from_messages(messages: list[Message], img_tok = "<image
     for m in messages:
         if m.role == 'user':
             text = ''
-            has_image = False
+            img_tag = ''
 
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    has_image = True
+                    img_tag += img_tok
                 if c.type == 'text':
                     text = c.text
 
-            img_tag = img_tok if has_image else ''
             prompt += f"[INST] {img_tag}{text} [/INST]"
         elif m.role == 'assistant':
             for c in m.content:
@@ -402,14 +399,12 @@ async def llama3_prompt_from_messages(messages: list[Message], img_tok = "<image
         messages.pop(-1)
 
     for m in messages:
-        has_image = False
+        img_tag = ''
 
         for c in m.content:
             if c.type == 'image_url':
                 images.extend([ await url_to_image(c.image_url.url) ])
-                has_image = True
-
-        img_tag = img_tok if has_image else ''
+                img_tag += img_tok
 
         for c in m.content:
             if c.type == 'text':
@@ -431,16 +426,15 @@ async def chatml_prompt_from_messages(messages: list[Message], img_tok = "<image
     for m in messages:
         if m.role == 'user':
             text = ''
-            has_image = False
+            img_tag = ''
 
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    has_image = True
+                    img_tag += img_tok
                 if c.type == 'text':
                     text = c.text
 
-            img_tag = img_tok if has_image else ''
             prompt += f"<|im_start|>user\n{img_tag}{text}<|im_end|>"
         elif m.role == 'assistant':
             for c in m.content:
@@ -467,16 +461,15 @@ async def gemma_prompt_from_messages(messages: list[Message], img_tok = "<image>
     for m in messages:
         if m.role == 'user':
             text = ''
-            has_image = False
+            img_tag = ''
 
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    has_image = True
+                    img_tag += img_tok
                 if c.type == 'text':
                     text = c.text
 
-            img_tag = img_tok if has_image else ''
             prompt += f"<start_of_turn>user\n{img_tag}{text}<end_of_turn>"
         elif m.role == 'assistant':
             for c in m.content:
@@ -502,7 +495,7 @@ async def fuyu_prompt_from_messages(messages: list[Message], img_tok = "", img_e
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    p = img_tok + p + img_end
+                    p = img_tok + p + img_end # XXX
                 if c.type == 'text':
                     p += f"{c.text}\n\n" # Question:
             prompt += p
@@ -531,16 +524,15 @@ async def emu_images_prompt_system_from_messages(messages: list[Message], img_to
     for m in messages:
         if m.role == 'user':
             text = ''
-            has_image = False
+            img_tag = ''
 
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    has_image = True
+                    img_tag += img_tok
                 if c.type == 'text':
                     text = c.text
 
-            img_tag = img_tok if has_image else ''
             prompt += f" [USER]: {img_tag}{text}"
         elif m.role == 'assistant':
             for c in m.content:
@@ -595,16 +587,15 @@ async def phintern_prompt_from_messages(messages: list[Message], img_tok = "<ima
     for m in messages:
         if m.role == 'user':
             text = ''
-            has_image = False
+            img_tag = ''
 
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    has_image = True
+                    img_tag += img_tok
                 if c.type == 'text':
                     text = c.text
 
-            img_tag = img_tok if has_image else ''
             prompt += f"<s><|user|>\n{img_tag}{text}<|end|>"
         elif m.role == 'assistant':
             for c in m.content:
@@ -627,16 +618,15 @@ async def falcon_prompt_from_messages(messages: list[Message], img_tok = "<image
     for m in messages:
         if m.role == 'user':
             text = ''
-            has_image = False
+            img_tag = ''
 
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    has_image = True
+                    img_tag += img_tok
                 if c.type == 'text':
                     text = c.text
 
-            img_tag = img_tok if has_image else ''
             prompt += f"User:{img_tag}{text} "
         elif m.role == 'assistant':
             for c in m.content:
@@ -664,7 +654,7 @@ async def prompt_history_images_system_from_messages(messages: list[Message], im
                 if c.type == 'image_url':
                     image = await url_handler(c.image_url.url)
                     images.extend([image])
-                    p = img_tok + p
+                    p = img_tok + p # XXX Wrong order?
                 if c.type == 'text':
                     p += c.text
 
@@ -743,16 +733,15 @@ async def pixtral_prompt_from_messages(messages: list[Message], img_tok = "[IMG]
     for m in messages:
         if m.role == 'user':
             text = ''
-            has_image = False
+            img_tag = ''
 
             for c in m.content:
                 if c.type == 'image_url':
                     images.extend([ await url_to_image(c.image_url.url) ])
-                    has_image = True
+                    img_tag += img_tok
                 if c.type == 'text':
                     text = c.text
 
-            img_tag = img_tok if has_image else ''
             prompt += f"[INST] {text}{img_tag} [/INST]"
         elif m.role == 'assistant':
             for c in m.content:
@@ -1010,3 +999,6 @@ def guess_backend(model_name: str) -> str:
 
     if 'got-ocr2' in model_id:
         return 'got_ocr2'
+    
+    if 'aria' in model_id:
+        return 'aria'

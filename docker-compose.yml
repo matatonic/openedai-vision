@@ -3,7 +3,10 @@ services:
     build:
       args:
         - VERSION=latest
+        - USER_ID=${UID:-1000}
+        - GROUP_ID=${GID:-1000}
       dockerfile: Dockerfile
+    user: ${UID:-1000}:${GID:-1000}
     container_name: openedai-vision
     image: ghcr.io/matatonic/openedai-vision
     env_file: vision.env # your settings go here

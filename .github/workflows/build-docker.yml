@@ -134,19 +134,6 @@ jobs:
           images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}
 
       # Build and push the Docker image to GHCR for the main branch or specific tags
-      - name: Build and Push Docker Image
-        if: github.ref == 'refs/heads/main'
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          build-args: |
-            VERSION =alt
-          file: Dockerfile
-          push: true
-          tags: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          labels: version=${{ github.run_id }}
-
-      # Build and push the Docker image to GHCR for the main branch or specific tags
       - name: Build and Push Docker Image (dev)
         if: github.ref == 'refs/heads/dev'
         uses: docker/build-push-action@v4
@@ -167,6 +154,8 @@ jobs:
             VERSION =alt
           file: Dockerfile
           push: true
-          tags: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+            ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           labels: version=${{ github.run_id }}
 
