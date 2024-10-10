@@ -139,6 +139,9 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          build-args: |
+            GROUP_ID=1000
+            USER_ID=1000
           file: Dockerfile
           push: true
           tags: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:dev
@@ -151,7 +154,9 @@ jobs:
         with:
           context: .
           build-args: |
-            VERSION =alt
+            VERSION=alt
+            GROUP_ID=1000
+            USER_ID=1000
           file: Dockerfile
           push: true
           tags: |
