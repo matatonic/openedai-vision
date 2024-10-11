@@ -1,15 +1,18 @@
 accelerate
-auto_gptq
-autoawq
+# auto_gptq and autoawq lack pre-compiled support for python 3.12
+auto_gptq; python_version != "3.12"
+autoawq; python_version != "3.12"
 bitsandbytes
 fastapi
 # See: https://github.com/bdashore3/flash-attention/releases for other windows flash_attn releases
 # And: https://github.com/Dao-AILab/flash-attention/releases for linux.
+https://github.com/Dao-AILab/flash-attention/releases/download/v2.6.3/flash_attn-2.6.3+cu123torch2.4cxx11abiFALSE-cp312-cp312-linux_x86_64.whl; platform_system == "Linux" and platform_machine == "x86_64" and python_version == "3.12"
 https://github.com/Dao-AILab/flash-attention/releases/download/v2.6.3/flash_attn-2.6.3+cu123torch2.4cxx11abiFALSE-cp311-cp311-linux_x86_64.whl; platform_system == "Linux" and platform_machine == "x86_64" and python_version == "3.11"
 https://github.com/Dao-AILab/flash-attention/releases/download/v2.6.3/flash_attn-2.6.3+cu123torch2.4cxx11abiFALSE-cp310-cp310-linux_x86_64.whl; platform_system == "Linux" and platform_machine == "x86_64" and python_version == "3.10"
+https://github.com/bdashore3/flash-attention/releases/download/v2.6.3/flash_attn-2.6.3+cu123torch2.4.0cxx11abiFALSE-cp312-cp312-win_amd64.whl; platform_system == "Windows" and python_version == "3.12"
 https://github.com/bdashore3/flash-attention/releases/download/v2.6.3/flash_attn-2.6.3+cu123torch2.4.0cxx11abiFALSE-cp311-cp311-win_amd64.whl; platform_system == "Windows" and python_version == "3.11"
 https://github.com/bdashore3/flash-attention/releases/download/v2.6.3/flash_attn-2.6.3+cu123torch2.4.0cxx11abiFALSE-cp310-cp310-win_amd64.whl; platform_system == "Windows" and python_version == "3.10"
-flash_attn; python_version != "3.10" and python_version != "3.11"
+flash_attn; python_version != "3.10" and python_version != "3.11" and python_version != "3.12"
 hf_transfer
 loguru
 numpy

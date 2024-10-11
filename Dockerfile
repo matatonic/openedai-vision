@@ -11,7 +11,7 @@ RUN git clone https://github.com/TIGER-AI-Lab/Mantis.git --single-branch /app/Ma
 
 COPY requirements.txt .
 ARG VERSION=latest
-RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "transformers>=4.45.1" >> requirements.txt ; fi
+RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "transformers>=4.45.2" >> requirements.txt ; fi
 RUN --mount=type=cache,target=/root/.cache/pip pip install -U -r requirements.txt
 
 WORKDIR /app/Mantis

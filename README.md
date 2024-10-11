@@ -1,5 +1,4 @@
-OpenedAI Vision
----------------
+# OpenedAI Vision
 
 An OpenAI API compatible vision server, it functions like `gpt-4-vision-preview` and lets you chat about the contents of an image.
 
@@ -159,6 +158,9 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+- performance: use float16 with Qwen2 AWQ, small performance improvement
+- fix: handle Ubuntu 24 / Python 3.12 a little better, thanks [@Lissanro](https://github.com/Lissanro)
 
 Version 0.39.1
 
@@ -382,12 +384,15 @@ Version: 0.11.0
 - MiniGemini renamed MGM upstream
 </details>
 
-## API Documentation
+## Installation
 
-* [OpenAI Vision guide](https://platform.openai.com/docs/guides/vision)
+### Docker support (tested, recommended)
 
+> ⚠️ Docker support requires NVIDIA CUDA container support installed and correctly configured
+>
+> See [Linux Installation](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) or
+> [Windows Installation](https://docs.nvidia.com/cuda/wsl-user-guide/index.html) (use WSL2 with docker and nvidia drivers)
 
-## Docker support (tested, recommended)
 
 1) Edit the `vision.env` or `vision-alt.env` file to suit your needs. See: `vision.sample.env` for an example.
 
@@ -415,21 +420,42 @@ docker compose pull
 docker compose -f docker-compose.alt.yml pull
 ```
 
-## Manual Installation instructions
+### Manual Installation instructions
+
+
+> Tested wth Python 3.10 & 3.11. AWQ and GPTQ are known to have issues with Python 3.12 (the default in Ubuntu 24) and require special attention, see below.
+
 
 ```shell
 # Create & activate a new virtual environment (optional but recommended)
 python -m venv .venv
 source .venv/bin/activate
+# upgrade pip
+pip install --upgrade pip
 # install the python dependencies
-pip install -U -r requirements.txt "transformers>=4.45.1"
+pip install -U -r requirements.txt "transformers>=4.45.2"
 # OR install the python dependencies for the alt version
 pip install -U -r requirements.txt "transformers==4.41.2"
-# run the server with your chosen model
+# optional - export variables for your environment, see vision.sample.env.
+#export HF_HOME=hf_home
+# run the server with your chosen model, see vision.sample.env for known working configurations.
 python vision.py --model vikhyatk/moondream2
 ```
 
-Additional steps may be required for some models, see the Dockerfile for the latest installation instructions.
+Additional steps are required for some models (Mantis, Dragonfly, Emu3, etc.), see the Dockerfile for the latest installation instructions.
+
+#### Python 3.12
+
+The following additional steps are required to support AWQ and GPTQ models with Python 3.12. Perform these steps after other requirements have been installed.
+
+1. [Install the CUDA toolkit](https://developer.nvidia.com/cuda-toolkit)
+
+2. Compile and install AWQ and GPTQ from source.
+
+```shell
+pip install git+https://github.com/AutoGPTQ/AutoGPTQ.git --no-build-isolation
+INSTALL_KERNELS=1 pip install git+https://github.com/casper-hansen/AutoAWQ.git --no-build-isolation
+```
 
 ## Usage
 
@@ -471,6 +497,10 @@ options:
   -P PORT, --port PORT  Server tcp port (default: 5006)
 
 ```
+
+## API Documentation
+
+* [OpenAI Vision guide](https://platform.openai.com/docs/guides/vision)
 
 ## Sample API Usage
 
@@ -530,7 +560,7 @@ Answer: The tree in the image could potentially be a larch, which is a type of d
 Question: ^D
 ```
 
-## Known Problems & Workarounds
+## FAQ, Known Problems & Workarounds
 
 1. Related to cuda device split, If you get:
 ```

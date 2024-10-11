@@ -1,4 +1,4 @@
-from transformers import Qwen2VLForConditionalGeneration, AutoTokenizer, AutoProcessor
+from transformers import Qwen2VLForConditionalGeneration, AutoProcessor
 from qwen_vl_utils import process_vision_info
 
 import os
@@ -21,6 +21,9 @@ class VisionQnA(VisionQnABase):
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
+
+        if 'awq' in model_id.lower() and self.dtype == torch.bfloat16:
+            self.dtype = self.params['torch_dtype'] = torch.float16  # recommended
 
         self.processor = AutoProcessor.from_pretrained(model_id)
         
