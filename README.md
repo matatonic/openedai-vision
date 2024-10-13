@@ -163,6 +163,7 @@ Version 0.39.2
 
 - performance: use float16 with Qwen2 AWQ, small performance improvement
 - fix: handle Ubuntu 24 / Python 3.12 a little better, thanks [@Lissanro](https://github.com/Lissanro)
+- old code in the last docker, github worker problems again?
 
 Version 0.39.1
 

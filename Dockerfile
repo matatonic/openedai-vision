@@ -22,9 +22,8 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps -e .
 
 WORKDIR /app
 
-COPY *.py .
+COPY *.py model_conf_tests.json README.md LICENSE /app/
 COPY backend /app/backend
-COPY model_conf_tests.json .
 
 ARG USER_ID=1000
 ENV USER_ID=${USER_ID}
