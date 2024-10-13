@@ -159,6 +159,8 @@ If you can't find your favorite model, you can [open a new issue](https://github
 
 ## Recent updates
 
+Version 0.39.2
+
 - performance: use float16 with Qwen2 AWQ, small performance improvement
 - fix: handle Ubuntu 24 / Python 3.12 a little better, thanks [@Lissanro](https://github.com/Lissanro)
 
