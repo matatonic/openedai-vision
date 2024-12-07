@@ -14,7 +14,9 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 <summary>Full list of supported models</summary>
 
 - [X] [AIDC-AI](https://huggingface.co/AIDC-AI)
+- - [X] [Ovis1.6-Llama3.2-3B](https://huggingface.co/AIDC-AI/Ovis1.6-Llama3.2-3B)
 - - [X] [Ovis1.6-Gemma2-9B](https://huggingface.co/AIDC-AI/Ovis1.6-Gemma2-9B)
+- - [X] [Ovis1.6-Gemma2-27B](https://huggingface.co/AIDC-AI/Ovis1.6-Gemma2-27B)
 - - [X] [Ovis1.5-Gemma2-9B](https://huggingface.co/AIDC-AI/Ovis1.5-Gemma2-9B)
 - - [X] [Ovis1.5-Llama3-8B](https://huggingface.co/AIDC-AI/Ovis1.5-Llama3-8B)
 - [X] [Ai2](https://huggingface.co/allenai)
@@ -23,6 +25,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [Molmo-7B-D-0924](https://huggingface.co/allenai/Molmo-7B-D-0924)
 - - [X] [MolmoE-1B-0924](https://huggingface.co/allenai/MolmoE-1B-0924)
 - [X] [BAAI](https://huggingface.co/BAAI/)
+- - [X] [BAAI/Aquila-VL-2B-llava-qwen](https://huggingface.co/BAAI/Aquila-VL-2B-llava-qwen)
 - - [X] [BAAI/Bunny-v1_0-2B-zh](https://huggingface.co/BAAI/Bunny-v1_0-2B-zh)
 - - [X] [BAAI/Bunny-v1_0-3B-zh](https://huggingface.co/BAAI/Bunny-v1_0-3B-zh)
 - - [X] [BAAI/Bunny-v1_0-3B](https://huggingface.co/BAAI/Bunny-v1_0-3B)
@@ -45,19 +48,24 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [joy-caption-alpha-two](https://huggingface.co/spaces/fancyfeast/joy-caption-alpha-two) (with experimental multi-image support)
 - - [X] [joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
-- [X] [HuggingFaceM4/idefics2](https://huggingface.co/HuggingFaceM4) 
+- [X] [Google](https://huggingface.co/google)
+- - [X] [paligemma2-3b](https://huggingface.co/google/paligemma2-3b-ft-docci-448)
+- - [X] [paligemma2-10b](https://huggingface.co/google/paligemma2-10b-ft-docci-448)
+- [X] [HuggingFaceM4](https://huggingface.co/HuggingFaceM4) 
 - - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (wont gpu split, alternate docker only)
 - - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (wont gpu split, alternate docker only)
 - - [X] [idefics2-8b-chatty](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty) (wont gpu split, alternate docker only)
 - - [X] [idefics2-8b-chatty-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty-AWQ) (wont gpu split, alternate docker only)
+- [X] [HuggingFaceTB](https://huggingface.co/HuggingFaceTB)
+- - [X] [SmolVLM-Instruct](https://huggingface.co/HuggingFaceTB/SmolVLM-Instruct)
 - [X] [InternLM](https://huggingface.co/internlm/)
 - - [X] [XComposer2-2d5-7b](https://huggingface.co/internlm/internlm-xcomposer2d5-7b) (wont gpu split)
 - - [X] [XComposer2-4KHD-7b](https://huggingface.co/internlm/internlm-xcomposer2-4khd-7b) (wont gpu split)
-- - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (wont gpu split)
-- - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended)
-- - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] (wont gpu split)
-- - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit)
-- - [X] [XComposer2-VL-1.8b](https://huggingface.co/internlm/internlm-xcomposer2-vl-1_8b)
+- - [X] [XComposer2-7b](https://huggingface.co/internlm/internlm-xcomposer2-7b) [finetune] (wont gpu split) (0.39.2 only)
+- - [X] [XComposer2-7b-4bit](https://huggingface.co/internlm/internlm-xcomposer2-7b-4bit) (not recommended) (0.39.2 only)
+- - [X] [XComposer2-VL](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b) [pretrain] (wont gpu split) (0.39.2 only)
+- - [X] [XComposer2-VL-4bit](https://huggingface.co/internlm/internlm-xcomposer2-vl-7b-4bit) (0.39.2 only)
+- - [X] [XComposer2-VL-1.8b](https://huggingface.co/internlm/internlm-xcomposer2-vl-1_8b) (0.39.2 only)
 - [X] [LMMs-Lab](https://huggingface.co/lmms-lab)
 - - [X] [llava-onevision-qwen2-0.5b-ov](https://huggingface.co/lmms-lab/llava-onevision-qwen2-0.5b-ov)
 - - [X] [llava-onevision-qwen2-7b-ov](https://huggingface.co/lmms-lab/llava-onevision-qwen2-7b-ov)
@@ -82,7 +90,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - [X] [Mistral AI](https://huggingface.co/mistralai)
 - - [X] [Pixtral-12B](https://huggingface.co/mistralai/Pixtral-12B-2409)
 - [X] [mx262/MiniMonkey](https://huggingface.co/mx262/MiniMonkey)
-- [X] [nvidia/NVLM-D-72B](https://huggingface.co/nvidia/NVLM-D-72B)
+- [X] [nvidia/NVLM-D-72B](https://huggingface.co/nvidia/NVLM-D-72B) (0.39.2 only)
 - [X] [omlab/omchat-v2.0-13B-single-beta_hf](https://huggingface.co/omlab/omchat-v2.0-13B-single-beta_hf) (alt docker)
 - [X] [openbmb](https://huggingface.co/openbmb)
 - - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
@@ -121,8 +129,8 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (wont gpu split, alt docker)
 - - [X] [Mantis-8B-Fuyu](https://huggingface.co/TIGER-Lab/Mantis-8B-Fuyu) (wont gpu split)
 - [X] [Together.ai](https://huggingface.co/togethercomputer)
-- - [X] [Llama-3-8B-Dragonfly-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-v1)
-- - [X] [Llama-3-8B-Dragonfly-Med-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-Med-v1) 
+- - [X] [Llama-3-8B-Dragonfly-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-v1) (0.39.2 only)
+- - [X] [Llama-3-8B-Dragonfly-Med-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-Med-v1) (0.39.2 only)
 - [X] [qihoo360](https://huggingface.co/qihoo360)
 - - [X] [360VL-8B](https://huggingface.co/qihoo360/360VL-8B) (alt docker)
 - - [X] [360VL-70B](https://huggingface.co/qihoo360/360VL-70B) (untested)
@@ -132,12 +140,16 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (wont gpu split)
 - [X] [Qwen](https://huggingface.co/Qwen/)
+- - [X] [Qwen2-VL-72B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct) (untested)
 - - [X] [Qwen2-VL-72B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct-AWQ)
+- - [X] [Qwen2-VL-72B-Instruct-GPTQ-Int4](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct-GPTQ-Int4)
 - - [X] [Qwen2-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct)
 - - [X] [Qwen2-VL-7B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct-AWQ)
+- - [X] [Qwen2-VL-7B-Instruct-GPTQ-Int4](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct-GPTQ-Int4)
 - - [X] [Qwen2-VL-2B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-2B-Instruct)
 - - [X] [Qwen2-VL-2B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-2B-Instruct-AWQ)
-- - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
+- - [X] [Qwen2-VL-2B-Instruct-GPTQ-Int4](https://huggingface.co/Qwen/Qwen2-VL-2B-Instruct-GPTQ-Int4)
+  - [X] [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat)
 - [X] [stepfun-ai/GOT-OCR2_0](https://huggingface.co/stepfun-ai/GOT-OCR2_0) (ocr only model)
 - [X] [vikhyatk](https://huggingface.co/vikhyatk)
 - - [X] [moondream2](https://huggingface.co/vikhyatk/moondream2)
@@ -158,6 +170,16 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.40.0
+
+- new model support: AIDC-AI/Ovis1.6-Llama3.2-3B, AIDC-AI/Ovis1.6-Gemma2-27B
+- new model support: BAAI/Aquila-VL-2B-llava-qwen
+- new model support: HuggingFaceTB/SmolVLM-Instruct
+- new model support: google/paligemma2 family of models (very limited instruct/chat training so far)
+- Qwen2-VL: unpin Qwen2-VL-7B & remove Qwen hacks, GTPT-Int4/8 working again (still slow - why?)
+- pin bitsandbytes==0.44.1
+- ⚠️ DEPRECATED MODELS (use the `0.39.2` docker image for support of these models): internlm-xcomposer2-7b, internlm-xcomposer2-7b-4bit, internlm-xcomposer2-vl-1_8b, internlm-xcomposer2-vl-7b, internlm-xcomposer2-vl-7b-4bit, nvidia/NVLM-D-72B, Llama-3-8B-Dragonfly-Med-v1, Llama-3-8B-Dragonfly-v1
 
 Version 0.39.2
 

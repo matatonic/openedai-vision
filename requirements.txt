@@ -2,7 +2,8 @@ accelerate
 # auto_gptq and autoawq lack pre-compiled support for python 3.12
 auto_gptq; python_version != "3.12"
 autoawq; python_version != "3.12"
-bitsandbytes
+autoawq_kernels; python_version != "3.12"
+bitsandbytes==0.44.1
 fastapi
 # See: https://github.com/bdashore3/flash-attention/releases for other windows flash_attn releases
 # And: https://github.com/Dao-AILab/flash-attention/releases for linux.

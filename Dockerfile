@@ -6,18 +6,14 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install --upgrade pip
 
 WORKDIR /app
 RUN git clone https://github.com/TIGER-AI-Lab/Mantis.git --single-branch /app/Mantis && \
-    git clone https://github.com/togethercomputer/Dragonfly --single-branch /app/Dragonfly && \
     git clone https://github.com/baaivision/Emu3 --single-branch /app/Emu3
 
 COPY requirements.txt .
 ARG VERSION=latest
-RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "transformers>=4.45.2" >> requirements.txt ; fi
+RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "transformers>=4.47.0" >> requirements.txt ; fi
 RUN --mount=type=cache,target=/root/.cache/pip pip install -U -r requirements.txt
 
 WORKDIR /app/Mantis
-RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps -e .
-
-WORKDIR /app/Dragonfly
 RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps -e .
 
 WORKDIR /app
@@ -31,6 +27,7 @@ ARG GROUP_ID=1000
 ENV GROUP_ID=${GROUP_ID}
 RUN groupadd -g ${GROUP_ID} openedai && \
     useradd -r -u ${USER_ID} -g ${GROUP_ID} -M -d /app openedai
+RUN chown openedai:openedai /app # for .triton, .config/matplotlib
 
 USER openedai
 ENV CLI_COMMAND="python vision.py"

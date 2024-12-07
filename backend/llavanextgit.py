@@ -9,6 +9,8 @@ from vision_qna import *
 # lmms-lab/llava-onevision-qwen2-72b-ov
 # lmms-lab/llava-onevision-qwen2-72b-si
 
+# BAAI/Aquila-VL-2B-llava-qwen
+
 import warnings
 warnings.filterwarnings("ignore")
 

@@ -823,11 +823,11 @@ def guess_model_format(model_name: str) -> str:
     model_id = model_name.lower()
 
     model_format_match_map = {
-        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b', 'internvl2-', 'llava-onevision'],
+        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b', 'internvl2-', 'llava-onevision', 'aquila'],
         'falcon': ['falcon'],
         'florence': ['florence'],
         'fuyu': ['fuyu'],
-        'gemma': ['gemma', '-2b'],
+        'gemma': ['gemma'],
         'glm4v': ['glm-4v'],
         'llama2': ['bakllava', '8x7b', 'mistral', 'mixtral'],
         'llama3': ['llama-3-vision', '360vl', 'llama3'],
@@ -852,6 +852,9 @@ def guess_model_format(model_name: str) -> str:
 def guess_backend(model_name: str) -> str:
     model_id = model_name.lower()
 
+    if 'paligemma' in model_id:
+        return 'paligemma'
+
     if 'llama-3.2' in model_id: # and vision 
         return 'mllama'
 
@@ -862,6 +865,8 @@ def guess_backend(model_name: str) -> str:
         if 'v1.6' in model_id:
             return 'llavanext'
         elif 'onevision' in model_id:
+            return 'llavanextgit'
+        elif 'aquila' in model_id:
             return 'llavanextgit'
         return 'llava'
 
@@ -947,6 +952,9 @@ def guess_backend(model_name: str) -> str:
 
     if 'idefics2' in model_id:
         return 'idefics2'
+    
+    if 'smolvlm' in model_id:
+        return 'smolvlm'
 
     if 'llama-3-vision-alpha' in model_id:
         return 'llama3vision'

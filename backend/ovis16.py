@@ -2,7 +2,9 @@ from transformers import AutoModelForCausalLM
 
 from vision_qna import *
 
+# AIDC-AI/Ovis1.6-Llama3.2-3B
 # AIDC-AI/Ovis1.6-Gemma2-9B
+# AIDC-AI/Ovis1.6-Gemma2-27B
 
 IMAGE_TOKEN = "<image>"
 

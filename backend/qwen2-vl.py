@@ -9,10 +9,17 @@ from vision_qna import *
 # Qwen/Qwen2-VL-7B-Instruct-AWQ
 # Qwen/Qwen2-VL-7B-Instruct
 # Qwen/Qwen2-VL-72B-Instruct-AWQ
+# Qwen/Qwen2-VL-72B-Instruct
+# Not recommended:
 # X Qwen/Qwen2-VL-2B-Instruct-GPTQ-Int4
 # X Qwen/Qwen2-VL-2B-Instruct-GPTQ-Int8
 # X Qwen/Qwen2-VL-7B-Instruct-GPTQ-Int4
 # X Qwen/Qwen2-VL-7B-Instruct-GPTQ-Int8
+# X Qwen/Qwen2-VL-72B-Instruct-GPTQ-Int4
+# X Qwen/Qwen2-VL-72B-Instruct-GPTQ-Int8
+
+# https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct-GPTQ-Int4
+# Performance: for A100 80GB Qwen claim 30-40 T/s, I can't reproduce with this setup, I see more like 5-10 T/s.
 
 class VisionQnA(VisionQnABase):
     model_name: str = "qwen2-vl"
@@ -22,15 +29,12 @@ class VisionQnA(VisionQnABase):
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
 
-        if 'awq' in model_id.lower() and self.dtype == torch.bfloat16:
+        if ('awq' in model_id.lower() or 'gptq' in model_id.lower()) and self.dtype == torch.bfloat16:
             self.dtype = self.params['torch_dtype'] = torch.float16  # recommended
 
         self.processor = AutoProcessor.from_pretrained(model_id)
         
         del self.params['trust_remote_code']
-
-        if model_id == 'Qwen/Qwen2-VL-7B-Instruct-AWQ':
-            self.params['revision'] = '9d72ae62396aaa1817b006e07ddbbd121024f50d' # re: https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct-AWQ/discussions/4
 
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(**self.params).eval()
 
@@ -46,12 +50,6 @@ class VisionQnA(VisionQnABase):
                 msg = { 'role': m.role, 'content': [] }
                 for c in m.content:
                     if c.type == 'image_url':
-                        # hack around https://github.com/QwenLM/Qwen2-VL/issues/202'
-                        if c.image_url.url.startswith('data:image'):
-                            parts = c.image_url.url.split(';')
-                            if parts[1].startswith('charset='):
-                                c.image_url.url = parts[0] + ';' + parts[2]
-
                         msg['content'].extend([{'type': c.type, 'image': c.image_url.url}])
                     elif c.type == 'text':
                         msg['content'].extend([{'type': c.type, 'text': c.text}])
