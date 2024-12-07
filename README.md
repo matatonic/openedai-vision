@@ -100,6 +100,13 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V) (alternate docker only)
 - - [ ] [OmniLMM-12B](https://huggingface.co/openbmb/OmniLMM-12B)
 - [X] [OpenGVLab](https://huggingface.co/OpenGVLab)
+- - [X] [InternVL2_5-78B](https://huggingface.co/OpenGVLab/InternVL2_5-78B)
+- - [X] [InternVL2_5-38B](https://huggingface.co/OpenGVLab/InternVL2_5-38B)
+- - [X] [InternVL2_5-26B](https://huggingface.co/OpenGVLab/InternVL2_5-26B)
+- - [X] [InternVL2_5-8B](https://huggingface.co/OpenGVLab/InternVL2_5-8B)
+- - [X] [InternVL2_5-4B](https://huggingface.co/OpenGVLab/InternVL2_5-4B)
+- - [X] [InternVL2_5-2B](https://huggingface.co/OpenGVLab/InternVL2_5-2B)
+- - [X] [InternVL2_5-1B](https://huggingface.co/OpenGVLab/InternVL2_5-1B)
 - - [X] [InternVL2-Llama3-76B](https://huggingface.co/OpenGVLab/InternVL2-Llama3-76B)
 - - [X] [InternVL2-40B](https://huggingface.co/OpenGVLab/InternVL2-40B)
 - - [X] [InternVL2-26B](https://huggingface.co/OpenGVLab/InternVL2-26B)
@@ -170,6 +177,11 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.41.0
+
+- new model support: OpenGVLab's InternVL 2.5 family of models (1B-78B)
+- I tried many ways to get split_model() working with InternVL but failed repeatedly, sorry!
 
 Version 0.40.0
 

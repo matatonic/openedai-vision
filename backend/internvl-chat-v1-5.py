@@ -2,6 +2,7 @@ import os
 from threading import Thread
 from transformers import AutoTokenizer, AutoModel
 from vision_qna import *
+import math
 import torch
 import torchvision.transforms as T
 from torchvision.transforms.functional import InterpolationMode
@@ -19,6 +20,14 @@ from torchvision.transforms.functional import InterpolationMode
 # OpenGVLab/InternVL2-26B
 # OpenGVLab/InternVL2-40B (yi-34- nous-hermes-2)
 # OpenGVLab/InternVL2-Llama3-76B
+# OpenGVLab/InternVL2_5-1B
+# OpenGVLab/InternVL2_5-2B
+# OpenGVLab/InternVL2_5-4B
+# OpenGVLab/InternVL2_5-8B
+# OpenGVLab/InternVL2_5-26B
+# OpenGVLab/InternVL2_5-38B
+# OpenGVLab/InternVL2_5-78B
+
 
 MAX_TILES = 6
 
@@ -97,6 +106,82 @@ def load_image(image, input_size=448, max_num=MAX_TILES):
     pixel_values = torch.stack(pixel_values)
     return pixel_values
 
+def split_model(model_name):
+    device_map = {}
+    world_size = torch.cuda.device_count()
+    num_layers = {
+        'Mini-InternVL-2B-V1-5': 24, 'Mini-InternVL-4B-V1-5': 32, 'InternVL-Chat-V1-5': 48,
+        'InternVL2-1B': 24, 'InternVL2-2B': 24, 'InternVL2-4B': 32, 'InternVL2-8B': 32,
+        'InternVL2-26B': 48, 'InternVL2-40B': 60, 'InternVL2-Llama3-76B': 80,
+        'InternVL2_5-1B': 24, 'InternVL_5-2B': 24, 'InternVL2_5-4B': 36, 'InternVL2_5-8B': 32,
+        'InternVL2_5-26B': 48, 'InternVL2_5-38B': 64, 'InternVL2_5-78B': 80}[model_name]
+    # Since the first GPU will be used for ViT, treat it as half a GPU.
+    num_layers_per_gpu = math.ceil(num_layers / (world_size - 0.5))
+    num_layers_per_gpu = [num_layers_per_gpu] * world_size
+    num_layers_per_gpu[0] = math.ceil(num_layers_per_gpu[0] * 0.5)
+    layer_cnt = 0
+    for i, num_layer in enumerate(num_layers_per_gpu):
+        for j in range(num_layer):
+            device_map[f'language_model.model.layers.{layer_cnt}'] = i
+            layer_cnt += 1
+    device_map['vision_model'] = 0
+    device_map['mlp1'] = 0
+    device_map['language_model.model.tok_embeddings'] = 0
+    device_map['language_model.model.embed_tokens'] = 0
+    device_map['language_model.output'] = 0
+    device_map['language_model.model.norm'] = 0
+    device_map['language_model.lm_head'] = 0
+    device_map[f'language_model.model.layers.{num_layers - 1}'] = 0
+
+    return device_map
+
+def split_model_dynamic(model_name):
+    device_map = {}
+    world_size = torch.cuda.device_count()
+    num_layers = {
+        'Mini-InternVL-2B-V1-5': 24, 'Mini-InternVL-4B-V1-5': 32, 'InternVL-Chat-V1-5': 48,
+        'InternVL2-1B': 24, 'InternVL2-2B': 24, 'InternVL2-4B': 32, 'InternVL2-8B': 32,
+        'InternVL2-26B': 48, 'InternVL2-40B': 60, 'InternVL2-Llama3-76B': 80,
+        'InternVL2_5-1B': 24, 'InternVL2_5-2B': 24, 'InternVL2_5-4B': 36, 'InternVL2_5-8B': 32,
+        'InternVL2_5-26B': 48, 'InternVL2_5-38B': 64, 'InternVL2_5-78B': 80}.get(model_name, None)
+    if num_layers is None:
+        logger.warning(f"Unknown model name {model_name}, can't guess layers count, reverting to 'auto' device_map which may not work.")
+        return 'auto'
+    # Get the available memory on each GPU
+    gpu_memory = [torch.cuda.get_device_properties(i).total_memory for i in range(world_size)]
+    # Subtract half of the first GPU's memory, XXX try to do better
+    reserved = 16 if num_layers > 32 else 6 # internvit 6B vs 300M, unfinished hack.
+
+    gpu_memory[0] -= min(reserved * 1e9, gpu_memory[0])
+    # Calculate the total available memory
+    total_memory = sum(gpu_memory)
+    # Calculate the memory ratios
+    memory_ratios = [mem / total_memory for mem in gpu_memory]
+    # Assign layers to GPUs based on their memory ratios
+    layer_cnt = 0
+    for i, ratio in enumerate(memory_ratios):
+        num_layers_on_gpu = math.floor(num_layers * ratio)
+        for j in range(num_layers_on_gpu):
+            if layer_cnt < num_layers:
+                device_map[f'language_model.model.layers.{layer_cnt}'] = i
+                layer_cnt += 1
+    # Assign any remaining layers to the first GPU
+    while layer_cnt < num_layers:
+        device_map[f'language_model.model.layers.{layer_cnt}'] = 0
+        layer_cnt += 1
+    device_map['vision_model'] = 0
+    device_map['mlp1'] = 0
+    #device_map['language_model'] = 0
+    device_map['language_model.model.tok_embeddings'] = 0
+    device_map['language_model.model.embed_tokens'] = 0
+    device_map['language_model.output'] = 0
+    device_map['language_model.model.norm'] = 0
+    device_map['language_model.lm_head'] = 0
+    device_map[f'language_model.model.layers.{num_layers - 1}'] = 0
+
+    logger.debug(f"{device_map=}")
+
+    return device_map
 
 class VisionQnA(VisionQnABase):
     model_name: str = "internvl-chat-v1-5"
@@ -104,6 +189,13 @@ class VisionQnA(VisionQnABase):
     vision_layers: List[str] = ["vision_model"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
+
+        # This doesn't work at all for me, still complains
+        # RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:1 and cuda:0!
+        #if device_map == 'auto':
+        #    model_name = model_id.split('/')[-1]
+        #    device_map = split_model_dynamic(model_name)
+
         super().__init__(model_id, device, device_map, extra_params, format)
 
         if not format:
@@ -113,6 +205,17 @@ class VisionQnA(VisionQnABase):
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
         self.model = AutoModel.from_pretrained(**self.params).eval()
+
+        for name, module in self.model.named_modules():
+            # Check the device of the module's parameters
+            dev = 'UNKNOWN'
+            if hasattr(module, 'weight'):
+                dev = module.weight.device
+            elif hasattr(module, 'bias'):
+                dev = module.bias.device
+            elif hasattr(module, 'device'):
+                dev = module.device
+            logger.debug(f'Layer: {name}, Device: {dev}')
 
         self.model.img_context_token_id = self.tokenizer.convert_tokens_to_ids('<IMG_CONTEXT>')
 
@@ -153,6 +256,7 @@ class VisionQnA(VisionQnABase):
             'max_new_tokens': 512,
             'do_sample': False,
             'eos_token_id': self.eos_token_id,
+            'pad_token_id': self.eos_token_id,
         }
 
         params = self.get_generation_params(request, default_params)

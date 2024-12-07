@@ -823,7 +823,7 @@ def guess_model_format(model_name: str) -> str:
     model_id = model_name.lower()
 
     model_format_match_map = {
-        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b', 'internvl2-', 'llava-onevision', 'aquila'],
+        'chatml': ['34b', 'yi-6b', 'nanollava', 'internvl-chat-v1-5', 'internvl-chat-2b', 'internvl2-', 'internvl2_5-', 'llava-onevision', 'aquila'],
         'falcon': ['falcon'],
         'florence': ['florence'],
         'fuyu': ['fuyu'],
@@ -947,7 +947,7 @@ def guess_backend(model_name: str) -> str:
     if 'internvl-chat' in model_id and '-v1-5' in model_id:
         return 'internvl-chat-v1-5'
 
-    if 'internvl2-' in model_id:
+    if 'internvl2-' in model_id or 'internvl2_5-' in model_id:
         return 'internvl-chat-v1-5'
 
     if 'idefics2' in model_id:
