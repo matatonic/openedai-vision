@@ -458,7 +458,7 @@ source .venv/bin/activate
 # upgrade pip
 pip install --upgrade pip
 # install the python dependencies
-pip install -U -r requirements.txt "transformers>=4.45.2"
+pip install -U -r requirements.txt "transformers>=4.47.0"
 # OR install the python dependencies for the alt version
 pip install -U -r requirements.txt "transformers==4.41.2"
 # optional - export variables for your environment, see vision.sample.env.
