@@ -1,7 +1,35 @@
-from fastapi import FastAPI, Request
+import functools
+import asyncio
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse, JSONResponse
 from loguru import logger
+
+
+def single_request(timeout_seconds=300):
+    lock = asyncio.Lock()
+    
+    def decorator(func):
+        @functools.wraps(func)
+        async def wrapper(*args, **kwargs):
+            try:
+                async with asyncio.timeout(timeout_seconds):
+                    if not await lock.acquire():
+                        raise HTTPException(
+                            status_code=429,
+                            detail="Server is currently processing another request"
+                        )
+                    try:
+                        return await func(*args, **kwargs)
+                    finally:
+                        lock.release()
+            except asyncio.TimeoutError:
+                raise HTTPException(
+                    status_code=504,
+                    detail="Request processing timed out"
+                )
+        return wrapper
+    return decorator
 
 class OpenAIError(Exception):
     pass

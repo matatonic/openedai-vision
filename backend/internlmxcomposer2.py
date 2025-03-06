@@ -24,7 +24,7 @@ def calc_hd(image, max_num=MAX_TILES):
     return min(ceil(width // 336) * ceil(height // 336), max_num)
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "internlm-xcomposer2-4khd-7b"
+    model_name: str = "internlmxcomposer2"
     format: str = "chatml"
     vision_layers: List[str] = ['vit', 'vision_proj']
     

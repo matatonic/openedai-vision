@@ -10,7 +10,7 @@ from vision_qna import *
 # llavanext doesn't support generation without images
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "llavanext"
+    model_name: str = "llava_next"
     format: str = 'llama2'
     vision_layers: List[str] = ["vision_model", "vision_tower", "multi_modal_projector"]
     

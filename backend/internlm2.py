@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 MAX_TILES = 24
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "internlm-xcomposer2d5"
+    model_name: str = "internlm2"
     format: str = "internal"
     vision_layers: List[str] = ['vit', 'vision_proj']
     

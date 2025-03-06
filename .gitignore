@@ -2,6 +2,9 @@
 hf_home/
 vision.env
 vision-alt.env
+sample-*.env
+test_output-*.csv
+*.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

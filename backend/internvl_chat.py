@@ -184,7 +184,7 @@ def split_model_dynamic(model_name):
     return device_map
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "internvl-chat-v1-5"
+    model_name: str = "internvl_chat"
     format: str = "chatml"
     vision_layers: List[str] = ["vision_model"]
     

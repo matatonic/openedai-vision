@@ -14,44 +14,54 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 <summary>Full list of supported models</summary>
 
 - [X] [AIDC-AI](https://huggingface.co/AIDC-AI)
+- - [X] [Ovis2-1B](https://huggingface.co/AIDC-AI/Ovis2-1B)
+- - [X] [Ovis2-2B](https://huggingface.co/AIDC-AI/Ovis2-2B)
+- - [X] [Ovis2-4B](https://huggingface.co/AIDC-AI/Ovis2-4B)
+- - [X] [Ovis2-8B](https://huggingface.co/AIDC-AI/Ovis2-8B)
+- - [X] [Ovis2-16B](https://huggingface.co/AIDC-AI/Ovis2-16B)
+- - [X] [Ovis2-34B](https://huggingface.co/AIDC-AI/Ovis2-34B)
 - - [X] [Ovis1.6-Llama3.2-3B](https://huggingface.co/AIDC-AI/Ovis1.6-Llama3.2-3B)
-- - [X] [Ovis1.6-Gemma2-9B](https://huggingface.co/AIDC-AI/Ovis1.6-Gemma2-9B)
-- - [X] [Ovis1.6-Gemma2-27B](https://huggingface.co/AIDC-AI/Ovis1.6-Gemma2-27B)
-- - [X] [Ovis1.5-Gemma2-9B](https://huggingface.co/AIDC-AI/Ovis1.5-Gemma2-9B)
+- - [X] [Ovis1.6-Gemma2-9B](https://huggingface.co/AIDC-AI/Ovis1.6-Gemma2-9B) (0.41.0 only)
+- - [X] [Ovis1.6-Gemma2-27B](https://huggingface.co/AIDC-AI/Ovis1.6-Gemma2-27B) (0.41.0 only)
+- - [X] [Ovis1.5-Gemma2-9B](https://huggingface.co/AIDC-AI/Ovis1.5-Gemma2-9B) (0.41.0 only)
 - - [X] [Ovis1.5-Llama3-8B](https://huggingface.co/AIDC-AI/Ovis1.5-Llama3-8B)
 - [X] [Ai2](https://huggingface.co/allenai)
-- - [X] [Molmo-72B-0924](https://huggingface.co/allenai/Molmo-72B-0924)
-- - [X] [Molmo-7B-O-0924](https://huggingface.co/allenai/Molmo-7B-O-0924)
-- - [X] [Molmo-7B-D-0924](https://huggingface.co/allenai/Molmo-7B-D-0924)
-- - [X] [MolmoE-1B-0924](https://huggingface.co/allenai/MolmoE-1B-0924)
+- - [X] [Molmo-72B-0924](https://huggingface.co/allenai/Molmo-72B-0924) (0.41.0 only)
+- - [X] [Molmo-7B-O-0924](https://huggingface.co/allenai/Molmo-7B-O-0924) (0.41.0 only)
+- - [X] [Molmo-7B-D-0924](https://huggingface.co/allenai/Molmo-7B-D-0924) (0.41.0 only)
+- - [X] [MolmoE-1B-0924](https://huggingface.co/allenai/MolmoE-1B-0924) (0.41.0 only)
 - [X] [BAAI](https://huggingface.co/BAAI/)
 - - [X] [BAAI/Aquila-VL-2B-llava-qwen](https://huggingface.co/BAAI/Aquila-VL-2B-llava-qwen)
-- - [X] [BAAI/Bunny-v1_0-2B-zh](https://huggingface.co/BAAI/Bunny-v1_0-2B-zh)
-- - [X] [BAAI/Bunny-v1_0-3B-zh](https://huggingface.co/BAAI/Bunny-v1_0-3B-zh)
-- - [X] [BAAI/Bunny-v1_0-3B](https://huggingface.co/BAAI/Bunny-v1_0-3B)
-- - [X] [BAAI/Bunny-v1_0-4B](https://huggingface.co/BAAI/Bunny-v1_0-4B)
-- - [X] [BAAI/Bunny-v1_1-4B](https://huggingface.co/BAAI/Bunny-v1_1-4B)
+- - [X] [BAAI/Bunny-v1_0-2B-zh](https://huggingface.co/BAAI/Bunny-v1_0-2B-zh) (0.41.0 only)
+- - [X] [BAAI/Bunny-v1_0-3B-zh](https://huggingface.co/BAAI/Bunny-v1_0-3B-zh) (0.41.0 only)
+- - [X] [BAAI/Bunny-v1_0-3B](https://huggingface.co/BAAI/Bunny-v1_0-3B) (0.41.0 only)
+- - [X] [BAAI/Bunny-v1_0-4B](https://huggingface.co/BAAI/Bunny-v1_0-4B) (0.41.0 only)
+- - [X] [BAAI/Bunny-v1_1-4B](https://huggingface.co/BAAI/Bunny-v1_1-4B) (0.41.0 only)
 - - [X] [BAAI/Bunny-v1_1-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-v1_1-Llama-3-8B-V) (alt docker)
 - - [X] [Bunny-Llama-3-8B-V](https://huggingface.co/BAAI/Bunny-Llama-3-8B-V) (alt docker)
 - - [X] [Emu2-Chat](https://huggingface.co/BAAI/Emu2-Chat) (may need the --max-memory option to GPU split, slow to load)
-- - [X] [Emu3-Chat](https://huggingface.co/BAAI/Emu3-Chat)
+- - [X] [Emu3-Chat](https://huggingface.co/BAAI/Emu3-Chat) (0.41.0 only)
+- [X] [CohereForAI](https://huggingface.co/CohereForAI)
+- - [X] [aya-vision-8b](https://huggingface.co/CohereForAI/aya-vision-8b)
+- - [X] [aya-vision-32b](https://huggingface.co/CohereForAI/aya-vision-32b)
 - [X] [cognitivecomputations](https://huggingface.co/cognitivecomputations)
 - - [X] [dolphin-vision-72b](https://huggingface.co/cognitivecomputations/dolphin-vision-72b) (alternate docker only)
 - - [X] [dolphin-vision-7b](https://huggingface.co/cognitivecomputations/dolphin-vision-7b) (alternate docker only)
 - [X] [echo840](https://huggingface.co/echo840)
-- - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat)
+- - [X] [Monkey-Chat](https://huggingface.co/echo840/Monkey-Chat) (0.41.0 only)
 - - [X] [Monkey](https://huggingface.co/echo840/Monkey)
 - [X] [failspy](https://huggingface.co/failspy)
-- - [X] [Phi-3-vision-128k-instruct-abliterated-alpha](https://huggingface.co/failspy/Phi-3-vision-128k-instruct-abliterated-alpha)
+- - [X] [Phi-3-vision-128k-instruct-abliterated-alpha](https://huggingface.co/failspy/Phi-3-vision-128k-instruct-abliterated-alpha) (0.41.0 only)
 - [X] [falcon-11B-vlm](https://huggingface.co/tiiuae/falcon-11B-vlm) (alternate docker only)
 - [X] [fancyfeast](https://huggingface.co/fancyfeast)
 - - [X] [joy-caption-alpha-two](https://huggingface.co/spaces/fancyfeast/joy-caption-alpha-two) (with experimental multi-image support)
 - - [X] [joy-caption-pre-alpha](https://huggingface.co/spaces/fancyfeast/joy-caption-pre-alpha) (caption only)
 - [X] [fuyu-8b](https://huggingface.co/adept/fuyu-8b) [pretrain]
 - [X] [Google](https://huggingface.co/google)
-- - [X] [paligemma2-3b](https://huggingface.co/google/paligemma2-3b-ft-docci-448)
-- - [X] [paligemma2-10b](https://huggingface.co/google/paligemma2-10b-ft-docci-448)
-- [X] [HuggingFaceM4](https://huggingface.co/HuggingFaceM4) 
+- - [X] [paligemma2-3b](https://huggingface.co/google/paligemma2-3b-ft-docci-448) (0.41.0 only)
+- - [X] [paligemma2-10b](https://huggingface.co/google/paligemma2-10b-ft-docci-448) (0.41.0 only)
+- [X] [HuggingFaceM4](https://huggingface.co/HuggingFaceM4
+- - [X] [Idefics3-8B-Llama3](https://huggingface.co/HuggingFaceM4/Idefics3-8B-Llama3)
 - - [X] [idefics2-8b](https://huggingface.co/HuggingFaceM4/idefics2-8b) (wont gpu split, alternate docker only)
 - - [X] [idefics2-8b-AWQ](https://huggingface.co/HuggingFaceM4/idefics2-8b-AWQ) (wont gpu split, alternate docker only)
 - - [X] [idefics2-8b-chatty](https://huggingface.co/HuggingFaceM4/idefics2-8b-chatty) (wont gpu split, alternate docker only)
@@ -83,9 +93,9 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [Llama-3.2-90B-Vision-Instruct](https://huggingface.co/meta-llama/Llama-3.2-90B-Vision-Instruct)
 - - [X] [Llama-3.2-11B-Vision-Instruct](https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct)
 - [X] [Microsoft](https://huggingface.co/microsoft/)
-- - [X] [Phi-3.5-vision-instruct](https://huggingface.co/microsoft/Phi-3.5-vision-instruct)
-- - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct)
-- - [X] [Florence-2-large-ft](https://huggingface.co/microsoft/Florence-2-large-ft)  (wont gpu split)
+- - [X] [Phi-3.5-vision-instruct](https://huggingface.co/microsoft/Phi-3.5-vision-instruct) (0.41.0 only)
+- - [X] [Phi-3-vision-128k-instruct](https://huggingface.co/microsoft/Phi-3-vision-128k-instruct) (0.41.0 only)
+- - [X] [Florence-2-large-ft](https://huggingface.co/microsoft/Florence-2-large-ft)  (wont gpu split) (0.41.0 only)
 - - [X] [Florence-2-base-ft](https://huggingface.co/microsoft/Florence-2-base-ft)  (wont gpu split)
 - [X] [Mistral AI](https://huggingface.co/mistralai)
 - - [X] [Pixtral-12B](https://huggingface.co/mistralai/Pixtral-12B-2409)
@@ -94,7 +104,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - [X] [omlab/omchat-v2.0-13B-single-beta_hf](https://huggingface.co/omlab/omchat-v2.0-13B-single-beta_hf) (alt docker)
 - [X] [openbmb](https://huggingface.co/openbmb)
 - - [X] [MiniCPM-V-2_6](https://huggingface.co/openbmb/MiniCPM-V-2_6) (video not supported yet)
-- - [X] [MiniCPM-V-2_6-int4](https://huggingface.co/openbmb/MiniCPM-V-2_6-int4)
+- - [X] [MiniCPM-V-2_6-int4](https://huggingface.co/openbmb/MiniCPM-V-2_6-int4) (0.41.0 only)
 - - [X] [MiniCPM-Llama3-V-2_5](https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5)
 - - [X] [MiniCPM-V-2](https://huggingface.co/openbmb/MiniCPM-V-2) (alternate docker only)
 - - [X] [MiniCPM-V aka. OmniLMM-3B](https://huggingface.co/openbmb/MiniCPM-V) (alternate docker only)
@@ -119,7 +129,7 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [ ] [InternVL-Chat-V1-5-AWQ](https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5-AWQ) (wont gpu split yet)
 - - [X] [Mini-InternVL-Chat-4B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-4B-V1-5) (alternate docker only)
 - - [X] [Mini-InternVL-Chat-2B-V1-5](https://huggingface.co/OpenGVLab/Mini-InternVL-Chat-2B-V1-5)
-- [X] [rhymes-ai/Aria](https://huggingface.co/rhymes-ai/Aria)
+- [X] [rhymes-ai/Aria](https://huggingface.co/rhymes-ai/Aria) (0.41.0 only)
 - [X] [Salesforce](https://huggingface.co/Salesforce)
 - - [X] [xgen-mm-phi3-mini-instruct-singleimage-r-v1.5](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-singleimage-r-v1.5)
 - - [X] [xgen-mm-phi3-mini-instruct-interleave-r-v1](https://huggingface.co/Salesforce/xgen-mm-phi3-mini-instruct-interleave-r-v1.5)
@@ -132,9 +142,9 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [cogagent-chat-hf](https://huggingface.co/THUDM/cogagent-chat-hf) (alternate docker only)
 - - [X] [glm-4v-9b](https://huggingface.co/THUDM/glm-4v-9b) (wont gpu split)
 - [X] [TIGER-Lab](https://huggingface.co/TIGER-Lab)
-- - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (wont gpu split, alt docker)
-- - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (wont gpu split, alt docker)
-- - [X] [Mantis-8B-Fuyu](https://huggingface.co/TIGER-Lab/Mantis-8B-Fuyu) (wont gpu split)
+- - [X] [Mantis-8B-siglip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-siglip-llama3) (wont gpu split, 0.41.0 alt docker)
+- - [X] [Mantis-8B-clip-llama3](https://huggingface.co/TIGER-Lab/Mantis-8B-clip-llama3) (wont gpu split, 0.41.0 alt docker)
+- - [X] [Mantis-8B-Fuyu](https://huggingface.co/TIGER-Lab/Mantis-8B-Fuyu) (wont gpu split, 0.41.0 only)
 - [X] [Together.ai](https://huggingface.co/togethercomputer)
 - - [X] [Llama-3-8B-Dragonfly-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-v1) (0.39.2 only)
 - - [X] [Llama-3-8B-Dragonfly-Med-v1](https://huggingface.co/togethercomputer/Llama-3-8B-Dragonfly-Med-v1) (0.39.2 only)
@@ -146,7 +156,15 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 - - [X] [nanoLLaVA-1.5](https://huggingface.co/qnguyen3/nanoLLaVA-1.5) (wont gpu split)
 - [X] [qresearch](https://huggingface.co/qresearch/)
 - - [X] [llama-3-vision-alpha-hf](https://huggingface.co/qresearch/llama-3-vision-alpha-hf) (wont gpu split)
-- [X] [Qwen](https://huggingface.co/Qwen/)
+- [X] [Qwen](https://huggingface.co/Qwen)
+- - [X] [Qwen2.5-VL-3B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct-AWQ)
+- - [X] [Qwen2.5-VL-3B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct)
+- - [X] [Qwen2.5-VL-7B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct-AWQ)
+- - [X] [Qwen2.5-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct)
+- - [X] [Qwen2.5-VL-72B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct-AWQ) (some error)
+- - [X] [Qwen2.5-VL-72B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct)
+- - [X] [kosbu/QVQ-72B-Preview-AWQ](https://huggingface.co/kosbu/QVQ-72B-Preview-AWQ)
+- - [X] [QVQ-72B-Preview](https://huggingface.co/Qwen/QVQ-72B-Preview)
 - - [X] [Qwen2-VL-72B-Instruct](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct) (untested)
 - - [X] [Qwen2-VL-72B-Instruct-AWQ](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct-AWQ)
 - - [X] [Qwen2-VL-72B-Instruct-GPTQ-Int4](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct-GPTQ-Int4)
@@ -177,6 +195,20 @@ Can't decide which to use? See the [OpenVLM Leaderboard](https://huggingface.co/
 If you can't find your favorite model, you can [open a new issue](https://github.com/matatonic/openedai-vision/issues/new/choose) and request it.
 
 ## Recent updates
+
+Version 0.42.0
+
+- new model support: CohereForAI/aya-vision family of models
+- new model support: AIDC-AI/Ovis2 family of models
+- new model support: Qwen/Qwen2.5-VL family of models
+- new model support: Qwen/QVQ-72B-Preview
+- new model support: HuggingFaceM4/Idefics3-8B-Llama3
+- compatibility: better backend auto detection for more flexible support of models by type
+- bump torch to 2.5
+- restrict requests to one at a time (no batching yet)
+- REGRESSION: memory usage randomly seems to blow up with some models (qwen2/qwen2.5), this seems to be a new Qwen specific bug
+- REGRESSION: GTPT-Int4/8 probably broken again
+- ⚠️ DEPRECATED MODELS (use the `0.41.0` docker image for support of these models): TIGER-Lab/Mantis, Ovis1.6-Gemma2-9B, Ovis1.6-Gemma2-27B, Ovis1.5-Gemma2-9B, allenai/Molmo, BAAI/Bunny, BAAI/Emu3-Chat, echo840/Monkey-Chat, failspy/Phi-3-vision-128k-instruct-abliterated-alpha, google/paligemma2, microsoft/Florence-2-large-ft, microsoft/Phi-3-vision, microsoft/Phi-3.5-vision, qnguyen3/nanoLLaVA, rhymes-ai/Aria
 
 Version 0.41.0
 
@@ -209,6 +241,9 @@ Version 0.39.0
 - improved support for multi-image in various models.
 - docker package: The latest release will now be tagged with `:latest`, rather than latest commit.
 - ⚠️ docker: docker will now run as a user instead of root. Your `hf_home` volume may need the ownership fixed, you can use this command: `sudo chown $(id -u):$(id -g) -R hf_home`
+
+<details>
+<summary>Older version notes</summary>
 
 Version 0.38.2
 
@@ -245,9 +280,6 @@ Version 0.34.0
 - new model support: Ai2/allenai Molmo family of models
 - new model support: stepfun-ai/GOT-OCR2_0, this is an OCR only model, all chat is ignored.
 - Support moved to alt image: Bunny-Llama-3-8B-V, Bunny-v1_1-Llama-3-8B-V, Mantis-8B-clip-llama3, Mantis-8B-siglip-llama3, omchat-v2.0-13B-single-beta_hf, qihoo360/360VL-8B
-
-<details>
-<summary>Older version notes</summary>
 
 Version 0.33.0
 
@@ -497,9 +529,7 @@ INSTALL_KERNELS=1 pip install git+https://github.com/casper-hansen/AutoAWQ.git -
 ## Usage
 
 ```
-usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--no-trust-remote-code] [-4]
-                 [--use-double-quant] [-8] [-F] [-A {sdpa,eager,flash_attention_2}] [-T MAX_TILES] [--preload] [-L {DEBUG,INFO,WARNING,ERROR,CRITICAL}] [-H HOST]
-                 [-P PORT]
+usage: vision.py [-h] -m MODEL [-b BACKEND] [-f FORMAT] [-d DEVICE] [--device-map DEVICE_MAP] [--max-memory MAX_MEMORY] [--unload-timer UNLOAD_TIMER] [--no-trust-remote-code] [-4] [--use-double-quant] [-8] [-F] [-A {sdpa,eager,flash_attention_2}] [-T MAX_TILES] [--preload] [-L {DEBUG,INFO,WARNING,ERROR,CRITICAL}] [-H HOST] [-P PORT]
 
 OpenedAI Vision API Server
 
@@ -517,6 +547,8 @@ options:
                         Set the default device map policy for the model. (auto, balanced, sequential, balanced_low_0, cuda:1, etc.) (default: auto)
   --max-memory MAX_MEMORY
                         (emu2 only) Set the per cuda device_map max_memory. Ex. 0:22GiB,1:22GiB,cpu:128GiB (default: None)
+  --unload-timer UNLOAD_TIMER
+                        Idle unload timer for the model in seconds, Ex. 900 for 15 minutes (default: None)
   --no-trust-remote-code
                         Don't trust remote code (required for many models) (default: False)
   -4, --load-in-4bit    load in 4bit (doesn't work with all models) (default: False)

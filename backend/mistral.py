@@ -13,7 +13,7 @@ from vision_qna import *
 # mistralai/Pixtral-12B-2409
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "pixtral"
+    model_name: str = "mistral"
     format: str = "pixtral"
     visual_layers: List[str] = ["vision_encoder", 'vision_language_adapter']
     

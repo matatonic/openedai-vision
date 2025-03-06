@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-import time
-import json
-import sys
-import requests
 import argparse
+import csv
+import json
+import requests
 import subprocess
+import sys
+import time
 import traceback
 from datauri import DataURI
 from openai import OpenAI
@@ -30,8 +31,21 @@ no_image = {
     '5': 'In the integer sequence: 1, 2, 3, 4, ... What number comes next after 4?'
 }
 
-green_pass = '\033[92mpass\033[0m✅'
-red_fail = '\033[91mfail\033[0m❌'
+green_pass = '✅ pass'
+red_fail = '❌ fail'
+
+torch_memory_baseline = 0
+
+def get_total_gpu_mem_used():
+    device_count = torch.cuda.device_count()
+    total_mem_used = 0.0
+    for i in range(device_count):
+        allocated_memory, total_memory,  = torch.cuda.mem_get_info(device=i)
+        total_mem_used += total_memory - allocated_memory
+    return total_mem_used / (1024 ** 3) - torch_memory_baseline  # convert bytes to gigabytes
+    
+torch_memory_baseline = get_total_gpu_mem_used()
+print(f"Baseline CUDA memory: {torch_memory_baseline:.1f}GB")
 
 
 def data_url_from_url(img_url: str) -> str:
@@ -48,30 +62,40 @@ def ready():
     except:
         return False
 
-def record_result(cmd_args, results, t, mem, note):
+def print_cli_command(r: dict, file=sys.stdout):
+    cmdl = ' '.join(r['args'])
+    result = all(r['results'])
+    print(f"#CLI_COMMAND=\"python vision.py -m {cmdl}\"  # test {green_pass if result else red_fail}, time: {r['time']:.1f}s, mem: {r['mem']:.1f}GB, {r['note']}, {r['total_tokens']}T/{r['total_time']:.1f}s, {r['average_tps']:.1f} T/s", file=file)
+
+def make_csv_header():
+    return ['pass', 'model', 'args', 'time', 'mem', 'total_tokens', 'total_time', 'average_tps', 'note']
+
+def make_csv_row(r):
+    cmdl = ' '.join(r['args'])
+    result = all(r['results'])
+    passed = '✅' if result else '❌'
+    return [passed, r['model'], cmdl, r['time'], r['mem'], r['total_tokens'], r['total_time'], r['average_tps'], r['note']]
+
+def record_result(cmd_args, results: list = [False], t: float = -1, mem: float = -1, tok_total: int = 0, tim_total: float = 0, average_tps: float = 0, note: str = 'N/A'):
     # update all_results with the test data
-    all_results.extend([{
+    r = {
+        'model': cmd_args[0],
         'args': cmd_args,
         'results': results,
         'time': t,
         'mem': mem,
+        'total_tokens': tok_total,
+        'total_time': tim_total,
+        'average_tps': average_tps,
         'note': note
-    }])
+    }
+    all_results.extend([r])
     result = all(results)
-    print(f"#CLI_COMMAND=\"python vision.py -m {' '.join(cmd_args)}\"  # test {green_pass if result else red_fail}, time: {t:.1f}s, mem: {mem:.1f}GB, {note}")
-
-torch_memory_baseline = 0
-
-def get_total_gpu_mem_used():
-    device_count = torch.cuda.device_count()
-    total_mem_used = 0.0
-    for i in range(device_count):
-        allocated_memory, total_memory,  = torch.cuda.mem_get_info(device=i)
-        total_mem_used += total_memory - allocated_memory
-    return total_mem_used / (1024 ** 3) - torch_memory_baseline  # convert bytes to gigabytes
-    
-torch_memory_baseline = get_total_gpu_mem_used()
-print(f"Baseline CUDA memory: {torch_memory_baseline:.1f}GB")
+    cmdl = ' '.join(r['args'])
+    passed = '✅' if result else '❌'
+    print_cli_command(r)
+    #print(f"#CLI_COMMAND=\"python vision.py -m {cmdl}\"  # test {green_pass if result else red_fail}, time: {t:.1f}s, mem: {mem:.1f}GB, {note}, {tok_total}T/{tim_total}s, {average_tps:.1f} T/s")
+    print([passed, r['model'], cmdl, r['time'], r['mem'], r['total_tokens'], r['total_time'], r['average_tps'], r['note']], file=sys.stderr)
 
 def test(cmd_args: list[str]) -> int:
     print(f"### Test start")
@@ -93,13 +117,13 @@ def test(cmd_args: list[str]) -> int:
 
         if proc.returncode is not None:
             note = 'Error: Server failed to start (exit).'
-            record_result(cmd_args, [False], -1, -1, note)
+            record_result(cmd_args, note=note)
             print(f"\n{note}\nResult: fail\n\n### Test end")
             return -1
         elif time.time() > timeout:
             print("Startup Timeout, killing server.", end='', flush=True)
             note = 'Error: Server failed to start (timeout).'
-            record_result(cmd_args, [False], -1, -1, note)
+            record_result(cmd_args, note=note)
 
             proc.kill()
             proc.wait()
@@ -123,24 +147,24 @@ def test(cmd_args: list[str]) -> int:
         timing = []
 
     t = time.time() - t
-
     mem = get_total_gpu_mem_used()
-
     result = all(results)
+    tok_total, tim_total, average_tps = 0, 0.0, 0.0
+
+    if timing:
+        for tok, tim in timing:
+            if tok > 1 and tim > 0:
+                tok_total += tok
+                tim_total += tim
+        if tim_total > 0.0:
+            average_tps=tok_total/tim_total
+
     if not note:
         note = f'{results.count(True)}/{len(results)} tests passed'
-        if timing:
-            tok_total, tim_total = 0, 0.0
-            for tok, tim in timing:
-                if tok > 1 and tim > 0:
-                    tok_total += tok
-                    tim_total += tim
-            if tim_total > 0.0:
-                note += f', ({tok_total}/{tim_total:0.1f}s) {tok_total/tim_total:0.1f} T/s'
 
     print(f"\n\n###\n\nTest complete.\nResult: {green_pass if result else red_fail}, time: {t:.1f}s")
 
-    record_result(cmd_args, results, t, mem, note)
+    record_result(cmd_args, results, t, mem, tok_total, tim_total, average_tps, note)
 
     print("Stopping server", end='', flush=True)
 
@@ -301,8 +325,10 @@ if __name__ == '__main__':
     
     print(f"### End tests.")
 
-    fname = f"sample.env-{time.time()}"
-    with open(fname,'w') as results_file:
+
+    # ENV sample
+    fname = f"vision.sample.env"
+    with open(fname, 'w') as results_file:
         print("""# This sample env file can be used to set environment variables for the docker-compose.yml
 # Copy this file to vision.env and uncomment the model of your choice.
 HF_HOME=hf_home
@@ -312,9 +338,14 @@ HF_HUB_ENABLE_HF_TRANSFER=1
 #OPENEDAI_DEVICE_MAP="sequential"
 """, file=results_file)
 
-        for r in all_results:
-            cmdl = ' '.join(r['args'])
-            result = all(r['results'])
-            print(f"#CLI_COMMAND=\"python vision.py -m {cmdl}\"  # test {green_pass if result else red_fail}, time: {r['time']:.1f}s, mem: {r['mem']:.1f}GB, {r['note']}", file=results_file)
+        # CSV results
+        writer = csv.writer(open("test_output.csv", 'w'))
+        writer.writerow(make_csv_header())
 
+        for r in all_results:
+            writer.writerow(make_csv_row(r))
+            print_cli_command(r, file=results_file)
+
+    # print
     print(open(fname,'r').read())
+

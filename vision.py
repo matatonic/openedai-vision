@@ -6,6 +6,7 @@ import time
 import json
 import argparse
 import importlib
+import threading
 from contextlib import asynccontextmanager
 import uvicorn
 from sse_starlette import EventSourceResponse
@@ -25,8 +26,10 @@ async def lifespan(app):
 
 app = openedai.OpenAIStub(lifespan=lifespan)
 
+REQUEST_TIMEOUT = os.environ.get('OPENEDAI_REQUEST_TIMEOUT', 300)
 
 @app.post(path="/v1/chat/completions")
+@openedai.single_request(timeout_seconds=REQUEST_TIMEOUT)
 async def vision_chat_completions(request: ImageChatRequest):
 
     request = vision_qna.repack_message_content(request)
@@ -134,6 +137,7 @@ def parse_args(argv=None):
     #parser.add_argument('-t', '--dtype', action='store', default="auto", help="Set the torch dtype, ex. 'float16'")
     parser.add_argument('--device-map', action='store', default=os.environ.get('OPENEDAI_DEVICE_MAP', "auto"), help="Set the default device map policy for the model. (auto, balanced, sequential, balanced_low_0, cuda:1, etc.)")
     parser.add_argument('--max-memory', action='store', default=None, help="(emu2 only) Set the per cuda device_map max_memory. Ex. 0:22GiB,1:22GiB,cpu:128GiB")
+    parser.add_argument('--unload-timer', action='store', default=None, type=int, help="Idle unload timer for the model in seconds, Ex. 900 for 15 minutes")
     parser.add_argument('--no-trust-remote-code', action='store_true', help="Don't trust remote code (required for many models)")
     parser.add_argument('-4', '--load-in-4bit', action='store_true', help="load in 4bit (doesn't work with all models)")
     parser.add_argument('--use-double-quant', action='store_true', help="Used with --load-in-4bit for an extra memory savings, a bit slower")
@@ -152,7 +156,7 @@ if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
 
     if not args.backend:
-        args.backend = guess_backend(args.model)
+        args.backend = guess_backend(args.model, trust_remote_code=not args.no_trust_remote_code)
 
     logger.info(f"Loading VisionQnA[{args.backend}] with {args.model}")
     backend = importlib.import_module(f'backend.{args.backend}')
@@ -164,6 +168,9 @@ if __name__ == "__main__":
     extra_params = dict(
         attn_implementation = args.attn_implementation
     )
+
+    if torch.cuda.get_device_properties(torch.cuda.current_device()).major >= 8:
+        torch.set_float32_matmul_precision("high")
 
     if args.load_in_4bit:
         extra_params['load_in_4bit'] = True
@@ -182,7 +189,42 @@ if __name__ == "__main__":
         dev_map_max_memory = {int(dev_id) if dev_id not in ['cpu', 'disk'] else dev_id: mem for dev_id, mem in [dev_mem.split(':') for dev_mem in args.max_memory.split(',')]}
         extra_params['max_memory'] = dev_map_max_memory
     
-    vision_qna = backend.VisionQnA(args.model, args.device, args.device_map, extra_params, format=args.format)
+    # wrap the model with a timeout, unload on idle and reload on demand.
+    class IdleWrapper:
+        def __init__(self, model, unload_timer=None):
+            self.model = model
+            self.unload_timer = unload_timer
+            self.last_used = time.time()
+            self.lock = threading.Lock()
+            if self.unload_timer:
+                self.unload_thread = threading.Thread(target=self.unload_model)
+                self.unload_thread.start()
+
+        def unload_model(self):
+            while True:
+                time.sleep(1)
+                if time.time() - self.last_used > self.unload_timer:
+                    with self.lock:
+                        if self.model is not None:
+                            logger.info("Unloading model due to inactivity")
+                            self.model = None
+                            lifespan()
+
+        def __getattr__(self, name):
+            with self.lock:
+                if self.model is None:
+                    logger.info("Reloading model due to demand")
+                    self.model = backend.VisionQnA(args.model, args.device, args.device_map, extra_params, format=args.format)
+                self.last_used = time.time()
+                try:
+                    return getattr(self.model, name)
+                finally:
+                    self.last_used = time.time()
+
+    vision_qna = IdleWrapper(
+        backend.VisionQnA(args.model, args.device, args.device_map, extra_params, format=args.format),
+        args.unload_timer
+    )
 
     if args.preload or vision_qna is None:
         sys.exit(0)

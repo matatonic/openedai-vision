@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 # qnguyen3/nanoLLaVA-1.5
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "nanollava"
+    model_name: str = "llava-qwen2"
     format: str = "chatml"
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):

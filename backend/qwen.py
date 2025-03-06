@@ -7,7 +7,7 @@ from vision_qna import *
 # "Qwen/Qwen-VL-Chat-int4" # 11GB (bad, bugs)
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "qwen-vl"
+    model_name: str = "qwen"
     format: 'chatml'
     vision_layers: List[str] = ['visual']
     

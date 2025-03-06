@@ -138,7 +138,13 @@ if __name__ == '__main__':
 
         def single_test(url, question, right_answer, label, generator=generate_response):
             tps_time = time.time()
-            answer, tok = generator(url, question)
+            try:
+                answer, tok = generator(url, question)
+            except Exception as e:
+                print(f"Error: {e}")
+                answer = ''
+                tok = 0
+
             tps_time = time.time() - tps_time
             correct = right_answer in answer.lower()
             results.extend([correct])

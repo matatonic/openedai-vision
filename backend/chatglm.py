@@ -6,7 +6,7 @@ from vision_qna import *
 # THUDM/glm-4v-9b
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "glm-4v"
+    model_name: str = "chatglm"
     format: str = 'glm-4v'
     vision_layers: List[str] = ['vision']
     

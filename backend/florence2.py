@@ -18,7 +18,7 @@ def select_task(prompt):
     return None
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "florence"
+    model_name: str = "florence2"
     format: str = "florence"
     visual_layers: List[str] = ['vision_tower', 'image_proj_norm', 'image_pos_embed', 'visual_temporal_embed']
     

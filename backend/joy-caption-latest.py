@@ -165,6 +165,8 @@ class VisionQnA(VisionQnABase):
         del self.params['pretrained_model_name_or_path']
         self.model = AutoModelForCausalLM.from_pretrained(CHECKPOINT_PATH / "text_model", **self.params)
         self.model.eval()
+        #self.model.generation_config.cache_implementation = "static"
+        #self.model.forward = torch.compile(self.model.forward, mode="reduce-overhead", fullgraph=True)
 
         self.image_adapter = ImageAdapter(self.clip_model.config.hidden_size, self.model.config.hidden_size, False, False, 38, False)
         self.image_adapter.load_state_dict(torch.load(CHECKPOINT_PATH / "image_adapter.pt", map_location="cpu", weights_only=True))
@@ -219,7 +221,7 @@ class VisionQnA(VisionQnABase):
 
         default_params = dict(
             max_new_tokens=512,
-            do_sample=True,
+            do_sample=False,
             suppress_tokens=None,
         )
 

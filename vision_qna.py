@@ -10,7 +10,7 @@ from PIL import Image
 import torch
 from typing import Optional, List, Literal, AsyncGenerator, Union, Any
 from pydantic import BaseModel
-from transformers import BitsAndBytesConfig, TextIteratorStreamer
+from transformers import BitsAndBytesConfig, TextIteratorStreamer, AutoConfig
 from loguru import logger
 from mistral_common.protocol.instruct.messages import UserMessage, TextChunk, ImageURLChunk, SystemMessage, AssistantMessage, ToolMessage
 from mistral_common.protocol.instruct.request import ChatCompletionRequest
@@ -76,7 +76,9 @@ class VisionQnABase:
             'low_cpu_mem_usage': True,
             'revision': self.revision,
             'device_map': device_map,
+            'trust_remote_code': extra_params.get('trust_remote_code', False)
         }
+
         if extra_params.get('load_in_4bit', False):
             load_in_4bit_params = {
                 'quantization_config': BitsAndBytesConfig(
@@ -98,9 +100,6 @@ class VisionQnABase:
                 )
             }
             self.params.update(load_in_8bit_params)
-
-        if extra_params.get('trust_remote_code', False):
-            self.params.update({"trust_remote_code": True })
 
         if format:
             self.format = format
@@ -255,6 +254,21 @@ async def images_hfmessages_from_messages(messages: list[Message], url_handler =
         hfmessages.extend([{'role': m.role, 'content': content}])
 
     return images, hfmessages
+
+async def messages_from_messages(messages: list[Message]): 
+    conversation = []
+
+    for m in messages:
+        content = []
+        for c in m.content:
+            if c.type == 'image_url':
+                content.extend([{"type": "image", "url": c.image_url.url}]) # image url remains unchanged
+            elif c.type == 'text':
+                content.extend([{'type': 'text', 'text': c.text}])
+
+        conversation.extend([{'role': m.role, 'content': content}])
+
+    return conversation
 
 
 async def phi15_prompt_from_messages(messages: list[Message], img_tok = "<image>", img_end = '', url_handler = url_to_image): # </image>
@@ -849,164 +863,48 @@ def guess_model_format(model_name: str) -> str:
 
     return 'vicuna'
 
-def guess_backend(model_name: str) -> str:
+
+def guess_backend(model_name: str, trust_remote_code = True) -> str:
+
     model_id = model_name.lower()
 
-    if 'paligemma' in model_id:
-        return 'paligemma'
-
-    if 'llama-3.2' in model_id: # and vision 
-        return 'mllama'
-
-    if 'nanollava' in model_id:
-        return 'nanollava'
-
-    if 'llava' in model_id:
-        if 'v1.6' in model_id:
-            return 'llavanext'
-        elif 'onevision' in model_id:
-            return 'llavanextgit'
-        elif 'aquila' in model_id:
-            return 'llavanextgit'
-        return 'llava'
-
-    if 'qwen2' in model_id:
-        return 'qwen2-vl'
-
-    if 'qwen' in model_id:
-        return 'qwen-vl'
-
-    if 'molmo' in model_id:
-        return 'molmo'
-
-    if 'moondream1' in model_id:
-        return 'moondream1'
-
+    if 'aria' in model_id:
+        return 'aria' # idefics3_vision
+    if 'ovis2' in model_id:
+        return 'ovis2'
+    if 'ovis1.6' in model_id:
+        return 'ovis16'
+    if 'aquila' in model_id:
+        return 'llavanextgit'
+    if 'bunny' in model_id:
+        return 'bunny'
+    if 'cogvlm2' in model_id:
+        return 'cogvlm2'
+    if 'cogvlm' in model_id or 'cogagent' in model_id:
+        return 'cogvlm'
+    if 'dolphin' in model_id:
+        return 'dv-qwen'
+    if 'emu2' in model_id:
+        return 'emu'
+    if 'joy-caption-alpha-two' in model_id:
+        return 'joy-caption-latest'
+    if 'joy-caption-pre-alpha' in model_id:
+        return 'joy-caption-pre-alpha'
+    if 'llava-onevision' in model_id:
+        return 'llavanextgit'
+    if 'mantis' in model_id:
+        return 'mantis'
+    if 'minimonkey' in model_id: # internvl_chat?
+        return 'minimonkey'
+    if 'minicpm-v-2_6' in model_id:
+        return 'minicpm-v-2_6'
     if 'moondream2' in model_id:
         return 'moondream2'
 
-    if 'minimonkey' in model_id:
-        return 'minimonkey'
+    try:
+        conf = AutoConfig.from_pretrained(model_id, trust_remote_code=trust_remote_code)
+        return conf.model_type.lower()
 
-    if 'monkey' in model_id:
-        return 'monkey'
-
-    if 'mgm-' in model_id or 'minigemini' in model_id or 'mini-gemini' in model_id:
-        return 'minigemini'
-
-    if 'ovis' in model_id:
-        if '1.6' in model_id:
-            return 'ovis16'
-        return 'ovis'
-
-    if 'deepseek' in model_id:
-        return 'deepseek-vl'
-
-    if 'minicpm-v-2_6' in model_id:
-        return 'minicpm-v-2_6'
-
-    if 'minicpm' in model_id:
-        return 'minicpm'
-
-    if 'omnilmm-12b' in model_id:
-        return 'omnilmm12b'
-
-    if 'xcomposer2d5' in model_id:
-        return 'xcomposer2d5'
-
-    if 'xcomposer2-4khd' in model_id:
-        return 'xcomposer2-4khd'
-
-    if 'xcomposer2-vl' in model_id:
-        return 'xcomposer2-vl'
-
-    if 'xcomposer2' in model_id:
-        return 'xcomposer2'
-
-    if 'yi-vl' in model_id:
-        return 'yi-vl'
-
-    if 'cogvlm2' in model_id:
-        return 'cogvlm2'
-
-    if 'cogagent-' in model_id or 'cogvlm-' in model_id:
-        return 'cogvlm'
-
-    if 'glm-4v' in model_id:
-        return 'glm-4v'
-
-    if 'fuyu' in model_id:
-        return 'fuyu'
-
-    if 'florence' in model_id:
-        return 'florence'
-
-    if 'nvlm' in model_id:
-        return 'nvlm'
-
-    if 'internvl-chat' in model_id and '-v1-5' in model_id:
-        return 'internvl-chat-v1-5'
-
-    if 'internvl2-' in model_id or 'internvl2_5-' in model_id:
-        return 'internvl-chat-v1-5'
-
-    if 'idefics2' in model_id:
-        return 'idefics2'
-    
-    if 'smolvlm' in model_id:
-        return 'smolvlm'
-
-    if 'llama-3-vision-alpha' in model_id:
-        return 'llama3vision'
-
-    if 'bunny' in model_id:
-        return 'bunny'
-
-    if 'mantis' in model_id:
-        return 'mantis'
-
-    if 'emu3' in model_id:
-        return 'emu3'
-
-    if 'emu' in model_id:
-        return 'emu'
-
-    if '360vl' in model_id:
-        return '360vl'
-
-    # before phi3
-    if 'xgen-mm' in model_id:
-        return 'xgen-mm'
-
-    if "phi-3" in model_id:
-        return 'phi3'
-
-    if 'falcon' in model_id:
-        return 'llavanext'
-
-    if 'dragonfly' in model_id:
-        return 'dragonfly'
-
-    if 'dolphin-vision' in model_id:
-        return 'dv-qwen'
-
-    if 'joy-caption-alpha-two' in model_id:
-        return 'joy-caption-latest'
-    
-    if 'joy-caption-pre-alpha' in model_id:
-        return 'joy-caption-pre-alpha'
-
-    if 'hf-internal-testing/pixtral-12b' in model_id:
-        return 'llava'
-
-    if 'pixtral' in model_id:
-        return 'pixtral'
-
-    if 'omchat' in model_id:
-        return 'omchat'
-
-    if 'got-ocr2' in model_id:
-        return 'got_ocr2'
-    
-    if 'aria' in model_id:
-        return 'aria'
+    except Exception as e:
+        print(f"Error, unable to guess backend or unsupported backend. To specify backend use -b/--backend")
+        raise e

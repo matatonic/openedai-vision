@@ -2,7 +2,8 @@ from transformers import AutoTokenizer, AutoModel
 
 from vision_qna import *
 
-# ucaslcl/GOT-OCR2_0
+# ucaslcl/GOT-OCR2_0 XXX
+# stepfun-ai/GOT-OCR2_0
 
 DEFAULT_IMAGE_TOKEN = "<image>"
 DEFAULT_IMAGE_PATCH_TOKEN = '<imgpad>'
@@ -10,7 +11,7 @@ DEFAULT_IM_START_TOKEN = '<img>'
 DEFAULT_IM_END_TOKEN = '</img>'
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "got_ocr2"
+    model_name: str = "got"
     format: str = "custom"
     visual_layers: List[str] = ['vision_tower_high', 'mm_projector_vary']
     

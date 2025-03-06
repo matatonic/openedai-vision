@@ -8,7 +8,7 @@ from vision_qna import *
 # xgen-mm-phi3-mini-instruct-dpo-r-v1.5
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "generic"
+    model_name: str = "xgenmm"
     format: str = 'phi3'
     vision_layers: List[str] = ['vision_encoder', 'vision_tokenizer']
     

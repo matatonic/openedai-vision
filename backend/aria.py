@@ -1,19 +1,19 @@
-from transformers import AutoModelForCausalLM, AutoProcessor
+from transformers import AriaProcessor, AriaForConditionalGeneration
 
 from vision_qna import *
 
 # rhymes-ai/Aria
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "aria"
+    model_name: str = "aria" # idefics3_vision
     format: str = "chatml"
     visual_layers: List[str] = ["vision_tower", "multi_modal_projector"]
     
     def __init__(self, model_id: str, device: str, device_map: str = 'auto', extra_params = {}, format = None):
         super().__init__(model_id, device, device_map, extra_params, format)
 
-        self.processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
-        self.model = AutoModelForCausalLM.from_pretrained(**self.params).eval()
+        self.processor = AriaProcessor.from_pretrained(model_id, trust_remote_code=self.params.get('trust_remote_code', False))
+        self.model = AriaForConditionalGeneration.from_pretrained(**self.params).eval()
 
         self.eos_token = '<|im_end|>'
 

@@ -10,6 +10,7 @@ from vision_qna import *
 # Qwen/Qwen2-VL-7B-Instruct
 # Qwen/Qwen2-VL-72B-Instruct-AWQ
 # Qwen/Qwen2-VL-72B-Instruct
+# Qwen/QVQ-72B-Preview
 # Not recommended:
 # X Qwen/Qwen2-VL-2B-Instruct-GPTQ-Int4
 # X Qwen/Qwen2-VL-2B-Instruct-GPTQ-Int8
@@ -22,7 +23,7 @@ from vision_qna import *
 # Performance: for A100 80GB Qwen claim 30-40 T/s, I can't reproduce with this setup, I see more like 5-10 T/s.
 
 class VisionQnA(VisionQnABase):
-    model_name: str = "qwen2-vl"
+    model_name: str = "qwen2_vl"
     format: 'chatml'
     vision_layers: List[str] = ['visual']
     

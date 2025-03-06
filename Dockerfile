@@ -5,15 +5,21 @@ RUN apt-get update && apt-get install -y git gcc \
 RUN --mount=type=cache,target=/root/.cache/pip pip install --upgrade pip
 
 WORKDIR /app
-RUN git clone https://github.com/TIGER-AI-Lab/Mantis.git --single-branch /app/Mantis && \
-    git clone https://github.com/baaivision/Emu3 --single-branch /app/Emu3
+RUN git clone https://github.com/deepseek-ai/DeepSeek-VL2 --single-branch /app/DeepSeek-VL2 && \
+    git clone https://github.com/LLaVA-VL/LLaVA-NeXT.git --single-branch /app/LLaVA-NeXT
 
 COPY requirements.txt .
 ARG VERSION=latest
-RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "transformers>=4.47.0" >> requirements.txt ; fi
+RUN if [ "$VERSION" = "alt" ]; then echo "transformers==4.41.2" >> requirements.txt; else echo "git+https://github.com/huggingface/transformers.git@v4.49.0-AyaVision" >> requirements.txt ; fi
 RUN --mount=type=cache,target=/root/.cache/pip pip install -U -r requirements.txt
 
-WORKDIR /app/Mantis
+RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps "git+https://github.com/casper-hansen/AutoAWQ.git"
+RUN --mount=type=cache,target=/root/.cache/pip pip install gptqmodel --no-build-isolation
+
+WORKDIR /app/DeepSeek-VL2
+RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps -e .
+
+WORKDIR /app/LLaVA-NeXT
 RUN --mount=type=cache,target=/root/.cache/pip pip install --no-deps -e .
 
 WORKDIR /app
